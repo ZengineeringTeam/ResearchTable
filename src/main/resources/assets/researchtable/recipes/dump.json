@@ -1,0 +1,14 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "researchtable:card"
+  },
+  "pattern": [
+    "*"
+  ],
+  "key": {
+    "*": {
+      "item": "researchtable:card"
+    }
+  }
+}

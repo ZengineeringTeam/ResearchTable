@@ -1,0 +1,17 @@
+[
+{
+  "modid": "researchtable",
+  "name": "ResearchTable",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Snownee"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "useDependencyInformation": true,
+  "requiredMods": ["forge@[14.23.4.2772,)", "kiwi@[0.4, 0.5)", "gamestages@[2.0, 3.0)"]
+}
+]
