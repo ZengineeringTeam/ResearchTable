@@ -27,7 +27,7 @@ public class BlockTable extends BlockModHorizontal
     {
         super(name, blockMaterial);
         setCreativeTab(CreativeTabs.DECORATIONS);
-        setLightLevel(0.125F);
+        setLightLevel(0.5F);
     }
 
     @Override
@@ -77,6 +77,7 @@ public class BlockTable extends BlockModHorizontal
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+        setLightLevel(0.5F);
         if (!worldIn.isRemote)
         {
             playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
