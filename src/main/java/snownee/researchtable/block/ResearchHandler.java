@@ -1,13 +1,13 @@
-package snownee.researchtable.item;
+package snownee.researchtable.block;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-public class CardHandler implements IItemHandler
+public class ResearchHandler implements IItemHandler
 {
     private final ItemStack stack;
 
-    CardHandler(ItemStack stack)
+    ResearchHandler(ItemStack stack)
     {
         this.stack = stack;
     }

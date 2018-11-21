@@ -1,35 +1,38 @@
 package snownee.researchtable.block;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
-import snownee.kiwi.tile.TileInventoryBase;
-import snownee.researchtable.ResearchTableModule;
+import snownee.kiwi.tile.TileBase;
 
-public class TileTable extends TileInventoryBase
+public class TileTable extends TileBase
 {
     public TileTable()
     {
-        super(1, 1);
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack)
-    {
-        return index == 0 && stack.getItem() == ResearchTableModule.CARD;
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if (!stacks.getStackInSlot(0).isEmpty())
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
-            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            {
 
-            }
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    protected void readPacketData(NBTTagCompound arg0)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected NBTTagCompound writePacketData(NBTTagCompound arg0)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
