@@ -15,7 +15,9 @@ import net.minecraft.world.World;
 public class Research
 {
     private static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
+
     private final String name;
+    private final ResearchCategory category;
     private final String title;
     private final String description;
     private final Set<String> stages;
@@ -23,9 +25,10 @@ public class Research
     private final List<ItemStack> icons;
     private final List<IReward> rewards;
 
-    public Research(String name, String title, String description, Set<String> stages, List<IReward> rewards, @Nullable List<ItemStack> icons)
+    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, @Nullable List<ItemStack> icons)
     {
         this.name = name;
+        this.category = category;
         this.title = title;
         this.description = description;
         this.stages = stages;
@@ -36,6 +39,11 @@ public class Research
     public String getName()
     {
         return name;
+    }
+
+    public ResearchCategory getCategory()
+    {
+        return category;
     }
 
     public String getTitle()

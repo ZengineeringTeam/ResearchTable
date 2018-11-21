@@ -1,9 +1,10 @@
 package snownee.researchtable.container;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.IContainerListener;
 import snownee.researchtable.block.TileTable;
 
 public class ContainerTable extends Container
@@ -28,6 +29,18 @@ public class ContainerTable extends Container
         else
         {
             return false;
+        }
+    }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        for (IContainerListener listener : listeners)
+        {
+            if (listener instanceof EntityPlayerMP)
+            {
+                ((EntityPlayerMP) listener).connection.sendPacket(tile.getUpdatePacket());
+            }
         }
     }
 

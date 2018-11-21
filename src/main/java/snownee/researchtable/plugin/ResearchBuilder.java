@@ -14,8 +14,8 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.core.ReseachList;
 import snownee.researchtable.core.Research;
+import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.RewardUnlockStages;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -25,15 +25,17 @@ public class ResearchBuilder
     private static final String KEY_NO_DESCRIPTION = ResearchTable.MODID + ".description.missing";
 
     private final String name;
+    private final ResearchCategory category;
     private Set<String> requiredStages;
     private Set<String> rewardStages;
     private List<ItemStack> icons;
     private String title;
     private String description;
 
-    public ResearchBuilder(@Nonnull String name)
+    public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategory category)
     {
         this.name = name;
+        this.category = category;
     }
 
     @ZenMethod
@@ -87,8 +89,9 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, title, description, requiredStages, ImmutableList.of(reward), icons);
-        ReseachList.LIST.add(research);
+        Research research = new Research(name, category, title, description, requiredStages, ImmutableList.of(reward),
+                icons);
+        // ReseachList.MAP.add(research);
         return true;
     }
 

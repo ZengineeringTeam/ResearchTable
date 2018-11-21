@@ -8,6 +8,8 @@ import snownee.kiwi.tile.TileBase;
 
 public class TileTable extends TileBase
 {
+    private String currentResearch;
+
     public TileTable()
     {
     }
@@ -23,16 +25,31 @@ public class TileTable extends TileBase
     }
 
     @Override
-    protected void readPacketData(NBTTagCompound arg0)
+    protected void readPacketData(NBTTagCompound data)
     {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
-    protected NBTTagCompound writePacketData(NBTTagCompound arg0)
+    public void readFromNBT(NBTTagCompound compound)
     {
         // TODO Auto-generated method stub
-        return null;
+        super.readFromNBT(compound);
+    }
+
+    @Override
+    protected NBTTagCompound writePacketData(NBTTagCompound data)
+    {
+        if (currentResearch != null)
+        {
+            data.setString("currentResearch", currentResearch);
+        }
+        return data;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    {
+        // TODO Auto-generated method stub
+        return super.writeToNBT(compound);
     }
 }
