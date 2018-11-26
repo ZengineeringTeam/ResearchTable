@@ -1,9 +1,4 @@
-import crafttweaker.player.IPlayer;
 import mods.ResearchTable;
-
-events.onPlayerCrafted(function(event as crafttweaker.event.PlayerCraftedEvent) {
-    event.player.addGameStage("stage");
-});
 
 var cat = ResearchTable.addCategory(<minecraft:grass>);
 
