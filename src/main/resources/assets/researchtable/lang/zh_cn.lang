@@ -1,1 +1,14 @@
 tile.researchtable.table.name=研究台
+tile.researchtable.table.tip=破坏后保留进度
+
+researchtable.title.missing=无标题
+researchtable.description.missing=无描述。
+
+researchtable.gui.owner=所有者：%s
+researchtable.gui.researching=正在研究%s
+researchtable.gui.progress=进度：%s
+researchtable.gui.needStages=需要阶段：%s
+researchtable.gui.button.research=研究
+researchtable.gui.button.submit=提交
+researchtable.gui.button.complete=完成
+researchtable.gui.button.cancel=取消

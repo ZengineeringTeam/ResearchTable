@@ -1,36 +1,103 @@
 package snownee.researchtable.client.gui;
 
-import net.minecraft.client.Minecraft;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+import snownee.kiwi.client.gui.GuiControl;
+import snownee.kiwi.client.gui.component.Component;
+import snownee.kiwi.util.Util;
+import snownee.researchtable.ResearchTable;
+import snownee.researchtable.client.gui.ComponentButtonList.State;
+import snownee.researchtable.core.ICondition;
+import snownee.researchtable.core.Research;
 
-public class GuiResearchDetail extends GuiScrollingList
+public class GuiResearchDetail extends GuiList
 {
+    @Nullable
+    private Research displaying;
+    GuiControl control;
+    private ComponentText text;
+    private ComponentButtonList buttons;
+    @Nullable
+    Research researching;
 
-    public GuiResearchDetail(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight, int screenWidth, int screenHeight)
+    public GuiResearchDetail(GuiControl control, int width, int height, int left, int top, int screenWidth, int screenHeight)
     {
-        super(client, width, height, top, bottom, left, entryHeight, screenWidth, screenHeight);
-        // TODO Auto-generated constructor stub
+        super(control, width, height, left, top, screenWidth, screenHeight);
+        setDrawBackground(false);
+        setDrawScrollBar(false);
+        this.control = new GuiControlSpecial(control.mc, width, height, control);
+        this.control.offsetX = left;
+        this.control.offsetY = top;
+        this.buttons = new ComponentButtonList(this.control, width, 15);
+        this.control.addComponent(this.buttons);
+        this.text = new ComponentText(this.control, width, 5, 5);
+        this.control.addComponent(this.text);
+    }
+
+    @Nullable
+    public Research getResearch()
+    {
+        return displaying;
+    }
+
+    public void setResearch(@Nonnull Research displaying, boolean canComplete)
+    {
+        if (this.displaying != displaying)
+        {
+            this.displaying = displaying;
+            for (int i = control.getComponentSize(null) - 3; i >= 0; --i)
+            {
+                // Last two components must be button list and text. remove others
+                control.removeComponent(i);
+            }
+            String description = displaying.getDescription();
+            if (I18n.hasKey(description))
+            {
+                description = I18n.format(description);
+            }
+            text.setText(description);
+            for (ICondition condition : displaying.getConditions())
+            {
+                control.addComponent(new ComponentResearchProgress(control, width, condition));
+            }
+            if (!displaying.canResearch(control.mc.player))
+            {
+                ComponentText textCannotResearch = new ComponentText(control, width, 5, 5);
+                String string = TextFormatting.RESET.toString();
+                boolean first = true;
+                for (String stage : displaying.getStages())
+                {
+                    if (!first)
+                    {
+                        string += Util.color(0) + ", ";
+                    }
+                    first = false;
+                    if (!GameStageHelper.hasStage(control.mc.player, stage))
+                    {
+                        string += Util.color(0xFFFF0000);
+                    }
+                    string += stage;
+                }
+                string += TextFormatting.RESET;
+                textCannotResearch.setText(I18n.format(ResearchTable.MODID + ".gui.needStages", string));
+                control.addComponent(textCannotResearch);
+            }
+        }
+        updateResearching(canComplete);
     }
 
     @Override
-    protected int getSize()
+    protected void elementClicked(int index, int mouseX, int mouseY, boolean doubleClick)
     {
-        return 1;
-    }
-
-    @Override
-    protected void elementClicked(int index, boolean doubleClick)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected boolean isSelected(int index)
-    {
-        // TODO Auto-generated method stub
-        return false;
+        if (index >= 0 && index < control.getComponentSize(null))
+        {
+            control.getComponent(index).handleMouseInput(mouseX, mouseY);
+        }
     }
 
     @Override
@@ -41,10 +108,73 @@ public class GuiResearchDetail extends GuiScrollingList
     }
 
     @Override
+    protected int getSize()
+    {
+        return control.getComponentSize(null);
+    }
+
+    @Override
+    protected int getSlotHeight(int index)
+    {
+        if (index >= 0 && index < control.getComponentSize(null))
+        {
+            Component component = control.getComponent(index);
+            return component.visible ? component.height : 0;
+        }
+        return 0;
+    }
+
+    @Override
     protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess)
     {
-        // TODO Auto-generated method stub
+        if (slotIdx >= 0 && slotIdx < control.getComponentSize(null))
+        {
+            Component component = control.getComponent(slotIdx);
+            if (component.visible)
+            {
+                component.drawScreen(offsetX, slotTop + offsetY, mouseX - left, mouseY - slotTop,
+                        control.mc.getRenderPartialTicks());
+            }
+        }
+    }
 
+    @Override
+    public void onDestroy()
+    {
+        control.onDestroy();
+        super.onDestroy();
+    }
+
+    public void updateResearching(boolean canComplete)
+    {
+        visible = displaying != null;
+        if (this.researching == this.displaying)
+        {
+            buttons.visible = true;
+            if (this.displaying != null) // Researching
+            {
+                if (canComplete)
+                {
+                    buttons.states[0] = State.INVISIBLE;
+                    buttons.texts[1] = "complete";
+                }
+                else
+                {
+                    buttons.states[0] = State.NORMAL;
+                    buttons.texts[1] = "cancel";
+                }
+            }
+        }
+        else
+        {
+            buttons.visible = this.researching == null;
+            if (buttons.visible)
+            {
+                buttons.states[0] = State.INVISIBLE;
+                buttons.states[1] = displaying.canResearch(parent.mc.player) ? State.NORMAL : State.DISABLED;
+                buttons.texts[1] = "research";
+            }
+        }
     }
 
 }

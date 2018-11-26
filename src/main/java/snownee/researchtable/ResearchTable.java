@@ -2,8 +2,17 @@ package snownee.researchtable;
 
 import org.apache.logging.log4j.Logger;
 
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import snownee.kiwi.network.NetworkChannel;
+import snownee.researchtable.client.gui.ConditionRenderer;
+import snownee.researchtable.network.PacketResearchChanged;
+import snownee.researchtable.plugin.ConditionCrTStack;
+import snownee.researchtable.plugin.CrTStackRenderer;
 
 @Mod(
         modid = ResearchTable.MODID,
@@ -31,5 +40,21 @@ public class ResearchTable
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event)
+    {
+        NetworkChannel.INSTANCE.register(PacketResearchChanged.class);
+    }
+
+    @Mod.EventHandler
+    @SideOnly(Side.CLIENT)
+    public void clientPreInit(FMLPreInitializationEvent event)
+    {
+        if (Loader.isModLoaded("crafttweaker"))
+        {
+            ConditionRenderer.register(ConditionCrTStack.class, new CrTStackRenderer.Factory());
+        }
     }
 }

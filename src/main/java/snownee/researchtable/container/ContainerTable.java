@@ -35,12 +35,16 @@ public class ContainerTable extends Container
     @Override
     public void detectAndSendChanges()
     {
-        for (IContainerListener listener : listeners)
+        if (tile.hasChanged)
         {
-            if (listener instanceof EntityPlayerMP)
+            for (IContainerListener listener : listeners)
             {
-                ((EntityPlayerMP) listener).connection.sendPacket(tile.getUpdatePacket());
+                if (listener instanceof EntityPlayerMP)
+                {
+                    ((EntityPlayerMP) listener).connection.sendPacket(tile.getUpdatePacket());
+                }
             }
+            tile.hasChanged = false;
         }
     }
 

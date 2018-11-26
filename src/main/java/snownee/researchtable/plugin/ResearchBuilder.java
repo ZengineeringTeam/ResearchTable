@@ -10,10 +10,13 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.core.ICondition;
+import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.RewardUnlockStages;
@@ -31,6 +34,7 @@ public class ResearchBuilder
     private List<ItemStack> icons;
     private String title;
     private String description;
+    private List<ICondition> conditions = new ArrayList<>(4);
 
     public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategory category)
     {
@@ -39,7 +43,7 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public void setIcons(@Nonnull IItemStack... items)
+    public ResearchBuilder setIcons(@Nonnull IItemStack... items)
     {
         List<ItemStack> actualItems = new ArrayList<>(items.length);
         for (IItemStack item : items)
@@ -47,30 +51,42 @@ public class ResearchBuilder
             actualItems.add(CraftTweakerMC.getItemStack(item));
         }
         icons = ImmutableList.copyOf(actualItems);
+        return this;
     }
 
     @ZenMethod
-    public void setRequiredStages(@Nonnull String... stages)
+    public ResearchBuilder setRequiredStages(@Nonnull String... stages)
     {
         requiredStages = ImmutableSet.copyOf(stages);
+        return this;
     }
 
     @ZenMethod
-    public void setRewardStages(@Nonnull String... stages)
+    public ResearchBuilder setRewardStages(@Nonnull String... stages)
     {
         rewardStages = ImmutableSet.copyOf(stages);
+        return this;
     }
 
     @ZenMethod
-    public void setTitle(@Nonnull String title)
+    public ResearchBuilder setTitle(@Nonnull String title)
     {
         this.title = title;
+        return this;
     }
 
     @ZenMethod
-    public void setDescription(@Nonnull String description)
+    public ResearchBuilder setDescription(@Nonnull String description)
     {
         this.description = description;
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder addCondition(@Nonnull IIngredient ingredient)
+    {
+        conditions.add(new ConditionCrTStack(ingredient));
+        return this;
     }
 
     @ZenMethod
@@ -89,10 +105,9 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, category, title, description, requiredStages, ImmutableList.of(reward),
-                icons);
-        // ReseachList.MAP.add(research);
-        return true;
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, ImmutableList.of(reward),
+                conditions, icons);
+        return ResearchList.LIST.add(research);
     }
 
 }

@@ -1,4 +1,14 @@
 tile.researchtable.table.name=Research Table
+tile.researchtable.table.tip=Keeping progress after breaking
 
 researchtable.title.missing=Untitled
 researchtable.description.missing=No description.
+
+researchtable.gui.owner=Owner: %s
+researchtable.gui.researching=Researching: %s
+researchtable.gui.progress=Progress: %s
+researchtable.gui.needStages=Need stages: %s
+researchtable.gui.button.research=Research
+researchtable.gui.button.submit=Submit
+researchtable.gui.button.complete=Complete
+researchtable.gui.button.cancel=Cancel

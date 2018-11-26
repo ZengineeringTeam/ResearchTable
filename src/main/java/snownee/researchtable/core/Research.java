@@ -1,5 +1,7 @@
 package snownee.researchtable.core;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -23,9 +25,10 @@ public class Research
     private final Set<String> stages;
     @Nullable
     private final List<ItemStack> icons;
-    private final List<IReward> rewards;
+    private final List<ICondition> conditions;
+    private final Collection<IReward> rewards;
 
-    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, @Nullable List<ItemStack> icons)
+    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons)
     {
         this.name = name;
         this.category = category;
@@ -33,6 +36,7 @@ public class Research
         this.description = description;
         this.stages = stages;
         this.rewards = rewards;
+        this.conditions = conditions;
         this.icons = icons;
     }
 
@@ -68,13 +72,29 @@ public class Research
         }
     }
 
+    public List<ICondition> getConditions()
+    {
+        return Collections.unmodifiableList(conditions);
+    }
+
     public boolean canResearch(EntityPlayer player)
     {
         return GameStageHelper.hasAllOf(player, stages);
     }
 
+    public Set<String> getStages()
+    {
+        return Collections.unmodifiableSet(stages);
+    }
+
     public void complete(World world, BlockPos pos, EntityPlayer player)
     {
         rewards.forEach(e -> e.earn(world, pos, player));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Research@" + getName();
     }
 }
