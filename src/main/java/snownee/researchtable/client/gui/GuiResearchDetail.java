@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
+import snownee.kiwi.client.gui.component.ComponentText;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.client.gui.ComponentButtonList.State;

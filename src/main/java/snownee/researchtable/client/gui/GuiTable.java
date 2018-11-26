@@ -12,6 +12,7 @@ import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiContainerMod;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
+import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
