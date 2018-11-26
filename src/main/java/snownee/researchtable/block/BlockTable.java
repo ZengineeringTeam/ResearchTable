@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
+import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.Research;
 
@@ -127,7 +128,7 @@ public class BlockTable extends BlockModHorizontal
                 {
                     float progress = compound.getFloat("progress");
                     tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress",
-                            TextFormatting.RESET + new MessageFormat("{0,number,#.#}").format(new Float[] { progress })
+                            TextFormatting.RESET + Util.MESSAGE_FORMAT.format(new Float[] { progress })
                                     + "%" + TextFormatting.GRAY));
                 }
             }

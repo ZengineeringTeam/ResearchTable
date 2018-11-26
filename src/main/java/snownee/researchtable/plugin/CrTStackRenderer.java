@@ -8,9 +8,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import snownee.kiwi.util.Util;
 import snownee.researchtable.client.gui.ConditionRenderer;
 
+@SideOnly(Side.CLIENT)
 public class CrTStackRenderer extends ConditionRenderer<ConditionCrTStack>
 {
     private final NonNullList<ItemStack> stacks;
@@ -51,6 +55,12 @@ public class CrTStackRenderer extends ConditionRenderer<ConditionCrTStack>
             return stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())).getDisplayName();
         }
         return ItemStack.EMPTY.getDisplayName();
+    }
+
+    @Override
+    public String format(long number)
+    {
+        return Util.formatComma(number);
     }
 
     public static class Factory implements ConditionRendererFactory<ConditionCrTStack>

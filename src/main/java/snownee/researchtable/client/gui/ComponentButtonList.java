@@ -3,6 +3,7 @@ package snownee.researchtable.client.gui;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import snownee.kiwi.client.AdvancedFontRenderer;
@@ -69,6 +70,7 @@ public class ComponentButtonList extends Component
                     states[i] = State.NORMAL;
                 }
             }
+            Tessellator.getInstance().getBuffer().setTranslation(0, 0, 0);
             GlStateManager.color(1, 1, 1, 1);
             DrawableNineSlice drawable = DRAWABLES[states[i].ordinal()];
             drawable.setWidth(40);

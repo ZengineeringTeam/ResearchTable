@@ -24,7 +24,7 @@ import snownee.researchtable.network.PacketResearchChanged.Action;
 public class GuiTable extends GuiContainerMod
 {
     private final TileTable table;
-    private GuiResearchDetail detail;
+    private ComponentResearchDetail detail;
     private ComponentResearchList researchList;
 
     public GuiTable(TileTable tile, InventoryPlayer inventory)
@@ -55,7 +55,7 @@ public class GuiTable extends GuiContainerMod
         //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "À²À²À²",
         //                ImmutableSet.of("stageA", "stageB"), Collections.EMPTY_LIST, conditions, null));
         researchList.setCategory(ResearchCategory.GENERAL);
-        detail = new GuiResearchDetail(panel.control, (int) ((xSize - 8) * 0.6), ySize - 8,
+        detail = new ComponentResearchDetail(panel.control, (int) ((xSize - 8) * 0.6), ySize - 8,
                 researchList.left + researchList.width, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
@@ -100,7 +100,9 @@ public class GuiTable extends GuiContainerMod
                     boolean flag = table.getResearch() == detail.getResearch();
                     for (int i = 0; i < progresses.size(); ++i)
                     {
-                        progresses.get(i).setProgress(flag ? table.getProgress(i) : 0);
+                        ComponentResearchProgress progress = progresses.get(i);
+                        progress.setProgress(flag ? table.getProgress(i) : 0);
+                        progress.setResearching(flag);
                     }
                 }
             }
@@ -117,7 +119,6 @@ public class GuiTable extends GuiContainerMod
     @Override
     public int messageReceived(GuiControl control, Component component, NBTTagCompound data)
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -178,6 +179,14 @@ public class GuiTable extends GuiContainerMod
             }
         }
         return 0;
+    }
+
+    @Override
+    public void onGuiClosed()
+    {
+        researchList = null;
+        detail = null;
+        super.onGuiClosed();
     }
 
 }

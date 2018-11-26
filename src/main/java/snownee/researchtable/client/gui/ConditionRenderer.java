@@ -35,6 +35,8 @@ public abstract class ConditionRenderer<T extends ICondition>
 
     public abstract String name();
 
+    public abstract String format(long number);
+
     public static interface ConditionRendererFactory<T extends ICondition>
     {
         ConditionRenderer<T> get(T condition);

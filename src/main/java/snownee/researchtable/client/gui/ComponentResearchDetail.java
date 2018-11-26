@@ -16,7 +16,7 @@ import snownee.researchtable.client.gui.ComponentButtonList.State;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 
-public class GuiResearchDetail extends GuiList
+public class ComponentResearchDetail extends GuiList
 {
     @Nullable
     private Research displaying;
@@ -26,7 +26,7 @@ public class GuiResearchDetail extends GuiList
     @Nullable
     Research researching;
 
-    public GuiResearchDetail(GuiControl control, int width, int height, int left, int top, int screenWidth, int screenHeight)
+    public ComponentResearchDetail(GuiControl control, int width, int height, int left, int top, int screenWidth, int screenHeight)
     {
         super(control, width, height, left, top, screenWidth, screenHeight);
         setDrawBackground(false);
@@ -64,9 +64,11 @@ public class GuiResearchDetail extends GuiList
             text.setText(description);
             for (ICondition condition : displaying.getConditions())
             {
-                control.addComponent(new ComponentResearchProgress(control, width, condition));
+                ComponentResearchProgress progress = new ComponentResearchProgress(control, width, condition);
+                progress.setResearching(displaying == researching);
+                control.addComponent(progress);
             }
-            if (!displaying.canResearch(control.mc.player))
+            if (researching != displaying && !displaying.canResearch(control.mc.player))
             {
                 ComponentText textCannotResearch = new ComponentText(control, width, 5, 5);
                 String string = TextFormatting.RESET.toString();
