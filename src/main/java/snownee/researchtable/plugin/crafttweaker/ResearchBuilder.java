@@ -1,4 +1,4 @@
-package snownee.researchtable.plugin;
+package snownee.researchtable.plugin.crafttweaker;
 
 import java.util.ArrayList;
 import java.util.Collections;

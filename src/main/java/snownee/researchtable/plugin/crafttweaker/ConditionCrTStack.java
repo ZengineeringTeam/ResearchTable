@@ -1,4 +1,4 @@
-package snownee.researchtable.plugin;
+package snownee.researchtable.plugin.crafttweaker;
 
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.minecraft.CraftTweakerMC;

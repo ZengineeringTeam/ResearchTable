@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.client.gui.ConditionRenderer;
 import snownee.researchtable.network.PacketResearchChanged;
-import snownee.researchtable.plugin.ConditionCrTStack;
-import snownee.researchtable.plugin.CrTStackRenderer;
+import snownee.researchtable.plugin.crafttweaker.ConditionCrTStack;
+import snownee.researchtable.plugin.crafttweaker.CrTStackRenderer;
 
 @Mod(
         modid = ResearchTable.MODID,
