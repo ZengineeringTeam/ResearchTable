@@ -32,7 +32,7 @@ public class TileTable extends TileBase
         @Override
         public int getSlots()
         {
-            return 1;
+            return research != null && !canComplete ? 1 : 0;
         }
 
         @Override
@@ -213,7 +213,7 @@ public class TileTable extends TileBase
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if (research != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handler);
         }
@@ -223,8 +223,7 @@ public class TileTable extends TileBase
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        return (research != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                || super.hasCapability(capability, facing);
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     public boolean hasPermission(EntityPlayer player)
