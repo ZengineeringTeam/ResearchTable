@@ -348,7 +348,6 @@ public class TileTable extends TileBase
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        System.out.println(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY
                 || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
                 || super.hasCapability(capability, facing);
