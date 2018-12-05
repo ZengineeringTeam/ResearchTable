@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import snownee.researchtable.ResearchTable;
@@ -87,6 +88,13 @@ public class ResearchBuilder
     public ResearchBuilder addCondition(@Nonnull IIngredient ingredient)
     {
         conditions.add(new ConditionCrTItem(ingredient));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder addCondition(@Nonnull ILiquidStack ingredient)
+    {
+        conditions.add(new ConditionCrTLiquid(ingredient));
         return this;
     }
 

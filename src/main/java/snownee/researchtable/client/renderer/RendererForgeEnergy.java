@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.client.gui.ConditionRenderer;
 import snownee.researchtable.core.ConditionForgeEnergy;
 
 @SideOnly(Side.CLIENT)

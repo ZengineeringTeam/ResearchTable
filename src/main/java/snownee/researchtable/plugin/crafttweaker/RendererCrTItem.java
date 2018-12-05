@@ -12,14 +12,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import snownee.kiwi.util.Util;
-import snownee.researchtable.client.gui.ConditionRenderer;
+import snownee.researchtable.client.renderer.ConditionRenderer;
 
 @SideOnly(Side.CLIENT)
-public class CrTStackRenderer extends ConditionRenderer<ConditionCrTItem>
+public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
 {
     private final NonNullList<ItemStack> stacks;
 
-    public CrTStackRenderer(ConditionCrTItem condition)
+    public RendererCrTItem(ConditionCrTItem condition)
     {
         stacks = NonNullList.create();
         List<IItemStack> items = condition.ingredient.getItems();
@@ -69,7 +69,7 @@ public class CrTStackRenderer extends ConditionRenderer<ConditionCrTItem>
         @Override
         public ConditionRenderer<ConditionCrTItem> get(ConditionCrTItem condition)
         {
-            return new CrTStackRenderer(condition);
+            return new RendererCrTItem(condition);
         }
 
     }

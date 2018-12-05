@@ -1,4 +1,4 @@
-package snownee.researchtable.client.gui;
+package snownee.researchtable.client.renderer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import snownee.researchtable.client.renderer.RendererForgeEnergy;
 import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
 

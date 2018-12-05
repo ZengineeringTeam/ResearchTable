@@ -10,6 +10,7 @@ import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.util.Util;
+import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.core.ICondition;
 
 public class ComponentResearchProgress extends Component
@@ -125,7 +126,7 @@ public class ComponentResearchProgress extends Component
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
         }
-        else
+        else if (renderer != null)
         {
             String text = renderer.format(condition.getGoal());
             AdvancedFontRenderer.INSTANCE.drawString(text,

@@ -9,10 +9,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.network.NetworkChannel;
-import snownee.researchtable.client.gui.ConditionRenderer;
+import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.plugin.crafttweaker.ConditionCrTItem;
-import snownee.researchtable.plugin.crafttweaker.CrTStackRenderer;
+import snownee.researchtable.plugin.crafttweaker.ConditionCrTLiquid;
+import snownee.researchtable.plugin.crafttweaker.RendererCrTItem;
+import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 
 @Mod(
         modid = ResearchTable.MODID,
@@ -54,7 +56,8 @@ public class ResearchTable
     {
         if (Loader.isModLoaded("crafttweaker"))
         {
-            ConditionRenderer.register(ConditionCrTItem.class, new CrTStackRenderer.Factory());
+            ConditionRenderer.register(ConditionCrTItem.class, new RendererCrTItem.Factory());
+            ConditionRenderer.register(ConditionCrTLiquid.class, new RendererCrTLiquid.Factory());
         }
     }
 }

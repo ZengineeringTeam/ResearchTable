@@ -14,6 +14,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -114,6 +118,87 @@ public class TileTable extends TileBase
 
     }
 
+    public class ResearchFluidWrapper implements IFluidHandler
+    {
+        private final FluidTankProperties info;
+
+        public ResearchFluidWrapper()
+        {
+            info = new FluidTankProperties();
+        }
+
+        @Override
+        public IFluidTankProperties[] getTankProperties()
+        {
+            return new IFluidTankProperties[] { info };
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill)
+        {
+            if (research != null && !canComplete)
+            {
+                return (int) match(ConditionTypes.FLUID, resource, !doFill);
+            }
+            return 0;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain)
+        {
+            return null;
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain)
+        {
+            return null;
+        }
+
+    }
+
+    private class FluidTankProperties implements IFluidTankProperties
+    {
+
+        @Override
+        @Nullable
+        public FluidStack getContents()
+        {
+            return null;
+        }
+
+        @Override
+        public int getCapacity()
+        {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public boolean canFill()
+        {
+            return research != null && !canComplete;
+        }
+
+        @Override
+        public boolean canDrain()
+        {
+            return false;
+        }
+
+        @Override
+        public boolean canFillFluidType(FluidStack fluidStack)
+        {
+            return match(ConditionTypes.FLUID, fluidStack, true) > 0;
+        }
+
+        @Override
+        public boolean canDrainFluidType(FluidStack fluidStack)
+        {
+            return false;
+        }
+
+    }
+
     @Nullable
     private Research research;
     @Nullable
@@ -122,6 +207,7 @@ public class TileTable extends TileBase
     public String ownerName;
     private ResearchItemWrapper itemHandler = new ResearchItemWrapper();
     private ResearchEnergyWrapper energyHandler = new ResearchEnergyWrapper();
+    private ResearchFluidWrapper fluidHandler = new ResearchFluidWrapper();
     private boolean canComplete;
 
     public TileTable()
@@ -252,13 +338,19 @@ public class TileTable extends TileBase
         {
             return CapabilityEnergy.ENERGY.cast(energyHandler);
         }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        {
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidHandler);
+        }
         return super.getCapability(capability, facing);
     }
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
+        System.out.println(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY
+                || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
                 || super.hasCapability(capability, facing);
     }
 

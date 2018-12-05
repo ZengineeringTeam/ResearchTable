@@ -6,6 +6,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
   .setIcons(<minecraft:grass>)
   .setTitle("Hot Topic")
   .addCondition(<ore:ingotIron> * 8)
+  .addCondition(<liquid:lava> * 2000)
   .setRewardStages("stage")
   .build();
 

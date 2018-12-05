@@ -1,6 +1,5 @@
 package snownee.researchtable.block;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -27,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
@@ -91,7 +92,17 @@ public class BlockTable extends BlockModHorizontal
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (!worldIn.isRemote)
+        ItemStack stack = playerIn.getHeldItem(hand);
+        IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
+        if (fluidHandler != null)
+        {
+            IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldIn, pos, facing);
+            if (fluidDestination != null)
+            {
+                FluidUtil.tryEmptyContainer(stack, fluidDestination, Integer.MAX_VALUE, playerIn, true);
+            }
+        }
+        else if (!worldIn.isRemote)
         {
             playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -127,9 +138,8 @@ public class BlockTable extends BlockModHorizontal
                 if (compound.hasKey("progress", Constants.NBT.TAG_FLOAT))
                 {
                     float progress = compound.getFloat("progress");
-                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress",
-                            TextFormatting.RESET + Util.MESSAGE_FORMAT.format(new Float[] { progress })
-                                    + "%" + TextFormatting.GRAY));
+                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.RESET
+                            + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%" + TextFormatting.GRAY));
                 }
             }
         }
