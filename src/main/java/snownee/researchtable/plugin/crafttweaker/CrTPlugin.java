@@ -6,6 +6,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import snownee.researchtable.core.ResearchCategory;
+import snownee.researchtable.core.ResearchList;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -28,7 +29,6 @@ public class CrTPlugin
     @ZenMethod
     public static boolean remove(@Nonnull String name)
     {
-        return false;
-        // return ReseachList.MAP.removeIf(e -> e.getName().equals(name));
+        return ResearchList.LIST.removeIf(e -> e.getName().equals(name));
     }
 }
