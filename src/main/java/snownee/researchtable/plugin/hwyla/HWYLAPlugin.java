@@ -5,7 +5,7 @@ import mcp.mobius.waila.api.IWailaRegistrar;
 import mcp.mobius.waila.api.WailaPlugin;
 import snownee.researchtable.block.BlockTable;
 
-@WailaPlugin
+//@WailaPlugin
 public class HWYLAPlugin implements IWailaPlugin
 {
 
