@@ -23,6 +23,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import snownee.kiwi.tile.TileBase;
 import snownee.researchtable.core.ConditionTypes;
+import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
@@ -391,6 +392,14 @@ public class TileTable extends TileBase
         if (research == null || world.isRemote)
         {
             return;
+        }
+        if (ownerName != null)
+        {
+            DataStorage.complete(ownerName, research);
+        }
+        else
+        {
+            DataStorage.complete(player.getName(), research);
         }
         research.complete(world, pos, player);
         setResearch(null);
