@@ -1,20 +1,27 @@
 package snownee.researchtable.plugin.crafttweaker;
 
+import java.util.function.Supplier;
+
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
+import snownee.researchtable.core.ConditionTypes;
 import snownee.researchtable.core.ICondition;
 
-public class ConditionCrTStack implements ICondition<ItemStack>
+public class ConditionCrTItem implements ICondition<ItemStack>
 {
     final IIngredient ingredient;
-    final int count;
+    final long count;
 
-    public ConditionCrTStack(IIngredient ingredient)
+    public ConditionCrTItem(IIngredient ingredient)
     {
-        this.count = ingredient.getAmount();
-        this.ingredient = ingredient.amount(1);
+        this(ingredient, ingredient.getAmount());
+    }
 
+    public ConditionCrTItem(IIngredient ingredient, long count)
+    {
+        this.count = count;
+        this.ingredient = ingredient.amount(1);
     }
 
     @Override
@@ -34,9 +41,9 @@ public class ConditionCrTStack implements ICondition<ItemStack>
     }
 
     @Override
-    public Class<ItemStack> getMatchClass()
+    public Supplier<Class<ItemStack>> getMatchType()
     {
-        return ItemStack.class;
+        return ConditionTypes.ITEM;
     }
 
 }

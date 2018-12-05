@@ -56,6 +56,8 @@ public class ComponentResearchProgress extends Component
 
         if (renderer != null)
         {
+            Tessellator.getInstance().getBuffer().setTranslation(0, 0, 0);
+            GlStateManager.color(1, 1, 1, 1);
             renderer.draw(parent.mc, offsetX + 5, offsetY + 4);
             String text = renderer.name();
             if (researching)

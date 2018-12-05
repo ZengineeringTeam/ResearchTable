@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.client.gui.ConditionRenderer;
 import snownee.researchtable.network.PacketResearchChanged;
-import snownee.researchtable.plugin.crafttweaker.ConditionCrTStack;
+import snownee.researchtable.plugin.crafttweaker.ConditionCrTItem;
 import snownee.researchtable.plugin.crafttweaker.CrTStackRenderer;
 
 @Mod(
@@ -54,7 +54,7 @@ public class ResearchTable
     {
         if (Loader.isModLoaded("crafttweaker"))
         {
-            ConditionRenderer.register(ConditionCrTStack.class, new CrTStackRenderer.Factory());
+            ConditionRenderer.register(ConditionCrTItem.class, new CrTStackRenderer.Factory());
         }
     }
 }

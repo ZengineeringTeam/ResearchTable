@@ -2,6 +2,7 @@ package snownee.researchtable.block;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -11,10 +12,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import snownee.kiwi.tile.TileBase;
+import snownee.researchtable.core.ConditionTypes;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
@@ -46,26 +50,8 @@ public class TileTable extends TileBase
         {
             if (slot == 0 && research != null && !stack.isEmpty() && !canComplete)
             {
-                List<ICondition> conditions = research.getConditions();
-                for (int i = 0; i < conditions.size(); ++i)
-                {
-                    ICondition condition = conditions.get(i);
-                    if (condition.getMatchClass() == ItemStack.class)
-                    {
-                        long matched = condition.matches(stack);
-                        if (matched > condition.getGoal() - progress[i])
-                        {
-                            matched = condition.getGoal() - progress[i];
-                        }
-                        if (matched > 0 && !simulate)
-                        {
-                            progress[i] += matched;
-                            refreshCanComplete();
-                            hasChanged = true;
-                        }
-                        return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - (int) matched);
-                    }
-                }
+                long matched = match(ConditionTypes.ITEM, stack, simulate);
+                return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - (int) matched);
             }
             return stack;
         }
@@ -83,13 +69,59 @@ public class TileTable extends TileBase
         }
     }
 
+    public class ResearchEnergyWrapper implements IEnergyStorage
+    {
+
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate)
+        {
+            if (canReceive())
+            {
+                return (int) match(ConditionTypes.ENERGY, (long) maxReceive, simulate);
+            }
+            return 0;
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate)
+        {
+            return 0;
+        }
+
+        @Override
+        public int getEnergyStored()
+        {
+            return 0;
+        }
+
+        @Override
+        public int getMaxEnergyStored()
+        {
+            return 0;
+        }
+
+        @Override
+        public boolean canExtract()
+        {
+            return false;
+        }
+
+        @Override
+        public boolean canReceive()
+        {
+            return research != null && !canComplete;
+        }
+
+    }
+
     @Nullable
     private Research research;
     @Nullable
     private long[] progress;
     public boolean hasChanged;
     public String ownerName;
-    private ResearchItemWrapper handler = new ResearchItemWrapper();
+    private ResearchItemWrapper itemHandler = new ResearchItemWrapper();
+    private ResearchEnergyWrapper energyHandler = new ResearchEnergyWrapper();
     private boolean canComplete;
 
     public TileTable()
@@ -116,7 +148,6 @@ public class TileTable extends TileBase
                 progress = new long[research.getConditions().size()];
             }
             canComplete = false;
-            hasChanged = true; // client & server
         }
     }
 
@@ -215,7 +246,11 @@ public class TileTable extends TileBase
     {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handler);
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
+        }
+        if (capability == CapabilityEnergy.ENERGY)
+        {
+            return CapabilityEnergy.ENERGY.cast(energyHandler);
         }
         return super.getCapability(capability, facing);
     }
@@ -223,7 +258,8 @@ public class TileTable extends TileBase
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY
+                || super.hasCapability(capability, facing);
     }
 
     public boolean hasPermission(EntityPlayer player)
@@ -261,12 +297,13 @@ public class TileTable extends TileBase
 
     public void complete(EntityPlayer player)
     {
-        if (research == null)
+        if (research == null || world.isRemote)
         {
             return;
         }
         research.complete(world, pos, player);
         setResearch(null);
+        hasChanged = true; // server
     }
 
     public void submit(EntityPlayer player)
@@ -279,11 +316,36 @@ public class TileTable extends TileBase
         for (int i = 0; i < player.inventory.mainInventory.size(); ++i)
         {
             ItemStack stack = player.inventory.mainInventory.get(i);
-            ItemStack remain = handler.insertItem(0, stack, false);
+            ItemStack remain = itemHandler.insertItem(0, stack, false);
             if (remain != stack)
             {
                 player.inventory.mainInventory.set(i, remain);
             }
         }
+    }
+
+    public <T> long match(Supplier<Class<T>> type, T e, boolean simulate)
+    {
+        List<ICondition> conditions = research.getConditions();
+        for (int i = 0; i < conditions.size(); ++i)
+        {
+            ICondition condition = conditions.get(i);
+            if (condition.getMatchType() == type)
+            {
+                long matched = condition.matches(e);
+                if (matched > condition.getGoal() - progress[i])
+                {
+                    matched = condition.getGoal() - progress[i];
+                }
+                if (matched > 0 && !simulate)
+                {
+                    progress[i] += matched;
+                    refreshCanComplete();
+                    hasChanged = true;
+                }
+                return matched;
+            }
+        }
+        return 0;
     }
 }

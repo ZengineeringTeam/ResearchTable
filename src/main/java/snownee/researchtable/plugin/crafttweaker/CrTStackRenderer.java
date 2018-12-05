@@ -15,11 +15,11 @@ import snownee.kiwi.util.Util;
 import snownee.researchtable.client.gui.ConditionRenderer;
 
 @SideOnly(Side.CLIENT)
-public class CrTStackRenderer extends ConditionRenderer<ConditionCrTStack>
+public class CrTStackRenderer extends ConditionRenderer<ConditionCrTItem>
 {
     private final NonNullList<ItemStack> stacks;
 
-    public CrTStackRenderer(ConditionCrTStack condition)
+    public CrTStackRenderer(ConditionCrTItem condition)
     {
         stacks = NonNullList.create();
         List<IItemStack> items = condition.ingredient.getItems();
@@ -63,11 +63,11 @@ public class CrTStackRenderer extends ConditionRenderer<ConditionCrTStack>
         return Util.formatComma(number);
     }
 
-    public static class Factory implements ConditionRendererFactory<ConditionCrTStack>
+    public static class Factory implements ConditionRendererFactory<ConditionCrTItem>
     {
 
         @Override
-        public ConditionRenderer<ConditionCrTStack> get(ConditionCrTStack condition)
+        public ConditionRenderer<ConditionCrTItem> get(ConditionCrTItem condition)
         {
             return new CrTStackRenderer(condition);
         }

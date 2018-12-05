@@ -10,10 +10,10 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
   .build();
 
 ResearchTable.builder("testResearch2", cat)
-  .setTitle("Any Wools")
+  .setTitle("Energetic Wool")
   .setIcons(<minecraft:wool:3>)
   .addCondition(<minecraft:wool:32767> * 2048)
-  .setRequiredStages("stageYouWillNeverGet")
+  .addEnergyCondition(123456)
   .build();
 
 ResearchTable.builder("testResearch3", cat)

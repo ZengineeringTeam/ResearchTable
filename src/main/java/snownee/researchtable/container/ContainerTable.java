@@ -44,7 +44,7 @@ public class ContainerTable extends Container
                     ((EntityPlayerMP) listener).connection.sendPacket(tile.getUpdatePacket());
                 }
             }
-            tile.hasChanged = false;
+            tile.hasChanged = false; // server
         }
     }
 

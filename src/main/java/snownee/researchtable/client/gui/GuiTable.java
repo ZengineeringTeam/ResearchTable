@@ -87,11 +87,15 @@ public class GuiTable extends GuiContainerMod
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        //        if (detail != null && detail.researching != table.getResearch())
+        //        {
+        //            table.hasChanged = true;
+        //        }
         if (table.hasChanged)
         {
-            detail.researching = table.getResearch();
             if (detail != null)
             {
+                detail.researching = table.getResearch();
                 detail.updateResearching(table.canComplete());
                 if (detail.getResearch() != null)
                 {

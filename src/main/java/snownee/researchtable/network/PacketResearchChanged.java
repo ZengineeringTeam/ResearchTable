@@ -58,26 +58,27 @@ public class PacketResearchChanged implements PacketMod
                 {
                     table.setResearch(research);
                 }
-                return;
+                break;
             case STOP:
                 if (table.getResearch() == research && !table.canComplete())
                 {
                     table.setResearch(null);
                 }
-                return;
+                break;
             case COMPLETE:
                 if (table.getResearch() == research && table.canComplete())
                 {
                     table.complete(player);
                 }
-                return;
+                break;
             case SUBMIT:
                 if (table.getResearch() == research && !table.canComplete())
                 {
                     table.submit(player);
                 }
-                return;
+                break;
             }
+            table.hasChanged = true; // server
         }
     }
 

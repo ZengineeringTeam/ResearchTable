@@ -8,12 +8,19 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import snownee.researchtable.client.renderer.RendererForgeEnergy;
+import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
 
 @SideOnly(Side.CLIENT)
 public abstract class ConditionRenderer<T extends ICondition>
 {
     private static final Map<Class, ConditionRendererFactory> MAP = new HashMap<>();
+
+    static
+    {
+        ConditionRenderer.register(ConditionForgeEnergy.class, new RendererForgeEnergy.Factory());
+    }
 
     public static <T extends ICondition> void register(Class<T> clazz, ConditionRendererFactory<T> renderer)
     {

@@ -15,10 +15,11 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
-import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
+import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.RewardUnlockStages;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -85,7 +86,14 @@ public class ResearchBuilder
     @ZenMethod
     public ResearchBuilder addCondition(@Nonnull IIngredient ingredient)
     {
-        conditions.add(new ConditionCrTStack(ingredient));
+        conditions.add(new ConditionCrTItem(ingredient));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder addEnergyCondition(long amount)
+    {
+        conditions.add(new ConditionForgeEnergy(amount));
         return this;
     }
 
@@ -105,8 +113,8 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, ImmutableList.of(reward),
-                conditions, icons);
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages,
+                ImmutableList.of(reward), conditions, icons);
         return ResearchList.LIST.add(research);
     }
 
