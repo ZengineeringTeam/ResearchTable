@@ -19,6 +19,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -37,6 +38,7 @@ import snownee.researchtable.core.Research;
 
 public class BlockTable extends BlockModHorizontal
 {
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(0.1, 0, 0.1, 0.9, 0.9, 0.9);
 
     public BlockTable(String name, Material blockMaterial)
     {
@@ -197,6 +199,12 @@ public class BlockTable extends BlockModHorizontal
                 }
             }
         }
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return AABB;
     }
 
 }
