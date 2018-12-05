@@ -1,5 +1,7 @@
 package snownee.researchtable.client.gui;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -13,6 +15,7 @@ import snownee.kiwi.client.gui.component.ComponentText;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.client.gui.ComponentButtonList.State;
+import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 
@@ -22,6 +25,7 @@ public class ComponentResearchDetail extends GuiList
     private Research displaying;
     GuiControl control;
     private ComponentText text;
+    private ComponentText info;
     private ComponentButtonList buttons;
     @Nullable
     Research researching;
@@ -34,6 +38,8 @@ public class ComponentResearchDetail extends GuiList
         this.control = new GuiControlSpecial(control.mc, width, height, control);
         this.control.offsetX = left;
         this.control.offsetY = top;
+        this.info = new ComponentText(this.control, width, 5, 5);
+        this.control.addComponent(this.info);
         this.buttons = new ComponentButtonList(this.control, width, 15);
         this.control.addComponent(this.buttons);
         this.text = new ComponentText(this.control, width, 5, 5);
@@ -51,7 +57,7 @@ public class ComponentResearchDetail extends GuiList
         if (this.displaying != displaying)
         {
             this.displaying = displaying;
-            for (int i = control.getComponentSize(null) - 3; i >= 0; --i)
+            for (int i = control.getComponentSize(null) - 4; i >= 0; --i)
             {
                 // Last two components must be button list and text. remove others
                 control.removeComponent(i);
@@ -67,28 +73,6 @@ public class ComponentResearchDetail extends GuiList
                 ComponentResearchProgress progress = new ComponentResearchProgress(control, width, condition);
                 progress.setResearching(displaying == researching);
                 control.addComponent(progress);
-            }
-            if (researching != displaying && !displaying.canResearch(control.mc.player))
-            {
-                ComponentText textCannotResearch = new ComponentText(control, width, 5, 5);
-                String string = TextFormatting.RESET.toString();
-                boolean first = true;
-                for (String stage : displaying.getStages())
-                {
-                    if (!first)
-                    {
-                        string += Util.color(0) + ", ";
-                    }
-                    first = false;
-                    if (!GameStageHelper.hasStage(control.mc.player, stage))
-                    {
-                        string += Util.color(0xFFFF0000);
-                    }
-                    string += stage;
-                }
-                string += TextFormatting.RESET;
-                textCannotResearch.setText(I18n.format(ResearchTable.MODID + ".gui.needStages", string));
-                control.addComponent(textCannotResearch);
             }
         }
         updateResearching(canComplete);
@@ -177,6 +161,41 @@ public class ComponentResearchDetail extends GuiList
                 buttons.states[1] = displaying.canResearch(parent.mc.player) ? State.NORMAL : State.DISABLED;
                 buttons.texts[1] = "research";
             }
+        }
+
+        if (researching != displaying && !displaying.canResearch(control.mc.player))
+        {
+            String string = TextFormatting.RESET.toString();
+            Set<String> stages = displaying.getStages();
+            if (!GameStageHelper.hasAllOf(control.mc.player, stages))
+            {
+                boolean first = true;
+                for (String stage : stages)
+                {
+                    if (!first)
+                    {
+                        string += Util.color(0) + ", ";
+                    }
+                    first = false;
+                    if (!GameStageHelper.hasStage(control.mc.player, stage))
+                    {
+                        string += Util.color(0xFFFF0000);
+                    }
+                    string += stage;
+                }
+                string += TextFormatting.RESET;
+                string = I18n.format(ResearchTable.MODID + ".gui.needStages", string);
+            }
+            if (DataStorage.count(control.mc.player.getName(), displaying) >= displaying.getMaxCount())
+            {
+                string += Util.color(0xFFFF0000) + I18n.format(ResearchTable.MODID + ".gui.maxCount");
+            }
+            info.setText(string);
+            info.visible = true;
+        }
+        else
+        {
+            info.visible = false;
         }
     }
 

@@ -37,6 +37,7 @@ public class ResearchBuilder
     private String title;
     private String description;
     private List<ICondition> conditions = new ArrayList<>(4);
+    private int maxCount = 1;
 
     public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategory category)
     {
@@ -120,6 +121,19 @@ public class ResearchBuilder
     }
 
     @ZenMethod
+    public ResearchBuilder setMaxCount(int count)
+    {
+        this.maxCount = count;
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setNoMaxCount()
+    {
+        return setMaxCount(Integer.MAX_VALUE);
+    }
+
+    @ZenMethod
     public boolean build()
     {
         RewardUnlockStages reward = new RewardUnlockStages(rewardStages != null ? rewardStages : Collections.EMPTY_SET);
@@ -136,7 +150,7 @@ public class ResearchBuilder
             requiredStages = Collections.EMPTY_SET;
         }
         Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages,
-                ImmutableList.of(reward), conditions, icons);
+                ImmutableList.of(reward), conditions, icons, maxCount);
         return ResearchList.LIST.add(research);
     }
 

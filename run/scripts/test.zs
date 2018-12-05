@@ -8,6 +8,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
   .addCondition(<ore:ingotIron> * 8)
   .addCondition(<liquid:lava> * 2000)
   .setRewardStages("stage")
+//.setNoMaxCount()
   .build();
 
 ResearchTable.builder("testResearch2", cat)
@@ -15,6 +16,7 @@ ResearchTable.builder("testResearch2", cat)
   .setIcons(<minecraft:wool:3>)
   .addCondition(<minecraft:wool:32767> * 2048)
   .addEnergyCondition(123456)
+  .setMaxCount(2)
   .build();
 
 ResearchTable.builder("testResearch3", cat)

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.network.PacketResearchChanged;
+import snownee.researchtable.network.PacketSyncClient;
 import snownee.researchtable.plugin.crafttweaker.ConditionCrTItem;
 import snownee.researchtable.plugin.crafttweaker.ConditionCrTLiquid;
 import snownee.researchtable.plugin.crafttweaker.RendererCrTItem;
@@ -48,6 +49,7 @@ public class ResearchTable
     public void init(FMLInitializationEvent event)
     {
         NetworkChannel.INSTANCE.register(PacketResearchChanged.class);
+        NetworkChannel.INSTANCE.register(PacketSyncClient.class);
     }
 
     @Mod.EventHandler

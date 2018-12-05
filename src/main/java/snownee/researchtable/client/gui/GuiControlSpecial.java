@@ -16,9 +16,9 @@ public class GuiControlSpecial extends GuiControl
     @Override
     public void addComponent(Component component)
     {
-        if (components.size() > 1)
+        if (components.size() > 2)
         {
-            components.add(components.size() - 2, component);
+            components.add(components.size() - 3, component);
         }
         else
         {

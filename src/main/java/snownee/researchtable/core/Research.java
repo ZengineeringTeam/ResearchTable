@@ -27,8 +27,9 @@ public class Research
     private final List<ItemStack> icons;
     private final List<ICondition> conditions;
     private final Collection<IReward> rewards;
+    private final int maxCount;
 
-    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons)
+    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons, int maxCount)
     {
         this.name = name;
         this.category = category;
@@ -38,6 +39,7 @@ public class Research
         this.rewards = rewards;
         this.conditions = conditions;
         this.icons = icons;
+        this.maxCount = maxCount;
     }
 
     public String getName()
@@ -79,7 +81,7 @@ public class Research
 
     public boolean canResearch(EntityPlayer player)
     {
-        return GameStageHelper.hasAllOf(player, stages);
+        return GameStageHelper.hasAllOf(player, stages) && DataStorage.count(player.getName(), this) < getMaxCount();
     }
 
     public Set<String> getStages()
@@ -96,5 +98,10 @@ public class Research
     public String toString()
     {
         return "Research@" + getName();
+    }
+
+    public int getMaxCount()
+    {
+        return maxCount;
     }
 }

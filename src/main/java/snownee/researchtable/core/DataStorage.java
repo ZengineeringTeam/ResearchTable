@@ -9,15 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.network.PacketSyncClient;
 
 @EventBusSubscriber(modid = ResearchTable.MODID)
 public class DataStorage
@@ -26,6 +32,7 @@ public class DataStorage
     private final WorldServer world;
     private final Map<String, Map<String, Integer>> players = new HashMap<>();
     private boolean changed = false;
+    public static Map<String, Integer> clientData;
 
     public DataStorage(WorldServer world)
     {
@@ -67,19 +74,7 @@ public class DataStorage
             if (data.hasKey(player, Constants.NBT.TAG_COMPOUND))
             {
                 NBTTagCompound compound = data.getCompoundTag(player);
-                Set<String> keySet = compound.getKeySet();
-                Map<String, Integer> researches = new HashMap<>(keySet.size());
-                for (String research : keySet)
-                {
-                    if (data.hasKey(research, Constants.NBT.TAG_INT))
-                    {
-                        int count = data.getInteger(research);
-                        if (count > 0)
-                        {
-                            researches.put(research, count);
-                        }
-                    }
-                }
+                Map<String, Integer> researches = readPlayerData(compound);
                 if (!researches.isEmpty())
                 {
                     players.put(player, researches);
@@ -96,17 +91,12 @@ public class DataStorage
             players.forEach((player, researches) -> {
                 if (!researches.isEmpty())
                 {
-                    NBTTagCompound compound = new NBTTagCompound();
-                    researches.forEach((research, count) -> {
-                        compound.setInteger(research, count);
-                    });
-                    data.setTag(player, compound);
+                    data.setTag(player, writePlayerData(researches));
                 }
             });
 
             File folder = new File(world.getSaveHandler().getWorldDirectory(), "data/");
             File file = new File(folder, ResearchTable.MODID + ".dat");
-            System.out.println(data);
             ThreadedFileIOBase.getThreadedIOInstance().queueIO(() -> {
                 try
                 {
@@ -149,7 +139,28 @@ public class DataStorage
             int count = researches.getOrDefault(research.getName(), 0);
             researches.put(research.getName(), ++count);
             INSTANCE.changed = true;
+            EntityPlayer player = INSTANCE.world.getPlayerEntityByName(playerName);
+            if (player != null)
+            {
+                syncClient(player);
+            }
             return count;
+        }
+        return 0;
+    }
+
+    public static int count(String playerName, Research research)
+    {
+        if (loaded())
+        {
+            if (INSTANCE.players.containsKey(playerName))
+            {
+                return INSTANCE.players.get(playerName).getOrDefault(research.getName(), 0);
+            }
+        }
+        else if (clientData != null)
+        {
+            return clientData.getOrDefault(research.getName(), 0);
         }
         return 0;
     }
@@ -170,6 +181,49 @@ public class DataStorage
         {
             INSTANCE.save();
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
+    {
+        syncClient(event.player);
+    }
+
+    private static void syncClient(EntityPlayer player)
+    {
+        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer)
+                && INSTANCE.players.containsKey(player.getName()))
+        {
+            NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(INSTANCE.players.get(player.getName())),
+                    (EntityPlayerMP) player);
+        }
+    }
+
+    public static Map<String, Integer> readPlayerData(NBTTagCompound data)
+    {
+        Set<String> keySet = data.getKeySet();
+        Map<String, Integer> researches = new HashMap<>(keySet.size());
+        for (String research : keySet)
+        {
+            if (data.hasKey(research, Constants.NBT.TAG_INT))
+            {
+                int count = data.getInteger(research);
+                if (count > 0)
+                {
+                    researches.put(research, count);
+                }
+            }
+        }
+        return researches;
+    }
+
+    public static NBTTagCompound writePlayerData(Map<String, Integer> map)
+    {
+        NBTTagCompound data = new NBTTagCompound();
+        map.forEach((research, count) -> {
+            data.setInteger(research, count);
+        });
+        return data;
     }
 
 }
