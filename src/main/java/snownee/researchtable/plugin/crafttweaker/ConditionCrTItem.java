@@ -27,7 +27,7 @@ public class ConditionCrTItem implements ICondition<ItemStack>
     @Override
     public long matches(ItemStack e)
     {
-        if (!e.isEmpty() && ingredient.matchesExact(CraftTweakerMC.getIItemStack(e).amount(1)))
+        if (!e.isEmpty() && ingredient.matches(CraftTweakerMC.getIItemStack(e).amount(1)))
         {
             return e.getCount();
         }

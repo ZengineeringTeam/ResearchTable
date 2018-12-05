@@ -427,25 +427,41 @@ public class TileTable extends TileBase
     public <T> long match(Supplier<Class<T>> type, T e, boolean simulate)
     {
         List<ICondition> conditions = research.getConditions();
+        long matched = 0;
         for (int i = 0; i < conditions.size(); ++i)
         {
             ICondition condition = conditions.get(i);
             if (condition.getMatchType() == type)
             {
-                long matched = condition.matches(e);
-                if (matched > condition.getGoal() - progress[i])
+                long matchedIn = condition.matches(e);
+                if (matchedIn < 0)
                 {
-                    matched = condition.getGoal() - progress[i];
+                    matchedIn = 0;
                 }
-                if (matched > 0 && !simulate)
+                if (matchedIn > condition.getGoal() - progress[i])
                 {
-                    progress[i] += matched;
-                    refreshCanComplete();
-                    hasChanged = true;
+                    matchedIn = condition.getGoal() - progress[i];
                 }
-                return matched;
+                if (matched + matchedIn < matched)
+                {
+                    matchedIn = Long.MAX_VALUE - matched;
+                }
+                matched += matchedIn;
+                if (matchedIn > 0 && !simulate)
+                {
+                    progress[i] += matchedIn;
+                }
+                if (matched == Long.MAX_VALUE)
+                {
+                    break;
+                }
             }
         }
-        return 0;
+        if (matched > 0 && !simulate)
+        {
+            refreshCanComplete();
+            hasChanged = true;
+        }
+        return matched;
     }
 }
