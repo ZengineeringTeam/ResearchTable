@@ -31,4 +31,10 @@ public class CrTPlugin
     {
         return ResearchList.LIST.removeIf(e -> e.getName().equals(name));
     }
+
+    @ZenMethod
+    public static void removeAll()
+    {
+        ResearchList.LIST.clear();
+    }
 }
