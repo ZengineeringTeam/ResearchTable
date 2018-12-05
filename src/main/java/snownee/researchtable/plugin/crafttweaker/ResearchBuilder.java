@@ -92,9 +92,23 @@ public class ResearchBuilder
     }
 
     @ZenMethod
+    public ResearchBuilder addCondition(@Nonnull IIngredient ingredient, long amount)
+    {
+        conditions.add(new ConditionCrTItem(ingredient, amount));
+        return this;
+    }
+
+    @ZenMethod
     public ResearchBuilder addCondition(@Nonnull ILiquidStack ingredient)
     {
         conditions.add(new ConditionCrTLiquid(ingredient));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder addCondition(@Nonnull ILiquidStack ingredient, long amount)
+    {
+        conditions.add(new ConditionCrTLiquid(ingredient, amount));
         return this;
     }
 
