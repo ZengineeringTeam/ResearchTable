@@ -10,6 +10,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
   .addCondition(<liquid:lava> * 2000)
   .setRewardStages("stage")
   .setRewardCommands("/say \"wow, @s has found a gold!\"")
+  .setRewardItems(<minecraft:gold_ingot>, <minecraft:gold_nugget>)
 //.setNoMaxCount()
   .build();
 

@@ -72,9 +72,7 @@ public class RewardExecute implements IReward
         };
 
         for (String command : commands)
-        {
             player.getServer().getCommandManager().executeCommand(sender, command);
-        }
     }
 
 }

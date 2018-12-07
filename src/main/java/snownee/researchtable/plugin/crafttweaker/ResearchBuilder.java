@@ -16,6 +16,7 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
@@ -24,6 +25,7 @@ import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.RewardExecute;
+import snownee.researchtable.core.RewardItems;
 import snownee.researchtable.core.RewardUnlockStages;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -78,6 +80,14 @@ public class ResearchBuilder
     public ResearchBuilder setRewardCommands(@Nonnull String... commands)
     {
         rewards.add(new RewardExecute(commands));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setRewardItems(@Nonnull IItemStack... items)
+    {
+        NonNullList<ItemStack> rawItems = NonNullList.from(ItemStack.EMPTY, CraftTweakerMC.getItemStacks(items));
+        rewards.add(new RewardItems(rawItems));
         return this;
     }
 
