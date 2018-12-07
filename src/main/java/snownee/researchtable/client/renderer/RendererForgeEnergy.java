@@ -1,8 +1,7 @@
 package snownee.researchtable.client.renderer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,7 +30,7 @@ public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy>
     @Override
     public String name()
     {
-        return "FE";
+        return I18n.format(ResearchTable.MODID + ".gui.fe");
     }
 
     @Override

@@ -9,6 +9,7 @@ researchtable.gui.researching=正在研究%s
 researchtable.gui.progress=进度：%s
 researchtable.gui.needStages=需要阶段：%s
 researchtable.gui.maxCount=已达到研究次数上限
+researchtable.gui.fe=能量
 researchtable.gui.button.research=研究
 researchtable.gui.button.submit=提交
 researchtable.gui.button.complete=完成
