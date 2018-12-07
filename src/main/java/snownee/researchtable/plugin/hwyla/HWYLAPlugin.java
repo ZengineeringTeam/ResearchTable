@@ -6,6 +6,7 @@ import mcp.mobius.waila.api.WailaPlugin;
 import snownee.researchtable.block.BlockTable;
 
 //@WailaPlugin
+@Deprecated
 public class HWYLAPlugin implements IWailaPlugin
 {
 

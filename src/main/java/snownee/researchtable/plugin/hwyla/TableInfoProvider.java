@@ -18,6 +18,7 @@ import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.core.Research;
 
+@Deprecated
 public class TableInfoProvider implements IWailaDataProvider
 {
     @Override
