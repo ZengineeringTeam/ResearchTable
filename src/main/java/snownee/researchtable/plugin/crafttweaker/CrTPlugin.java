@@ -18,12 +18,14 @@ import stanhebben.zenscript.annotations.ZenSetter;
 public class CrTPlugin
 {
     @ZenSetter("hideUnavailableResearch")
+    @ZenMethod
     public static void setHide(boolean hide)
     {
         ResearchTable.hide = hide;
     }
 
     @ZenGetter("hideUnavailableResearch")
+    @ZenMethod
     public static boolean getHide()
     {
         return ResearchTable.hide;
