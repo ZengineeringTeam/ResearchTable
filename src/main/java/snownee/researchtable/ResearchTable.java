@@ -27,7 +27,6 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 )
 public class ResearchTable
 {
-
     public static final String MODID = "researchtable";
     public static final String NAME = "ResearchTable";
 
@@ -46,6 +45,8 @@ public class ResearchTable
     {
         logger = event.getModLog();
     }
+
+    public static boolean hide = false;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)

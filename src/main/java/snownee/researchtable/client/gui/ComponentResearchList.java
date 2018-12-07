@@ -3,6 +3,7 @@ package snownee.researchtable.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
@@ -31,8 +33,12 @@ public class ComponentResearchList extends GuiList
     public void setCategory(ResearchCategory category)
     {
         researches.clear();
-        researches.addAll(
-                ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category)).collect(Collectors.toList()));
+        Stream<Research> stream = ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category));
+        if (ResearchTable.hide)
+        {
+            stream = stream.filter(e -> e.canResearch(parent.mc.player));
+        }
+        researches.addAll(stream.collect(Collectors.toList()));
     }
 
     @Override

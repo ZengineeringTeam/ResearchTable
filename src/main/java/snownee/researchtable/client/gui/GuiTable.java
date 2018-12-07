@@ -14,6 +14,7 @@ import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.network.NetworkChannel;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
 import snownee.researchtable.core.ResearchCategory;

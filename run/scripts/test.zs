@@ -1,5 +1,7 @@
 import mods.ResearchTable;
 
+ResearchTable.hideUnavailableResearch = false; // False by default
+
 var cat = ResearchTable.addCategory(<minecraft:grass>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
