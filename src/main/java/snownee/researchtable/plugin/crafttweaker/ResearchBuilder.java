@@ -2,6 +2,7 @@ package snownee.researchtable.plugin.crafttweaker;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,9 +19,11 @@ import net.minecraft.item.ItemStack;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
+import snownee.researchtable.core.IReward;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
+import snownee.researchtable.core.RewardExecute;
 import snownee.researchtable.core.RewardUnlockStages;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -32,7 +35,7 @@ public class ResearchBuilder
     private final String name;
     private final ResearchCategory category;
     private Set<String> requiredStages;
-    private Set<String> rewardStages;
+    private List<IReward> rewards = new LinkedList<>();
     private List<ItemStack> icons;
     private String title;
     private String description;
@@ -67,7 +70,14 @@ public class ResearchBuilder
     @ZenMethod
     public ResearchBuilder setRewardStages(@Nonnull String... stages)
     {
-        rewardStages = ImmutableSet.copyOf(stages);
+        rewards.add(new RewardUnlockStages(stages));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setRewardCommands(@Nonnull String... commands)
+    {
+        rewards.add(new RewardExecute(commands));
         return this;
     }
 
@@ -136,7 +146,6 @@ public class ResearchBuilder
     @ZenMethod
     public boolean build()
     {
-        RewardUnlockStages reward = new RewardUnlockStages(rewardStages != null ? rewardStages : Collections.EMPTY_SET);
         if (title == null)
         {
             title = KEY_NO_TITLE;
@@ -149,8 +158,8 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages,
-                ImmutableList.of(reward), conditions, icons, maxCount);
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, rewards,
+                conditions, icons, maxCount);
         return ResearchList.LIST.add(research);
     }
 

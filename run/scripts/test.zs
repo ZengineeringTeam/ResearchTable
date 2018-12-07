@@ -4,11 +4,12 @@ var cat = ResearchTable.addCategory(<minecraft:grass>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
   .setIcons(<minecraft:grass>)
-  .setTitle("Hot Topic")
+  .setTitle("Alchemy")
   .setDescription("Input your description")
   .addCondition(<ore:ingotIron> * 8)
   .addCondition(<liquid:lava> * 2000)
   .setRewardStages("stage")
+  .setRewardCommands("/say \"wow, @s has found a gold!\"")
 //.setNoMaxCount()
   .build();
 
@@ -27,6 +28,7 @@ ResearchTable.builder("testResearch3", cat)
   .addCondition(<minecraft:apple> * 2147483647)
   .addCondition(<minecraft:wheat> * 2147483647)
   .addCondition(<minecraft:wheat_seeds> * 2147483647)
+  // CraftTweaker cannot handle item size more than Integer.MAX_VALUE, so here is another method
   .addCondition(<minecraft:carrot>, 9223372036854775807)
   .addCondition(<minecraft:potato>, 9223372036854775807)
   .addCondition(<minecraft:egg>, 9223372036854775807)

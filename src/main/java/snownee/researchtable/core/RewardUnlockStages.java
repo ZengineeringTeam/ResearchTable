@@ -2,6 +2,8 @@ package snownee.researchtable.core;
 
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -11,9 +13,9 @@ public class RewardUnlockStages implements IReward
 {
     private final Set<String> stages;
 
-    public RewardUnlockStages(Set<String> stages)
+    public RewardUnlockStages(String... stages)
     {
-        this.stages = stages;
+        this.stages = ImmutableSet.copyOf(stages);
     }
 
     @Override
