@@ -6,10 +6,12 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.client.renderer.ConditionRenderer;
+import snownee.researchtable.command.CommandResearch;
 import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.network.PacketSyncClient;
 import snownee.researchtable.plugin.crafttweaker.ConditionCrTItem;
@@ -61,5 +63,11 @@ public class ResearchTable
             ConditionRenderer.register(ConditionCrTItem.class, new RendererCrTItem.Factory());
             ConditionRenderer.register(ConditionCrTLiquid.class, new RendererCrTLiquid.Factory());
         }
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new CommandResearch());
     }
 }

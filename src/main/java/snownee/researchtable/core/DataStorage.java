@@ -129,6 +129,11 @@ public class DataStorage
     // TODO: register event
     public static int complete(String playerName, Research research)
     {
+        return setCount(playerName, research, count(playerName, research) + 1);
+    }
+
+    public static int setCount(String playerName, Research research, int count)
+    {
         if (loaded())
         {
             if (!INSTANCE.players.containsKey(playerName))
@@ -136,8 +141,14 @@ public class DataStorage
                 INSTANCE.players.put(playerName, new HashMap<>());
             }
             Map<String, Integer> researches = INSTANCE.players.get(playerName);
-            int count = researches.getOrDefault(research.getName(), 0);
-            researches.put(research.getName(), ++count);
+            if (count > 0)
+            {
+                researches.put(research.getName(), count);
+            }
+            else
+            {
+                researches.remove(research.getName());
+            }
             INSTANCE.changed = true;
             EntityPlayer player = INSTANCE.world.getPlayerEntityByName(playerName);
             if (player != null)

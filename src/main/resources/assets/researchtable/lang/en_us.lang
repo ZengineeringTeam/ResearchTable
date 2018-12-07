@@ -14,3 +14,8 @@ researchtable.gui.button.research=Research
 researchtable.gui.button.submit=Submit
 researchtable.gui.button.complete=Complete
 researchtable.gui.button.cancel=Cancel
+
+commands.researchtable.usage=/researchtable <Player> <Research> [count]
+commands.researchtable.researchNotFound=Research not found.
+commands.researchtable.get=%s: %s
+commands.researchtable.set=%s: successful
