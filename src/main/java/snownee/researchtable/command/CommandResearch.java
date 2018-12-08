@@ -1,5 +1,6 @@
 package snownee.researchtable.command;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,22 +40,38 @@ public class CommandResearch extends CommandBase
             throw new WrongUsageException(getUsage(sender));
         }
         EntityPlayerMP player = getPlayer(server, sender, args[0]);
-        Optional<Research> result = ResearchList.find(args[1]);
-        if (!result.isPresent())
+        boolean all = false;
+        List<Research> researchs;
+        if (args[1].equals("all"))
         {
-            throw new CommandException("commands." + getName() + ".researchNotFound", args[1]);
-        }
-        Research research = result.get();
-        if (args.length == 2)
-        {
-            notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(),
-                    DataStorage.count(player.getName(), research));
+            researchs = ResearchList.LIST;
         }
         else
         {
-            int count = parseInt(args[2], 0);
-            DataStorage.setCount(player.getName(), research, count);
-            notifyCommandListener(sender, this, "commands." + getName() + ".set", player.getName());
+            Optional<Research> result = ResearchList.find(args[1]);
+            if (!result.isPresent())
+            {
+                throw new CommandException("commands." + getName() + ".researchNotFound", args[1]);
+            }
+            Research research = result.get();
+            researchs = Collections.singletonList(research);
+        }
+        if (args.length == 2)
+        {
+            for (Research research : researchs)
+            {
+                notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(),
+                        DataStorage.count(player.getName(), research));
+            }
+        }
+        else
+        {
+            for (Research research : researchs)
+            {
+                int count = parseInt(args[2], 0);
+                DataStorage.setCount(player.getName(), research, count);
+                notifyCommandListener(sender, this, "commands." + getName() + ".set", player.getName());
+            }
         }
     }
 
