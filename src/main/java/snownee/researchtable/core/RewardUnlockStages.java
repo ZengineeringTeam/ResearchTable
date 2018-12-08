@@ -22,6 +22,7 @@ public class RewardUnlockStages implements IReward
     public void earn(World world, BlockPos pos, EntityPlayer player)
     {
         stages.forEach(e -> GameStageHelper.addStage(player, e));
+        GameStageHelper.syncPlayer(player);
     }
 
 }
