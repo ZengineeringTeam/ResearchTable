@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.ResearchTableConfig;
 import snownee.researchtable.core.Research;
 
 public class BlockTable extends BlockModHorizontal
@@ -76,7 +77,7 @@ public class BlockTable extends BlockModHorizontal
     @Override
     public BlockRenderLayer getRenderLayer()
     {
-        return BlockRenderLayer.CUTOUT_MIPPED;
+        return ResearchTableConfig.renderLayer;
     }
 
     @Override
