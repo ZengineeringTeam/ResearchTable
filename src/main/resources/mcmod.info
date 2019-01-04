@@ -12,6 +12,6 @@
   "logoFile": "",
   "screenshots": [],
   "useDependencyInformation": true,
-  "requiredMods": ["forge@[14.23.4.2772,)", "kiwi@[0.4, 0.5)", "gamestages@[2.0, 3.0)"]
+  "requiredMods": ["forge@[14.23.4.2772,)", "kiwi@[0.5, 0.7)", "gamestages@[2.0, 3.0)"]
 }
 ]
