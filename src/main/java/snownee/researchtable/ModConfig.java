@@ -36,4 +36,7 @@ public final class ModConfig
 
     @Config.Name("GuiDetailWidth")
     public static int guiDetailWidth = 150;
+
+    @Config.Name("HideUnavailableResearch")
+    public static boolean hide = false;
 }

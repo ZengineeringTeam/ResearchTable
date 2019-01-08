@@ -97,6 +97,7 @@ public class GuiTable extends GuiContainerMod
             {
                 detail.researching = table.getResearch();
                 detail.updateResearching(table.canComplete());
+                researchList.setCategory(researchList.category);
                 if (detail.getResearch() != null)
                 {
                     List<ComponentResearchProgress> progresses = detail.control.getComponents(ComponentResearchProgress.class);
@@ -160,7 +161,6 @@ public class GuiTable extends GuiContainerMod
                         Action action = table.canComplete() ? Action.COMPLETE : Action.STOP;
                         if (action == Action.STOP && !GuiScreen.isShiftKeyDown())
                         {
-                            // TODO: toast
                             return 0;
                         }
                         PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), action);

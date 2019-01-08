@@ -3,7 +3,6 @@ package snownee.researchtable.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -14,7 +13,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
-import snownee.researchtable.ResearchTable;
+import snownee.kiwi.util.Util;
+import snownee.researchtable.ModConfig;
+import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
@@ -22,6 +23,8 @@ import snownee.researchtable.core.ResearchList;
 public class ComponentResearchList extends GuiList
 {
     final List<Research> researches = new ArrayList<>();
+    ResearchCategory category;
+
     private final int slotHeight;
 
     public ComponentResearchList(GuiControl parent, int width, int height, int left, int top, int entryHeight, int screenWidth, int screenHeight)
@@ -32,13 +35,34 @@ public class ComponentResearchList extends GuiList
 
     public void setCategory(ResearchCategory category)
     {
+        this.category = category;
         researches.clear();
-        Stream<Research> stream = ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category));
-        if (ResearchTable.hide)
+
+        List<Research> researchesAvailable = new ArrayList<>();
+        List<Research> researchesUnavailable = new ArrayList<>();
+        List<Research> researchesCompleted = new ArrayList<>();
+
+        for (Research research : ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category)).collect(Collectors.toList()))
         {
-            stream = stream.filter(e -> e.canResearch(parent.mc.player));
+            if (research.canResearch(parent.mc.player))
+            {
+                researchesAvailable.add(research);
+            }
+            else if (!ModConfig.hide)
+            {
+                if (DataStorage.count(parent.mc.player.getName(), research) >= research.getMaxCount())
+                {
+                    researchesCompleted.add(research);
+                }
+                else
+                {
+                    researchesUnavailable.add(research);
+                }
+            }
         }
-        researches.addAll(stream.collect(Collectors.toList()));
+        researches.addAll(researchesAvailable);
+        researches.addAll(researchesUnavailable);
+        researches.addAll(researchesCompleted);
     }
 
     @Override
@@ -56,8 +80,6 @@ public class ComponentResearchList extends GuiList
     @Override
     protected void drawBackground()
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -75,6 +97,10 @@ public class ComponentResearchList extends GuiList
         if (I18n.hasKey(title))
         {
             title = I18n.format(title);
+        }
+        if (!research.canResearch(Minecraft.getMinecraft().player))
+        {
+            title = Util.color(0x808080) + title;
         }
         AdvancedFontRenderer.INSTANCE.drawString(title, offsetX + 32, offsetY + slotTop + 6, 0x000000);
     }

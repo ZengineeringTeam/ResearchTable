@@ -43,8 +43,6 @@ public class ResearchTable
         logger = event.getModLog();
     }
 
-    public static boolean hide = false;
-
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
