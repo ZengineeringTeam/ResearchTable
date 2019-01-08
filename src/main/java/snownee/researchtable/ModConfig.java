@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = ResearchTable.MODID)
 @Mod.EventBusSubscriber(modid = ResearchTable.MODID)
-public final class ResearchTableConfig
+public final class ModConfig
 {
-    private ResearchTableConfig()
+    private ModConfig()
     {
         throw new UnsupportedOperationException("No instance for you");
     }
@@ -27,4 +27,13 @@ public final class ResearchTableConfig
 
     @Config.Name("RenderLayer")
     public static BlockRenderLayer renderLayer = BlockRenderLayer.CUTOUT_MIPPED;
+
+    @Config.Name("GuiHeight")
+    public static int guiHeight = 158;
+
+    @Config.Name("GuiListWidth")
+    public static int guiListWidth = 100;
+
+    @Config.Name("GuiDetailWidth")
+    public static int guiDetailWidth = 150;
 }

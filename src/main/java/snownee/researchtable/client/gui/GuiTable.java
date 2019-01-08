@@ -15,6 +15,7 @@ import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.ModConfig;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
 import snownee.researchtable.core.ResearchCategory;
@@ -32,8 +33,8 @@ public class GuiTable extends GuiContainerMod
     {
         super(new ContainerTable(tile, inventory));
         this.table = tile;
-        xSize = 256;
-        ySize = 158;
+        xSize = ModConfig.guiListWidth + ModConfig.guiDetailWidth + 8;
+        ySize = ModConfig.guiHeight;
     }
 
     @Override
@@ -43,8 +44,7 @@ public class GuiTable extends GuiContainerMod
 
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
-        researchList = new ComponentResearchList(panel.control, (int) ((xSize - 8) * 0.4), ySize - 8, 0, 0, 20, width,
-                height);
+        researchList = new ComponentResearchList(panel.control, ModConfig.guiListWidth, ySize - 8, 0, 0, 20, width, height);
         // ResearchList.LIST.clear();
         //        int r = new Random().nextInt(6) + 1;
         //        List<ICondition> conditions = new ArrayList<>(8);
@@ -56,8 +56,7 @@ public class GuiTable extends GuiContainerMod
         //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "À²À²À²",
         //                ImmutableSet.of("stageA", "stageB"), Collections.EMPTY_LIST, conditions, null));
         researchList.setCategory(ResearchCategory.GENERAL);
-        detail = new ComponentResearchDetail(panel.control, (int) ((xSize - 8) * 0.6), ySize - 8,
-                researchList.left + researchList.width, 0, width, height);
+        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8, researchList.left + researchList.width, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
         if (detail.researching != null)
@@ -100,8 +99,7 @@ public class GuiTable extends GuiContainerMod
                 detail.updateResearching(table.canComplete());
                 if (detail.getResearch() != null)
                 {
-                    List<ComponentResearchProgress> progresses = detail.control
-                            .getComponents(ComponentResearchProgress.class);
+                    List<ComponentResearchProgress> progresses = detail.control.getComponents(ComponentResearchProgress.class);
                     boolean flag = table.getResearch() == detail.getResearch();
                     for (int i = 0; i < progresses.size(); ++i)
                     {
@@ -140,8 +138,7 @@ public class GuiTable extends GuiContainerMod
             {
                 if (table.getResearch() == detail.getResearch())
                 {
-                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
-                            Action.SUBMIT);
+                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), Action.SUBMIT);
                     NetworkChannel.INSTANCE.sendToServer(packet);
                 }
             }
@@ -151,8 +148,7 @@ public class GuiTable extends GuiContainerMod
                 {
                     if (detail.getResearch() != null)
                     {
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(),
-                                Action.START);
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(), Action.START);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }
@@ -167,8 +163,7 @@ public class GuiTable extends GuiContainerMod
                             // TODO: toast
                             return 0;
                         }
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
-                                action);
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), action);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }

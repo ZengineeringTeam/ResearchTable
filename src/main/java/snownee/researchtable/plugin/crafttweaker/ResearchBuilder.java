@@ -168,8 +168,7 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, rewards,
-                conditions, icons, maxCount);
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, rewards, conditions, icons, maxCount);
         return ResearchList.LIST.add(research);
     }
 

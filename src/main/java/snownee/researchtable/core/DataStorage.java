@@ -202,11 +202,9 @@ public class DataStorage
 
     private static void syncClient(EntityPlayer player)
     {
-        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer)
-                && INSTANCE.players.containsKey(player.getName()))
+        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer) && INSTANCE.players.containsKey(player.getName()))
         {
-            NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(INSTANCE.players.get(player.getName())),
-                    (EntityPlayerMP) player);
+            NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(INSTANCE.players.get(player.getName())), (EntityPlayerMP) player);
         }
     }
 

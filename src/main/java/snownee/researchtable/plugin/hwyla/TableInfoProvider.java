@@ -44,8 +44,7 @@ public class TableInfoProvider implements IWailaDataProvider
                     title = I18n.format(title);
                 }
                 tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress",
-                        TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { table.getProgress() }) + "%"));
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { table.getProgress() }) + "%"));
             }
         }
         return tooltip;

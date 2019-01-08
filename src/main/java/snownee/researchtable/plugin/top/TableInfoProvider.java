@@ -38,8 +38,7 @@ public class TableInfoProvider implements IProbeInfoProvider
                     TileTable table = (TileTable) tile;
                     if (table.ownerName != null && !table.ownerName.isEmpty())
                     {
-                        probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.owner",
-                                TextFormatting.WHITE + table.ownerName));
+                        probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + table.ownerName));
                     }
                     Research research = table.getResearch();
                     if (research != null)
@@ -49,10 +48,8 @@ public class TableInfoProvider implements IProbeInfoProvider
                         {
                             title = I18n.translateToLocalFormatted(title);
                         }
-                        probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.researching",
-                                TextFormatting.WHITE + title));
-                        probeInfo.progress((int) (table.getProgress()), 100, new ProgressStyle().filledColor(0xFF00CC33)
-                                .alternateFilledColor(0xFF00CC33).backgroundColor(0).suffix("%"));
+                        probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));
+                        probeInfo.progress((int) (table.getProgress()), 100, new ProgressStyle().filledColor(0xFF00CC33).alternateFilledColor(0xFF00CC33).backgroundColor(0).suffix("%"));
                     }
                 }
             }

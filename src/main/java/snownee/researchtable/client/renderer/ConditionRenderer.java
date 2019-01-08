@@ -1,11 +1,14 @@
 package snownee.researchtable.client.renderer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.researchtable.core.ConditionForgeEnergy;
@@ -42,6 +45,10 @@ public abstract class ConditionRenderer<T extends ICondition>
     public abstract String name();
 
     public abstract String format(long number);
+
+    public abstract FontRenderer getFont();
+
+    public abstract List<String> getTooltip(ITooltipFlag flag);
 
     public static interface ConditionRendererFactory<T extends ICondition>
     {

@@ -264,9 +264,7 @@ public abstract class GuiList extends Component
         double scaleW = parent.mc.displayWidth / res.getScaledWidth_double();
         double scaleH = parent.mc.displayHeight / res.getScaledHeight_double();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int) (this.offsetX * scaleW),
-                (int) (parent.mc.displayHeight - ((offsetY + top + height) * scaleH)), (int) (width * scaleW),
-                (int) (height * scaleH));
+        GL11.glScissor((int) (this.offsetX * scaleW), (int) (parent.mc.displayHeight - ((offsetY + top + height) * scaleH)), (int) (width * scaleW), (int) (height * scaleH));
 
         if (drawBackground)
         {
@@ -282,15 +280,10 @@ public abstract class GuiList extends Component
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 final float scale = 32.0F;
                 worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-                worldr.pos(left, top + height, 0.0D).tex(left / scale, (top + height + scrollDistance) / scale)
-                        .color(0x20, 0x20, 0x20, 0xFF).endVertex();
-                worldr.pos(left + width, top + height, 0.0D)
-                        .tex((left + width) / scale, (top + height + scrollDistance) / scale)
-                        .color(0x20, 0x20, 0x20, 0xFF).endVertex();
-                worldr.pos(left + width, top, 0.0D).tex((left + width) / scale, (top + scrollDistance) / scale)
-                        .color(0x20, 0x20, 0x20, 0xFF).endVertex();
-                worldr.pos(left, top, 0.0D).tex(left / scale, (this.top + scrollDistance) / scale)
-                        .color(0x20, 0x20, 0x20, 0xFF).endVertex();
+                worldr.pos(left, top + height, 0.0D).tex(left / scale, (top + height + scrollDistance) / scale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+                worldr.pos(left + width, top + height, 0.0D).tex((left + width) / scale, (top + height + scrollDistance) / scale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+                worldr.pos(left + width, top, 0.0D).tex((left + width) / scale, (top + scrollDistance) / scale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+                worldr.pos(left, top, 0.0D).tex(left / scale, (this.top + scrollDistance) / scale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
                 tess.draw();
             }
         }
@@ -314,14 +307,11 @@ public abstract class GuiList extends Component
 
             if (slotTop <= this.top + this.height && slotTop + slotBuffer >= this.top)
             {
-                if (isHovering && (extraHeight <= 0 || mouseX < scrollBarLeft) && mouseY >= slotTop
-                        && mouseY < slotTop + sloltHeight)
+                if (isHovering && (extraHeight <= 0 || mouseX < scrollBarLeft) && mouseY >= slotTop && mouseY < slotTop + sloltHeight)
                 {
                     if (clicked)
                     {
-                        this.elementClicked(hoveringIndex, mouseX - left, mouseY - slotTop,
-                                hoveringIndex == this.selectedIndex
-                                        && System.currentTimeMillis() - this.lastClickTime < 250L);
+                        this.elementClicked(hoveringIndex, mouseX - left, mouseY - slotTop, hoveringIndex == this.selectedIndex && System.currentTimeMillis() - this.lastClickTime < 250L);
                         this.selectedIndex = hoveringIndex;
                         this.lastClickTime = System.currentTimeMillis();
                     }
@@ -377,25 +367,20 @@ public abstract class GuiList extends Component
             {
                 worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                 worldr.pos(scrollBarLeft, top + height, 0.0D).tex(0.0D, 1.0D).color(0xDD, 0xDD, 0xDD, 0xFF).endVertex();
-                worldr.pos(scrollBarRight, top + height, 0.0D).tex(1.0D, 1.0D).color(0xDD, 0xDD, 0xDD, 0xFF)
-                        .endVertex();
+                worldr.pos(scrollBarRight, top + height, 0.0D).tex(1.0D, 1.0D).color(0xDD, 0xDD, 0xDD, 0xFF).endVertex();
                 worldr.pos(scrollBarRight, top, 0.0D).tex(1.0D, 0.0D).color(0xDD, 0xDD, 0xDD, 0xFF).endVertex();
                 worldr.pos(scrollBarLeft, top, 0.0D).tex(0.0D, 0.0D).color(0xDD, 0xDD, 0xDD, 0xFF).endVertex();
                 tess.draw();
             }
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.pos(scrollBarLeft, barTop + scrollBarHeight, 0.0D).tex(0.0D, 1.0D).color(0x80, 0x80, 0x80, 0xFF)
-                    .endVertex();
-            worldr.pos(scrollBarRight, barTop + scrollBarHeight, 0.0D).tex(1.0D, 1.0D).color(0x80, 0x80, 0x80, 0xFF)
-                    .endVertex();
+            worldr.pos(scrollBarLeft, barTop + scrollBarHeight, 0.0D).tex(0.0D, 1.0D).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.pos(scrollBarRight, barTop + scrollBarHeight, 0.0D).tex(1.0D, 1.0D).color(0x80, 0x80, 0x80, 0xFF).endVertex();
             worldr.pos(scrollBarRight, barTop, 0.0D).tex(1.0D, 0.0D).color(0x80, 0x80, 0x80, 0xFF).endVertex();
             worldr.pos(scrollBarLeft, barTop, 0.0D).tex(0.0D, 0.0D).color(0x80, 0x80, 0x80, 0xFF).endVertex();
             tess.draw();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.pos(scrollBarLeft, barTop + scrollBarHeight - 1, 0.0D).tex(0.0D, 1.0D).color(0xC0, 0xC0, 0xC0, 0xFF)
-                    .endVertex();
-            worldr.pos(scrollBarRight - 1, barTop + scrollBarHeight - 1, 0.0D).tex(1.0D, 1.0D)
-                    .color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(scrollBarLeft, barTop + scrollBarHeight - 1, 0.0D).tex(0.0D, 1.0D).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(scrollBarRight - 1, barTop + scrollBarHeight - 1, 0.0D).tex(1.0D, 1.0D).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
             worldr.pos(scrollBarRight - 1, barTop, 0.0D).tex(1.0D, 0.0D).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
             worldr.pos(scrollBarLeft, barTop, 0.0D).tex(0.0D, 0.0D).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
             tess.draw();

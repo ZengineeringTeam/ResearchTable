@@ -20,10 +20,7 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTItem;
 import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 
 @Mod(
-        modid = ResearchTable.MODID,
-        name = ResearchTable.NAME,
-        version = "@VERSION_INJECT@",
-        acceptedMinecraftVersions = "[1.12, 1.13)"
+        modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 public class ResearchTable
 {

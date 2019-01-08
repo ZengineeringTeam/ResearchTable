@@ -1,5 +1,7 @@
 package snownee.researchtable.client.gui;
 
+import java.util.Arrays;
+
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -45,7 +47,7 @@ public class ComponentButtonList extends Component
     @Override
     public void drawScreen(int offsetX, int offsetY, int relMouseX, int relMouseY, float partialTicks)
     {
-        offsetX += 60;
+        offsetX += width - 90;
         for (int i = 0; i < states.length; i++)
         {
             if (states[i] == State.INVISIBLE)
@@ -54,7 +56,7 @@ public class ComponentButtonList extends Component
             }
             if (states[i] != State.DISABLED)
             {
-                if (GuiTable.isInRegion(60 + 45 * i, 0, 60 + 45 * i + 40, 12, relMouseX, relMouseY))
+                if (GuiTable.isInRegion(width - 90 + 45 * i, 0, width - 90 + 45 * i + 40, 12, relMouseX, relMouseY))
                 {
                     if (Mouse.isButtonDown(0))
                     {
@@ -63,6 +65,10 @@ public class ComponentButtonList extends Component
                     else
                     {
                         states[i] = State.HOVERED;
+                        if (texts[i].equals("cancel"))
+                        {
+                            setTooltip(Arrays.asList("Press Shift"), null);
+                        }
                     }
                 }
                 else
@@ -78,8 +84,7 @@ public class ComponentButtonList extends Component
             drawable.draw(parent.mc, offsetX + 45 * i, offsetY);
             String text = I18n.format(ResearchTable.MODID + ".gui.button." + texts[i]);
             int width = AdvancedFontRenderer.INSTANCE.getStringWidth(text);
-            AdvancedFontRenderer.INSTANCE.drawString(text, offsetX + 45 * i + 20 - width / 2, offsetY + 2,
-                    states[i] == State.DISABLED ? 0x999999 : 0);
+            AdvancedFontRenderer.INSTANCE.drawString(text, offsetX + 45 * i + 20 - width / 2, offsetY + 2, states[i] == State.DISABLED ? 0x999999 : 0);
         }
     }
 
@@ -88,8 +93,8 @@ public class ComponentButtonList extends Component
     {
         for (int i = 0; i < states.length; i++)
         {
-            if (states[i] != State.DISABLED && states[i] != State.INVISIBLE
-                    && GuiTable.isInRegion(60 + 45 * i, 0, 60 + 45 * i + 40, 12, relMouseX, relMouseY))
+            int x = width - 90;
+            if (states[i] != State.DISABLED && states[i] != State.INVISIBLE && GuiTable.isInRegion(x + 45 * i, 0, x + 45 * i + 40, 12, relMouseX, relMouseY))
             {
                 sendMessage(i, states[i].ordinal());
             }

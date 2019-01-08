@@ -1,16 +1,23 @@
 package snownee.researchtable.plugin.crafttweaker;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 
@@ -91,6 +98,28 @@ public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid>
             return new RendererCrTLiquid(condition);
         }
 
+    }
+
+    @Override
+    public FontRenderer getFont()
+    {
+        return AdvancedFontRenderer.INSTANCE;
+    }
+
+    @Override
+    public List<String> getTooltip(ITooltipFlag flag)
+    {
+        List<String> tooltip = Arrays.asList(fluid.getLocalizedName());
+        if (flag.isAdvanced())
+        {
+            String s = TextFormatting.GRAY + fluid.getFluid().getName();
+            if (fluid.tag != null)
+            {
+                s += fluid.tag;
+            }
+            tooltip.add(s);
+        }
+        return tooltip;
     }
 
 }

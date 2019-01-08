@@ -15,8 +15,7 @@ public class TOPPlugin implements IModule
     @Override
     public void preInit()
     {
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe",
-                "snownee.researchtable.plugin.top.TOPPlugin$GetTheOneProbe");
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "snownee.researchtable.plugin.top.TOPPlugin$GetTheOneProbe");
     }
 
     public static class GetTheOneProbe implements Function<ITheOneProbe, Void>

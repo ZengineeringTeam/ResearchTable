@@ -70,8 +70,7 @@ public class ComponentResearchList extends GuiList
         GlStateManager.disableLighting();
         RenderHelper.enableGUIStandardItemLighting();
         renderItem.renderItemAndEffectIntoGUI(research.getIcon(), offsetX + 6, offsetY + slotTop + 1);
-        renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6,
-                offsetY + slotTop + 1, null);
+        renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6, offsetY + slotTop + 1, null);
         String title = research.getTitle();
         if (I18n.hasKey(title))
         {

@@ -5,6 +5,8 @@ import java.util.List;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -42,8 +44,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     {
         if (!stacks.isEmpty())
         {
-            mc.getRenderItem().renderItemAndEffectIntoGUI(
-                    stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())), x, y);
+            mc.getRenderItem().renderItemAndEffectIntoGUI(stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())), x, y);
         }
     }
 
@@ -72,6 +73,26 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
             return new RendererCrTItem(condition);
         }
 
+    }
+
+    @Override
+    public FontRenderer getFont()
+    {
+        ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
+        FontRenderer font = stack.getItem().getFontRenderer(stack);
+        if (font == null)
+        {
+            font = Minecraft.getMinecraft().fontRenderer;
+        }
+        font.setUnicodeFlag(true);
+        return font;
+    }
+
+    @Override
+    public List<String> getTooltip(ITooltipFlag flag)
+    {
+        ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
+        return stack.getTooltip(Minecraft.getMinecraft().player, flag);
     }
 
 }

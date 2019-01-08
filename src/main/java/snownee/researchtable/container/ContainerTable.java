@@ -23,8 +23,7 @@ public class ContainerTable extends Container
     {
         if (tile.hasWorld())
         {
-            return playerIn.getDistanceSq((double) tile.getPos().getX() + 0.5D, (double) tile.getPos().getY() + 0.5D,
-                    (double) tile.getPos().getZ() + 0.5D) <= 64.0D;
+            return playerIn.getDistanceSq((double) tile.getPos().getX() + 0.5D, (double) tile.getPos().getY() + 0.5D, (double) tile.getPos().getZ() + 0.5D) <= 64.0D;
         }
         else
         {

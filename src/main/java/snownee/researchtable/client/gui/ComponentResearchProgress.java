@@ -1,9 +1,13 @@
 package snownee.researchtable.client.gui;
 
+import java.util.List;
+
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.ResourceLocation;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
@@ -15,8 +19,7 @@ import snownee.researchtable.core.ICondition;
 
 public class ComponentResearchProgress extends Component
 {
-    private static final DrawableResource SUCCESS_ICON = new DrawableResource(
-            new ResourceLocation("textures/gui/container/beacon.png"), 91, 224, 14, 12);
+    private static final DrawableResource SUCCESS_ICON = new DrawableResource(new ResourceLocation("textures/gui/container/beacon.png"), 91, 224, 14, 12);
 
     private final ICondition condition;
     private final ConditionRenderer renderer;
@@ -51,7 +54,7 @@ public class ComponentResearchProgress extends Component
     public void drawScreen(int offsetX, int offsetY, int relMouseX, int relMouseY, float partialTicks)
     {
         int left = offsetX + 25;
-        int right = offsetX + 130;
+        int right = offsetX + width - 20;
         int top = offsetY + 15;
         int bottom = offsetY + 19;
 
@@ -66,6 +69,14 @@ public class ComponentResearchProgress extends Component
                 text += " (" + Util.formatCompact(target) + "/" + Util.formatCompact(total) + ")";
             }
             AdvancedFontRenderer.INSTANCE.drawString(text, left, offsetY + (researching ? 5 : 7), 0);
+            if (GuiTable.isInRegion(5, 4, 21, 20, relMouseX, relMouseY))
+            {
+                List<String> tooltip = renderer.getTooltip(parent.mc.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+                if (tooltip != null)
+                {
+                    setTooltip(tooltip, renderer.getFont());
+                }
+            }
         }
 
         if (researching)
@@ -83,18 +94,16 @@ public class ComponentResearchProgress extends Component
             if (current == 1)
             {
                 GlStateManager.color(1, 1, 1, 1);
-                SUCCESS_ICON.draw(parent.mc, offsetX + 132, offsetY + 7);
+                SUCCESS_ICON.draw(parent.mc, right + 4, offsetY + 7);
             }
             else
             {
-                AdvancedFontRenderer.INSTANCE.drawString((int) (progress * 100) + "%", offsetX + 133, offsetY + 10, 0);
+                AdvancedFontRenderer.INSTANCE.drawString((int) (progress * 100) + "%", right + 5, offsetY + 10, 0);
             }
 
             GlStateManager.enableBlend();
             GlStateManager.disableTexture2D();
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ZERO);
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.color(0.2F, 0.2F, 0.2F, 1);
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
             bufferbuilder.pos(left, bottom, 0.0D).endVertex();
@@ -129,8 +138,7 @@ public class ComponentResearchProgress extends Component
         else if (renderer != null)
         {
             String text = renderer.format(condition.getGoal());
-            AdvancedFontRenderer.INSTANCE.drawString(text,
-                    right + 10 - AdvancedFontRenderer.INSTANCE.getStringWidth(text), offsetY + 7, 0);
+            AdvancedFontRenderer.INSTANCE.drawString(text, right + 10 - AdvancedFontRenderer.INSTANCE.getStringWidth(text), offsetY + 7, 0);
         }
     }
 

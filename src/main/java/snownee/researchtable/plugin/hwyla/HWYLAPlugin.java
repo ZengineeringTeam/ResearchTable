@@ -13,9 +13,9 @@ public class HWYLAPlugin implements IWailaPlugin
     @Override
     public void register(IWailaRegistrar registrar)
     {
-//        TableInfoProvider provider = new TableInfoProvider();
-//        registrar.registerBodyProvider(provider, BlockTable.class);
-//        registrar.registerNBTProvider(provider, BlockTable.class);
+        //        TableInfoProvider provider = new TableInfoProvider();
+        //        registrar.registerBodyProvider(provider, BlockTable.class);
+        //        registrar.registerNBTProvider(provider, BlockTable.class);
     }
 
 }

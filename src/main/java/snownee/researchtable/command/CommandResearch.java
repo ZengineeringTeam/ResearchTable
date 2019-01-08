@@ -60,8 +60,7 @@ public class CommandResearch extends CommandBase
         {
             for (Research research : researchs)
             {
-                notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(),
-                        DataStorage.count(player.getName(), research));
+                notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(), DataStorage.count(player.getName(), research));
             }
         }
         else

@@ -119,8 +119,7 @@ public class ComponentResearchDetail extends GuiList
             Component component = control.getComponent(slotIdx);
             if (component.visible)
             {
-                component.drawScreen(offsetX, slotTop + offsetY, mouseX - left, mouseY - slotTop,
-                        control.mc.getRenderPartialTicks());
+                component.drawScreen(offsetX, slotTop + offsetY, mouseX - left, mouseY - slotTop, control.mc.getRenderPartialTicks());
             }
         }
     }

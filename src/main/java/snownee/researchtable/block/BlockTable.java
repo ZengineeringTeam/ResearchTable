@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.ResearchTableConfig;
+import snownee.researchtable.ModConfig;
 import snownee.researchtable.core.Research;
 
 public class BlockTable extends BlockModHorizontal
@@ -52,8 +52,7 @@ public class BlockTable extends BlockModHorizontal
     @SideOnly(Side.CLIENT)
     public void mapModel()
     {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-                new ModelResourceLocation(getRegistryName(), "facing=north"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "facing=north"));
     }
 
     @Override
@@ -77,7 +76,7 @@ public class BlockTable extends BlockModHorizontal
     @Override
     public BlockRenderLayer getRenderLayer()
     {
-        return ResearchTableConfig.renderLayer;
+        return ModConfig.renderLayer;
     }
 
     @Override
@@ -125,8 +124,7 @@ public class BlockTable extends BlockModHorizontal
                 if (tileCompound.hasKey("owner", Constants.NBT.TAG_STRING))
                 {
                     String ownerName = tileCompound.getString("owner");
-                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner",
-                            TextFormatting.RESET + ownerName + TextFormatting.GRAY));
+                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.RESET + ownerName + TextFormatting.GRAY));
                 }
             }
             if (compound.hasKey("title", Constants.NBT.TAG_STRING))
@@ -136,13 +134,11 @@ public class BlockTable extends BlockModHorizontal
                 {
                     title = I18n.format(title);
                 }
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching",
-                        TextFormatting.RESET + title + TextFormatting.GRAY));
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.RESET + title + TextFormatting.GRAY));
                 if (compound.hasKey("progress", Constants.NBT.TAG_FLOAT))
                 {
                     float progress = compound.getFloat("progress");
-                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.RESET
-                            + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%" + TextFormatting.GRAY));
+                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.RESET + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%" + TextFormatting.GRAY));
                 }
             }
         }
