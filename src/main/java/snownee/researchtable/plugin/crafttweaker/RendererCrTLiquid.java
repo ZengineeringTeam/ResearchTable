@@ -1,7 +1,8 @@
 package snownee.researchtable.plugin.crafttweaker;
 
-import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -109,7 +110,7 @@ public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid>
     @Override
     public List<String> getTooltip(ITooltipFlag flag)
     {
-        List<String> tooltip = Arrays.asList(fluid.getLocalizedName());
+        List<String> tooltip = Lists.newArrayList(fluid.getLocalizedName());
         if (flag.isAdvanced())
         {
             String s = TextFormatting.GRAY + fluid.getFluid().getName();

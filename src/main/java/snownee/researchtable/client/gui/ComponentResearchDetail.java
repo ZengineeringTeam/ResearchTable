@@ -90,8 +90,6 @@ public class ComponentResearchDetail extends GuiList
     @Override
     protected void drawBackground()
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
