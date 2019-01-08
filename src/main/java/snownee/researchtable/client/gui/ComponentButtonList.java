@@ -67,7 +67,7 @@ public class ComponentButtonList extends Component
                         states[i] = State.HOVERED;
                         if (texts[i].equals("cancel"))
                         {
-                            setTooltip(Arrays.asList("Press Shift"), null);
+                            setTooltip(Arrays.asList(I18n.format("researchtable.gui.button.shift")), null);
                         }
                     }
                 }
