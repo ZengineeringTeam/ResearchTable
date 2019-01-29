@@ -27,14 +27,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
 import snownee.kiwi.util.Util;
-import snownee.researchtable.ResearchTable;
 import snownee.researchtable.ModConfig;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.Research;
 
 public class BlockTable extends BlockModHorizontal
@@ -101,10 +102,14 @@ public class BlockTable extends BlockModHorizontal
             IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldIn, pos, facing);
             if (fluidDestination != null)
             {
-                FluidUtil.tryEmptyContainer(stack, fluidDestination, Integer.MAX_VALUE, playerIn, true);
+                FluidActionResult result = FluidUtil.tryEmptyContainer(stack, fluidDestination, Integer.MAX_VALUE, playerIn, true);
+                if (result.isSuccess())
+                {
+                    playerIn.setHeldItem(hand, result.getResult());
+                }
             }
         }
-        else if (!worldIn.isRemote)
+        else
         {
             playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }

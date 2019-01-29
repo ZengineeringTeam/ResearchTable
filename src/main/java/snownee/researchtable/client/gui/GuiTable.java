@@ -41,7 +41,7 @@ public class GuiTable extends GuiContainerMod
     public void initGui()
     {
         super.initGui();
-
+        fontRenderer = AdvancedFontRenderer.INSTANCE;
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
         researchList = new ComponentResearchList(panel.control, ModConfig.guiListWidth, ySize - 8, 0, 0, 20, width, height);
