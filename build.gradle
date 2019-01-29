@@ -77,7 +77,7 @@ dependencies {
         exclude group: 'cofh'
     }
     compile files(
-        'Kiwi-1.12.2-0.5.0-deobf.jar'
+        'Kiwi-1.12.2-0.5.1.27-deobf.jar'
     )
 }
 
