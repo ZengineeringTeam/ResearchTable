@@ -84,7 +84,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         {
             font = Minecraft.getMinecraft().fontRenderer;
         }
-        font.setUnicodeFlag(true);
+        // font.setUnicodeFlag(true);
         return font;
     }
 
@@ -92,7 +92,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     public List<String> getTooltip(ITooltipFlag flag)
     {
         ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
-        return stack.getTooltip(Minecraft.getMinecraft().player, flag);
+        return stack.getTooltip(null, flag);
     }
 
 }
