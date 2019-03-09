@@ -103,7 +103,7 @@ public class BlockTable extends BlockModHorizontal
             if (fluidDestination != null)
             {
                 FluidActionResult result = FluidUtil.tryEmptyContainer(stack, fluidDestination, Integer.MAX_VALUE, playerIn, true);
-                if (result.isSuccess())
+                if (result.isSuccess() && !playerIn.isCreative())
                 {
                     playerIn.setHeldItem(hand, result.getResult());
                 }
