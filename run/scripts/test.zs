@@ -1,5 +1,7 @@
 import mods.ResearchTable;
 
+// use `/researchtable @p all 0` to clear all progress
+
 var cat = ResearchTable.addCategory(<minecraft:grass>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
@@ -25,6 +27,7 @@ ResearchTable.builder("testResearch2", cat)
 ResearchTable.builder("testResearch3", cat)
   .setTitle("Produce Seller")
   .setIcons(<minecraft:bread>)
+  .setRequiredResearches("testResearch1")
   .setRequiredStages("stage", "stageYouWillNeverGet")
   .addCondition(<minecraft:apple> * 2147483647)
   .addCondition(<minecraft:wheat> * 2147483647)

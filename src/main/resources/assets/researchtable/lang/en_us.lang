@@ -8,6 +8,7 @@ researchtable.gui.owner=Owner: %s
 researchtable.gui.researching=Researching: %s
 researchtable.gui.progress=Progress: %s
 researchtable.gui.needStages=Need stages: %s
+researchtable.gui.needResearches=Need researches: %s
 researchtable.gui.maxCount=You have completed this research!
 researchtable.gui.fe=Energy
 researchtable.gui.button.research=Research

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -159,21 +160,35 @@ public class DataStorage
         }
         return 0;
     }
-
-    public static int count(String playerName, Research research)
+    
+    public static int count(String playerName, String research)
     {
         if (loaded())
         {
             if (INSTANCE.players.containsKey(playerName))
             {
-                return INSTANCE.players.get(playerName).getOrDefault(research.getName(), 0);
+                return INSTANCE.players.get(playerName).getOrDefault(research, 0);
             }
         }
         else if (clientData != null)
         {
-            return clientData.getOrDefault(research.getName(), 0);
+            return clientData.getOrDefault(research, 0);
         }
         return 0;
+    }
+
+    public static int count(String playerName, Research research)
+    {
+        return count(playerName, research.getName());
+    }
+    
+    public static boolean hasAllOf(String playerName, Collection<String> researches)
+    {
+        for (String research : researches)
+        {
+            if (count(playerName, research) == 0) return false;
+        }
+        return true;
     }
 
     @SubscribeEvent

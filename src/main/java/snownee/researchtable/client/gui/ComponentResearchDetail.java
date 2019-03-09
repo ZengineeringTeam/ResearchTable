@@ -1,5 +1,6 @@
 package snownee.researchtable.client.gui;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -18,6 +19,7 @@ import snownee.researchtable.client.gui.ComponentButtonList.State;
 import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
+import snownee.researchtable.core.ResearchList;
 
 public class ComponentResearchDetail extends GuiList
 {
@@ -164,8 +166,11 @@ public class ComponentResearchDetail extends GuiList
         {
             String string = TextFormatting.RESET.toString();
             Set<String> stages = displaying.getStages();
+            Set<String> researches = displaying.getRequiredResearchNames();
+            boolean wrap = false;
             if (!GameStageHelper.hasAllOf(control.mc.player, stages))
             {
+                wrap = true;
                 boolean first = true;
                 for (String stage : stages)
                 {
@@ -183,8 +188,34 @@ public class ComponentResearchDetail extends GuiList
                 string += TextFormatting.RESET;
                 string = I18n.format(ResearchTable.MODID + ".gui.needStages", string);
             }
+            if (!DataStorage.hasAllOf(control.mc.player.getName(), researches))
+            {
+                if (wrap) string += "\n";
+                wrap = true;
+                boolean first = true;
+                String s = "";
+                for (String research : researches)
+                {
+                    Optional<Research> result = ResearchList.find(research);
+                    if (!result.isPresent()) continue;
+                    if (!first)
+                    {
+                        s += Util.color(0) + ", ";
+                    }
+                    first = false;
+                    if (DataStorage.count(control.mc.player.getName(), research) == 0)
+                    {
+                        s += Util.color(0xFFFF0000);
+                    }
+                    s += result.get().getTitle();
+                }
+                string += TextFormatting.RESET;
+                string += I18n.format(ResearchTable.MODID + ".gui.needResearches", s);
+            }
             if (DataStorage.count(control.mc.player.getName(), displaying) >= displaying.getMaxCount())
             {
+                if (wrap) string += "\n";
+                wrap = true;
                 string += Util.color(0xFFFF0000) + I18n.format(ResearchTable.MODID + ".gui.maxCount");
             }
             info.setText(string);

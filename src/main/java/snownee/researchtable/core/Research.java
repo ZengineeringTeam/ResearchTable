@@ -23,19 +23,21 @@ public class Research
     private final String title;
     private final String description;
     private final Set<String> stages;
+    private final Set<String> researches;
     @Nullable
     private final List<ItemStack> icons;
     private final List<ICondition> conditions;
     private final Collection<IReward> rewards;
     private final int maxCount;
 
-    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons, int maxCount)
+    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, Set<String> researches, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons, int maxCount)
     {
         this.name = name;
         this.category = category;
         this.title = title;
         this.description = description;
         this.stages = stages;
+        this.researches = researches;
         this.rewards = rewards;
         this.conditions = conditions;
         this.icons = icons;
@@ -81,12 +83,17 @@ public class Research
 
     public boolean canResearch(EntityPlayer player)
     {
-        return GameStageHelper.hasAllOf(player, stages) && DataStorage.count(player.getName(), this) < getMaxCount();
+        return GameStageHelper.hasAllOf(player, stages) && DataStorage.count(player.getName(), this) < getMaxCount() && DataStorage.hasAllOf(player.getName(), researches);
     }
 
     public Set<String> getStages()
     {
         return Collections.unmodifiableSet(stages);
+    }
+
+    public Set<String> getRequiredResearchNames()
+    {
+        return Collections.unmodifiableSet(researches);
     }
 
     public void complete(World world, BlockPos pos, EntityPlayer player)

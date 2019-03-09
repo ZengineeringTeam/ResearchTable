@@ -37,6 +37,7 @@ public class ResearchBuilder
     private final String name;
     private final ResearchCategory category;
     private Set<String> requiredStages;
+    private Set<String> requiredResearches;
     private List<IReward> rewards = new LinkedList<>();
     private List<ItemStack> icons;
     private String title;
@@ -66,6 +67,13 @@ public class ResearchBuilder
     public ResearchBuilder setRequiredStages(@Nonnull String... stages)
     {
         requiredStages = ImmutableSet.copyOf(stages);
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setRequiredResearches(@Nonnull String... researches)
+    {
+        requiredResearches = ImmutableSet.copyOf(researches);
         return this;
     }
 
@@ -168,7 +176,11 @@ public class ResearchBuilder
         {
             requiredStages = Collections.EMPTY_SET;
         }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, rewards, conditions, icons, maxCount);
+        if (requiredResearches == null)
+        {
+            requiredResearches = Collections.EMPTY_SET;
+        }
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, requiredResearches, rewards, conditions, icons, maxCount);
         return ResearchList.LIST.add(research);
     }
 
