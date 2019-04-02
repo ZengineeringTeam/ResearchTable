@@ -168,7 +168,7 @@ public class BlockTable extends BlockModHorizontal
             Research research = table.getResearch();
             if (research != null)
             {
-                compound.setString("title", research.getTitle());
+                compound.setString("title", research.getTitleRaw());
                 compound.setFloat("progress", table.getProgress());
             }
             stack.setTagCompound(compound);

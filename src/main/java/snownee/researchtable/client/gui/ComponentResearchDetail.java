@@ -64,12 +64,7 @@ public class ComponentResearchDetail extends GuiList
                 // Last two components must be button list and text. remove others
                 control.removeComponent(i);
             }
-            String description = displaying.getDescription();
-            if (I18n.hasKey(description))
-            {
-                description = I18n.format(description);
-            }
-            text.setText(description);
+            text.setText(displaying.getDescription());
             for (ICondition condition : displaying.getConditions())
             {
                 ComponentResearchProgress progress = new ComponentResearchProgress(control, width, condition);

@@ -13,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
@@ -22,6 +24,7 @@ import snownee.researchtable.core.Research;
 public class TableInfoProvider implements IWailaDataProvider
 {
     @Override
+    @SideOnly(Side.CLIENT)
     public List<String> getWailaBody(ItemStack itemStack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         if (accessor.getTileEntity() instanceof TileTable)
@@ -39,10 +42,6 @@ public class TableInfoProvider implements IWailaDataProvider
             if (research != null)
             {
                 String title = research.getTitle();
-                if (I18n.hasKey(title))
-                {
-                    title = I18n.format(title);
-                }
                 tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));
                 tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { table.getProgress() }) + "%"));
             }

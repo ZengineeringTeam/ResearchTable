@@ -43,7 +43,7 @@ public class TableInfoProvider implements IProbeInfoProvider
                     Research research = table.getResearch();
                     if (research != null)
                     {
-                        String title = research.getTitle();
+                        String title = research.getTitleRaw();
                         if (I18n.canTranslate(title))
                         {
                             title = I18n.translateToLocalFormatted(title);

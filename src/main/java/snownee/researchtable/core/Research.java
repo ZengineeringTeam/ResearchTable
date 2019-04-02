@@ -8,11 +8,14 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.darkhax.gamestages.GameStageHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Research
 {
@@ -54,14 +57,26 @@ public class Research
         return category;
     }
 
-    public String getTitle()
+    public String getTitleRaw()
     {
         return title;
     }
 
-    public String getDescription()
+    @SideOnly(Side.CLIENT)
+    public String getTitle()
+    {
+        return I18n.hasKey(title) ? I18n.format(title) : title;
+    }
+
+    public String getDescriptionRaw()
     {
         return description;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getDescription()
+    {
+        return I18n.hasKey(description) ? I18n.format(description) : description;
     }
 
     public ItemStack getIcon()

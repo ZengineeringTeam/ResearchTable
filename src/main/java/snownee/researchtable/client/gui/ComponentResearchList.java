@@ -94,10 +94,6 @@ public class ComponentResearchList extends GuiList
         renderItem.renderItemAndEffectIntoGUI(research.getIcon(), offsetX + 6, offsetY + slotTop + 1);
         renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6, offsetY + slotTop + 1, null);
         String title = research.getTitle();
-        if (I18n.hasKey(title))
-        {
-            title = I18n.format(title);
-        }
         if (!research.canResearch(Minecraft.getMinecraft().player))
         {
             title = Util.color(0x808080) + title;
