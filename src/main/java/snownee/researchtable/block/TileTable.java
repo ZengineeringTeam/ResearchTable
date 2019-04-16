@@ -189,7 +189,7 @@ public class TileTable extends TileBase
         @Override
         public boolean canFillFluidType(FluidStack fluidStack)
         {
-            return match(ConditionTypes.FLUID, fluidStack, true) > 0;
+            return canFill() && match(ConditionTypes.FLUID, fluidStack, true) > 0;
         }
 
         @Override

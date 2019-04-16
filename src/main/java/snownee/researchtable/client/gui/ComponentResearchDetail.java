@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.typesafe.config.ConfigException.Null;
+
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
@@ -157,7 +159,7 @@ public class ComponentResearchDetail extends GuiList
             }
         }
 
-        if (researching != displaying && !displaying.canResearch(control.mc.player))
+        if (displaying != null && researching != displaying && !displaying.canResearch(control.mc.player))
         {
             String string = TextFormatting.RESET.toString();
             Set<String> stages = displaying.getStages();
