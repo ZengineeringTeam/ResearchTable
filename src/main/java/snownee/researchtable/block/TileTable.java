@@ -2,6 +2,7 @@ package snownee.researchtable.block;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -9,6 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -22,6 +24,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import snownee.kiwi.tile.TileBase;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ConditionTypes;
 import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.ICondition;
@@ -206,19 +209,32 @@ public class TileTable extends TileBase
     private long[] progress;
     public boolean hasChanged;
     public String ownerName;
+    private UUID ownerUUID;
     private ResearchItemWrapper itemHandler = new ResearchItemWrapper();
     private ResearchEnergyWrapper energyHandler = new ResearchEnergyWrapper();
     private ResearchFluidWrapper fluidHandler = new ResearchFluidWrapper();
     private boolean canComplete;
 
-    public TileTable()
-    {
-    }
-
     @Nullable
     public Research getResearch()
     {
         return research;
+    }
+
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
+    }
+
+    public void setOwnerUUID(UUID uuid)
+    {
+        if (this.ownerUUID == null)
+        {
+            this.ownerUUID = uuid;
+        }
+        else
+        {
+            ResearchTable.logger.debug("An attempt of re-setting research table owner uuid occurred. Action aborted.");
+        }
     }
 
     public void setResearch(@Nullable Research research)
@@ -244,6 +260,16 @@ public class TileTable extends TileBase
         if (data.hasKey("owner", Constants.NBT.TAG_STRING))
         {
             ownerName = data.getString("owner");
+        }
+        else if (data.hasKey("owner", Constants.NBT.TAG_COMPOUND))
+        {
+            NBTTagCompound credential = data.getCompoundTag("owner");
+            this.ownerName = credential.getString("name");
+            this.ownerUUID = NBTUtil.getUUIDFromTag(credential.getCompoundTag("uuid"));
+        }
+        else
+        {
+            // TODO Warn about missing owner info
         }
         if (data.hasKey("research", Constants.NBT.TAG_STRING))
         {
@@ -280,10 +306,16 @@ public class TileTable extends TileBase
     @Override
     protected NBTTagCompound writePacketData(NBTTagCompound data)
     {
+        NBTTagCompound credential = new NBTTagCompound();
         if (ownerName != null)
         {
-            data.setString("owner", ownerName);
+            credential.setString("name", ownerName);
         }
+        if (ownerUUID != null)
+        {
+            credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
+        }
+        data.setTag("owner", credential);
         if (research != null)
         {
             data.setString("research", research.getName());
@@ -354,11 +386,28 @@ public class TileTable extends TileBase
 
     public boolean hasPermission(EntityPlayer player)
     {
+        if (player.getUniqueID().equals(this.ownerUUID))
+        {
+            return true;
+        }
+
         if (ownerName == null || ownerName.isEmpty())
         {
             return true;
         }
-        return player.getName().equals(ownerName);
+
+        if (player.getName().equals(ownerName))
+        {
+            return true;
+        }
+        else
+        {
+            ResearchTable.logger.warn(
+                    "Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.",
+                    player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID
+            );
+            return false;
+        }
     }
 
     public boolean canComplete()

@@ -195,9 +195,10 @@ public class BlockTable extends BlockModHorizontal
             if (tile instanceof TileTable)
             {
                 TileTable table = (TileTable) tile;
-                if (table.ownerName == null && placer instanceof EntityPlayer && !(placer instanceof FakePlayer))
+                if (table.getOwnerUUID() == null && placer instanceof EntityPlayer && !(placer instanceof FakePlayer))
                 {
                     table.ownerName = ((EntityPlayer) placer).getName();
+                    table.setOwnerUUID(placer.getUniqueID());
                 }
             }
         }
