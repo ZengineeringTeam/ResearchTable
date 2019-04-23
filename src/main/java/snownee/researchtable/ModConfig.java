@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = ResearchTable.MODID)
 @Mod.EventBusSubscriber(modid = ResearchTable.MODID)
-public final class ModConfig
+public final class  ModConfig
 {
     private ModConfig()
     {
@@ -39,4 +39,9 @@ public final class ModConfig
 
     @Config.Name("HideUnavailableResearch")
     public static boolean hide = false;
+
+    @Config.Comment("If enabled, the player will execute the rewarded command as if he is executing the command on his own. " +
+            "Use this option if you encountered issue with a certain permission management system.")
+    @Config.Name("NonPrivilegedCommandReward")
+    public static boolean nonPrivilegedMode = false;
 }
