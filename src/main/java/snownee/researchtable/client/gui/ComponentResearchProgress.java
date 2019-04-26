@@ -22,7 +22,7 @@ public class ComponentResearchProgress extends Component
     private static final DrawableResource SUCCESS_ICON = new DrawableResource(new ResourceLocation("textures/gui/container/beacon.png"), 91, 224, 14, 12);
 
     private final ICondition condition;
-    private final ConditionRenderer renderer;
+    private ConditionRenderer renderer;
     private boolean researching;
     private long total;
     private long target;
@@ -38,6 +38,11 @@ public class ComponentResearchProgress extends Component
         {
             total = 1;
         }
+    }
+
+    public void resetRenderer()
+    {
+        this.renderer = ConditionRenderer.get(condition);
     }
 
     public void setResearching(boolean researching)
