@@ -114,9 +114,19 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public ResearchBuilder addCondition(@Nonnull IIngredient ingredient)
+    public ResearchBuilder addCondition(@Nonnull IIngredient... ingredients)
     {
-        conditions.add(new ConditionCrTItem(ingredient));
+        for (IIngredient ingredient : ingredients)
+        {
+            if (ingredient instanceof ILiquidStack)
+            {
+                conditions.add(new ConditionCrTLiquid((ILiquidStack) ingredient));
+            }
+            else
+            {
+                conditions.add(new ConditionCrTItem(ingredient));
+            }
+        }
         return this;
     }
 
@@ -124,13 +134,6 @@ public class ResearchBuilder
     public ResearchBuilder addCondition(@Nonnull IIngredient ingredient, long amount)
     {
         conditions.add(new ConditionCrTItem(ingredient, amount));
-        return this;
-    }
-
-    @ZenMethod
-    public ResearchBuilder addCondition(@Nonnull ILiquidStack ingredient)
-    {
-        conditions.add(new ConditionCrTLiquid(ingredient));
         return this;
     }
 
