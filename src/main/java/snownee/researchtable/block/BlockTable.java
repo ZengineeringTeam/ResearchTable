@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.block.BlockModHorizontal;
+import snownee.kiwi.util.NBTHelper;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.ResearchTable;
@@ -125,10 +126,18 @@ public class BlockTable extends BlockModHorizontal
         {
             if (compound.hasKey("BlockEntityTag", Constants.NBT.TAG_COMPOUND))
             {
+                String ownerName = null;
                 NBTTagCompound tileCompound = compound.getCompoundTag("BlockEntityTag");
-                if (tileCompound.hasKey("owner", Constants.NBT.TAG_STRING))
+                if (tileCompound.hasKey("owner", Constants.NBT.TAG_COMPOUND))
                 {
-                    String ownerName = tileCompound.getString("owner");
+                    ownerName = NBTHelper.of(tileCompound).getString("owner.name");
+                }
+                else if (tileCompound.hasKey("owner", Constants.NBT.TAG_STRING))
+                {
+                    ownerName = tileCompound.getString("owner");
+                }
+                if (ownerName != null)
+                {
                     tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.RESET + ownerName + TextFormatting.GRAY));
                 }
             }
