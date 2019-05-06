@@ -8,11 +8,9 @@
   "url": "",
   "updateUrl": "",
   "authorList": ["Snownee"],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [],
+  "credits": "Huge thanks to my supporters:\n粉鱼, Lioness131, 皮蛋, Cherls, idyllic_bean, 鱼加盐有点咸, 洋葱菜菜子",
   "useDependencyInformation": true,
   "requiredMods": ["forge@[14.23.4.2772,)", "kiwi@[0.5, 0.7)", "gamestages@[2.0, 3.0)"],
-  "dependencies": ["forge@[14.23.4.2772,)", "kiwi@[0.5, 0.7)", "gamestages@[2.0, 3.0)", "crafttweaker"],
+  "dependencies": ["forge@[14.23.4.2772,)", "kiwi@[0.5, 0.7)", "gamestages@[2.0, 3.0)", "crafttweaker"]
 }
 ]
