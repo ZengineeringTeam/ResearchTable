@@ -6,14 +6,15 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.typesafe.config.ConfigException.Null;
-
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
+import snownee.kiwi.client.gui.component.ComponentList;
 import snownee.kiwi.client.gui.component.ComponentText;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
@@ -23,7 +24,8 @@ import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
 
-public class ComponentResearchDetail extends GuiList
+@SideOnly(Side.CLIENT)
+public class ComponentResearchDetail extends ComponentList
 {
     @Nullable
     private Research displaying;

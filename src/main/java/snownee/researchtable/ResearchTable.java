@@ -22,6 +22,7 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 @Mod(
         modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)", useMetadata = true
 )
+// @EventBusSubscriber(value = Side.CLIENT)
 public class ResearchTable
 {
     public static final String MODID = "researchtable";
@@ -66,4 +67,20 @@ public class ResearchTable
     {
         event.registerServerCommand(new CommandResearch());
     }
+
+    // When current GUI is not null, you cannot receive event, I am not sure if it is a bug
+    //    @SubscribeEvent
+    //    @SideOnly(Side.CLIENT)
+    //    public static void onGameStageEvent(GameStageEvent event)
+    //    {
+    //        if (event.getClass() == GameStageEvent.Check.class || event.getClass() == GameStageEvent.Add.class || event.getClass() == GameStageEvent.Remove.class)
+    //        {
+    //            return;
+    //        }
+    //        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+    //        if (gui != null && gui.getClass() == GuiTable.class)
+    //        {
+    //            ((GuiTable) gui).resetProgress();
+    //        }
+    //    }
 }

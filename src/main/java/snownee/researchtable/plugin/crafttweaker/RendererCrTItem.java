@@ -1,20 +1,24 @@
 package snownee.researchtable.plugin.crafttweaker;
 
+import java.util.Collections;
 import java.util.List;
 
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.client.renderer.ConditionRenderer;
+import snownee.researchtable.client.renderer.EventShowItemCondition;
 
 @SideOnly(Side.CLIENT)
 public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
@@ -37,6 +41,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
                 stacks.add(CraftTweakerMC.getItemStack(stack));
             }
         }
+        MinecraftForge.EVENT_BUS.post(new EventShowItemCondition(stacks));
     }
 
     @Override
@@ -55,7 +60,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         {
             return stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())).getDisplayName();
         }
-        return ItemStack.EMPTY.getDisplayName();
+        return I18n.format("researchtable.gui.unknown_item");
     }
 
     @Override
@@ -78,8 +83,12 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     @Override
     public FontRenderer getFont()
     {
-        ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
-        FontRenderer font = stack.getItem().getFontRenderer(stack);
+        FontRenderer font = null;
+        if (!stacks.isEmpty())
+        {
+            ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
+            font = stack.getItem().getFontRenderer(stack);
+        }
         if (font == null)
         {
             font = Minecraft.getMinecraft().fontRenderer;
@@ -91,8 +100,15 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     @Override
     public List<String> getTooltip(ITooltipFlag flag)
     {
-        ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
-        return stack.getTooltip(null, flag);
+        if (!stacks.isEmpty())
+        {
+            ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
+            return stack.getTooltip(null, flag);
+        }
+        else
+        {
+            return Collections.EMPTY_LIST;
+        }
     }
 
 }

@@ -36,3 +36,5 @@ ResearchTable.builder("testResearch3", cat)
   .addCondition(<minecraft:potato>, 9223372036854775807)
   .addCondition(<minecraft:egg>, 9223372036854775807)
   .build();
+
+mods.ItemStages.addItemStage("one", <minecraft:wool:5>);

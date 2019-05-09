@@ -14,7 +14,6 @@ import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.network.NetworkChannel;
-import snownee.researchtable.ResearchTable;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
@@ -69,11 +68,13 @@ public class GuiTable extends GuiContainerMod
         panel.control.addComponent(detail);
     }
 
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    @Override
     protected void mouseReleased(int mouseX, int mouseY, int state)
     {
         super.mouseReleased(mouseX, mouseY, state);
@@ -179,6 +180,16 @@ public class GuiTable extends GuiContainerMod
             }
         }
         return 0;
+    }
+
+    public void resetProgress()
+    {
+        if (detail == null) return;
+        List<ComponentResearchProgress> components = detail.control.getComponents(ComponentResearchProgress.class);
+        for (ComponentResearchProgress component : components)
+        {
+            component.resetRenderer();
+        }
     }
 
     @Override

@@ -8,12 +8,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.element.DrawableNineSlice;
 import snownee.researchtable.ResearchTable;
 
+@SideOnly(Side.CLIENT)
 public class ComponentButtonList extends Component
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/beacon.png");

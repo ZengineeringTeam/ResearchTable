@@ -10,9 +10,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
+import snownee.kiwi.client.gui.component.ComponentList;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.core.DataStorage;
@@ -20,7 +22,8 @@ import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 
-public class ComponentResearchList extends GuiList
+@SideOnly(Side.CLIENT)
+public class ComponentResearchList extends ComponentList
 {
     final List<Research> researches = new ArrayList<>();
     ResearchCategory category;

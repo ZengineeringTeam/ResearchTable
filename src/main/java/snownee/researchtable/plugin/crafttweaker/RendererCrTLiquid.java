@@ -54,10 +54,10 @@ public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid>
         GlStateManager.color(red, green, blue, 1.0F);
 
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        double uMin = (double) sprite.getMinU();
-        double uMax = (double) sprite.getMaxU();
-        double vMin = (double) sprite.getMinV();
-        double vMax = (double) sprite.getMaxV();
+        double uMin = sprite.getMinU();
+        double uMax = sprite.getMaxU();
+        double vMin = sprite.getMinV();
+        double vMax = sprite.getMaxV();
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();

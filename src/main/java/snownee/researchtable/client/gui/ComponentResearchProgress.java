@@ -2,13 +2,14 @@ package snownee.researchtable.client.gui;
 
 import java.util.List;
 
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
@@ -17,6 +18,7 @@ import snownee.kiwi.util.Util;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.core.ICondition;
 
+@SideOnly(Side.CLIENT)
 public class ComponentResearchProgress extends Component
 {
     private static final DrawableResource SUCCESS_ICON = new DrawableResource(new ResourceLocation("textures/gui/container/beacon.png"), 91, 224, 14, 12);

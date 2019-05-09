@@ -1,10 +1,13 @@
 package snownee.researchtable.client.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.IMessageHandler;
 import snownee.kiwi.client.gui.component.Component;
 
+@SideOnly(Side.CLIENT)
 public class GuiControlSpecial extends GuiControl
 {
 

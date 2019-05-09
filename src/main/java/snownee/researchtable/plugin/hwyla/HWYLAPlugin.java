@@ -2,8 +2,6 @@ package snownee.researchtable.plugin.hwyla;
 
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
-import mcp.mobius.waila.api.WailaPlugin;
-import snownee.researchtable.block.BlockTable;
 
 //@WailaPlugin
 @Deprecated
