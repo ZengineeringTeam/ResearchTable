@@ -39,10 +39,6 @@ public class PacketResearchChanged implements PacketMod
     @Override
     public void handleServer(EntityPlayerMP player)
     {
-        if (!research.canResearch(player))
-        {
-            return;
-        }
         TileEntity tile = player.world.getTileEntity(pos);
         if (tile instanceof TileTable)
         {
@@ -54,8 +50,13 @@ public class PacketResearchChanged implements PacketMod
             switch (action)
             {
             case START:
+                if (!research.canResearch(player))
+                {
+                    return;
+                }
                 if (table.getResearch() == null && research != null)
                 {
+                    research.start(player.world, pos, player);
                     table.setResearch(research);
                 }
                 break;

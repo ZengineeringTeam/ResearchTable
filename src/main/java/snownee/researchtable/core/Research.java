@@ -3,11 +3,9 @@ package snownee.researchtable.core;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -25,26 +23,24 @@ public class Research
     private final ResearchCategory category;
     private final String title;
     private final String description;
-    private final Set<String> stages;
-    private final Set<String> researches;
     @Nullable
     private final List<ItemStack> icons;
     private final List<ICondition> conditions;
+    private final Collection<ICriterion> criteria;
+    private final Collection<IReward> triggers;
     private final Collection<IReward> rewards;
-    private final int maxCount;
 
-    public Research(String name, ResearchCategory category, String title, String description, Set<String> stages, Set<String> researches, List<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons, int maxCount)
+    public Research(String name, ResearchCategory category, String title, String description, Collection<ICriterion> criteria, Collection<IReward> triggers, Collection<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons)
     {
         this.name = name;
         this.category = category;
         this.title = title;
         this.description = description;
-        this.stages = stages;
-        this.researches = researches;
+        this.criteria = criteria;
+        this.triggers = triggers;
         this.rewards = rewards;
         this.conditions = conditions;
         this.icons = icons;
-        this.maxCount = maxCount;
     }
 
     public String getName()
@@ -98,17 +94,17 @@ public class Research
 
     public boolean canResearch(EntityPlayer player)
     {
-        return GameStageHelper.hasAllOf(player, stages) && DataStorage.count(player.getName(), this) < getMaxCount() && DataStorage.hasAllOf(player.getName(), researches);
+        return criteria.stream().allMatch(c -> c.matches(player));
     }
 
-    public Set<String> getStages()
+    public Collection<ICriterion> getCriteria()
     {
-        return Collections.unmodifiableSet(stages);
+        return Collections.unmodifiableCollection(criteria);
     }
 
-    public Set<String> getRequiredResearchNames()
+    public Collection<IReward> getTriggers()
     {
-        return Collections.unmodifiableSet(researches);
+        return Collections.unmodifiableCollection(triggers);
     }
 
     public void complete(World world, BlockPos pos, EntityPlayer player)
@@ -122,8 +118,8 @@ public class Research
         return "Research@" + getName();
     }
 
-    public int getMaxCount()
+    public void start(World world, BlockPos pos, EntityPlayer player)
     {
-        return maxCount;
+        triggers.forEach(r -> r.earn(world, pos, player));
     }
 }

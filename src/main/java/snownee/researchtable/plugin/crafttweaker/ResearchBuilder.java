@@ -1,7 +1,6 @@
 package snownee.researchtable.plugin.crafttweaker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ConditionForgeEnergy;
+import snownee.researchtable.core.CriterionResearchCount;
+import snownee.researchtable.core.CriterionResearches;
+import snownee.researchtable.core.CriterionScore;
+import snownee.researchtable.core.CriterionStages;
 import snownee.researchtable.core.ICondition;
+import snownee.researchtable.core.ICriterion;
 import snownee.researchtable.core.IReward;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
@@ -27,6 +31,7 @@ import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.RewardExecute;
 import snownee.researchtable.core.RewardItems;
 import snownee.researchtable.core.RewardUnlockStages;
+import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 public class ResearchBuilder
@@ -36,8 +41,8 @@ public class ResearchBuilder
 
     private final String name;
     private final ResearchCategory category;
-    private Set<String> requiredStages;
-    private Set<String> requiredResearches;
+    private List<ICriterion> criteria = new LinkedList<>();
+    private List<IReward> triggers = new LinkedList<>();
     private List<IReward> rewards = new LinkedList<>();
     private List<ItemStack> icons;
     private String title;
@@ -66,14 +71,41 @@ public class ResearchBuilder
     @ZenMethod
     public ResearchBuilder setRequiredStages(@Nonnull String... stages)
     {
-        requiredStages = ImmutableSet.copyOf(stages);
+        Set<String> set = ImmutableSet.copyOf(stages);
+        criteria.add(new CriterionStages(set, set.size()));
         return this;
     }
 
     @ZenMethod
     public ResearchBuilder setRequiredResearches(@Nonnull String... researches)
     {
-        requiredResearches = ImmutableSet.copyOf(researches);
+        Set<String> set = ImmutableSet.copyOf(researches);
+        criteria.add(new CriterionResearches(set, set.size()));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setOptionalStages(int amount, @Nonnull String... stages)
+    {
+        Set<String> set = ImmutableSet.copyOf(stages);
+        criteria.add(new CriterionStages(set, amount));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setOptionalResearches(int amount, @Nonnull String... researches)
+    {
+        Set<String> set = ImmutableSet.copyOf(researches);
+        criteria.add(new CriterionResearches(set, amount));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setRequiredScore(String score, String failingText, int min, @Optional int max)
+    {
+        if (max <= 0)
+            max = min;
+        criteria.add(new CriterionScore(score, min, max, failingText));
         return this;
     }
 
@@ -96,6 +128,28 @@ public class ResearchBuilder
     {
         NonNullList<ItemStack> rawItems = NonNullList.from(ItemStack.EMPTY, CraftTweakerMC.getItemStacks(items));
         rewards.add(new RewardItems(rawItems));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setTriggerStages(@Nonnull String... stages)
+    {
+        triggers.add(new RewardUnlockStages(stages));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setTriggerCommands(@Nonnull String... commands)
+    {
+        triggers.add(new RewardExecute(commands));
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchBuilder setTriggerItems(@Nonnull IItemStack... items)
+    {
+        NonNullList<ItemStack> rawItems = NonNullList.from(ItemStack.EMPTY, CraftTweakerMC.getItemStacks(items));
+        triggers.add(new RewardItems(rawItems));
         return this;
     }
 
@@ -161,7 +215,7 @@ public class ResearchBuilder
     @ZenMethod
     public ResearchBuilder setNoMaxCount()
     {
-        return setMaxCount(Integer.MAX_VALUE);
+        return setMaxCount(0);
     }
 
     @ZenMethod
@@ -175,15 +229,11 @@ public class ResearchBuilder
         {
             description = KEY_NO_DESCRIPTION;
         }
-        if (requiredStages == null)
+        if (maxCount > 0)
         {
-            requiredStages = Collections.EMPTY_SET;
+            criteria.add(new CriterionResearchCount(name, maxCount));
         }
-        if (requiredResearches == null)
-        {
-            requiredResearches = Collections.EMPTY_SET;
-        }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, requiredStages, requiredResearches, rewards, conditions, icons, maxCount);
+        Research research = new Research(name, ResearchCategory.GENERAL, title, description, criteria, triggers, rewards, conditions, icons);
         return ResearchList.LIST.add(research);
     }
 

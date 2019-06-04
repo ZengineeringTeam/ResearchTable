@@ -32,7 +32,7 @@ public class RewardExecute implements IReward
         }
     }
 
-    private static final class PrivilegedPlayer implements ICommandSender
+    static final class PrivilegedPlayer implements ICommandSender
     {
         private final EntityPlayer player;
 

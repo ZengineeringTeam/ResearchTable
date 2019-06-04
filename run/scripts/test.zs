@@ -6,7 +6,7 @@ var cat = ResearchTable.addCategory(<minecraft:grass>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
   .setIcons(<minecraft:grass>)
-  .setTitle("Alchemy")
+  .setTitle("Alchemy") // I18n support: use language key
   .setDescription("Input your description")
   .addCondition(<ore:ingotIron> * 8, <liquid:lava> * 2000)
   .setRewardStages("stage")
@@ -28,6 +28,8 @@ ResearchTable.builder("testResearch3", cat)
   .setIcons(<minecraft:bread>)
   .setRequiredResearches("testResearch1")
   .setRequiredStages("stage", "stageYouWillNeverGet")
+//.setOptionalStages(2, "stage", "stage2", "stage3")
+  .setOptionalResearches(1, "testResearch1", "testResearch2", "testResearch3")
   .addCondition(<minecraft:apple> * 2147483647)
   .addCondition(<minecraft:wheat> * 2147483647)
   .addCondition(<minecraft:wheat_seeds> * 2147483647)
@@ -37,4 +39,18 @@ ResearchTable.builder("testResearch3", cat)
   .addCondition(<minecraft:egg>, 9223372036854775807)
   .build();
 
+// ItemStages Integration
 mods.ItemStages.addItemStage("one", <minecraft:wool:5>);
+
+// Scoreboard
+// Run this before using:
+// /scoreboard objectives add points dummy
+// /scoreboard objectives setdisplay sidebar points
+// /scoreboard players add @p points 1
+
+ResearchTable.builder("testResearch4", cat)
+  .setTitle("Scoreboard Test")
+  .setIcons(<minecraft:command_block>)
+  .setRequiredScore("points", "your.language.key", 1, 3) // inclusive
+  .setTriggerCommands("/scoreboard players remove @s points 1")
+  .build();

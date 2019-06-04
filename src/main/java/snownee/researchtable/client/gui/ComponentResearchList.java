@@ -53,7 +53,7 @@ public class ComponentResearchList extends ComponentList
             }
             else if (!ModConfig.hide)
             {
-                if (DataStorage.count(parent.mc.player.getName(), research) >= research.getMaxCount())
+                if (DataStorage.count(parent.mc.player.getName(), research) > 0)
                 {
                     researchesCompleted.add(research);
                 }

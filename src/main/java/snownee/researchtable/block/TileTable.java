@@ -250,7 +250,7 @@ public class TileTable extends TileBase
             {
                 progress = new long[research.getConditions().size()];
             }
-            canComplete = false;
+            refreshCanComplete();
         }
     }
 
