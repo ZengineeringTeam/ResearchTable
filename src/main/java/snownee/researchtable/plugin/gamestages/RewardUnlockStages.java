@@ -1,4 +1,4 @@
-package snownee.researchtable.core;
+package snownee.researchtable.plugin.gamestages;
 
 import java.util.Set;
 
@@ -8,6 +8,7 @@ import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import snownee.researchtable.core.IReward;
 
 public class RewardUnlockStages implements IReward
 {

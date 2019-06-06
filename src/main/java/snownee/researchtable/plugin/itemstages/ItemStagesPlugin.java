@@ -12,7 +12,7 @@ import snownee.kiwi.KiwiModule;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.client.renderer.EventShowItemCondition;
 
-@KiwiModule(modid = ResearchTable.MODID, name = "itemstages", dependency = "itemstages")
+@KiwiModule(modid = ResearchTable.MODID, name = "itemstages", dependency = "itemstages", optional = true)
 public class ItemStagesPlugin implements IModule
 {
     @Override

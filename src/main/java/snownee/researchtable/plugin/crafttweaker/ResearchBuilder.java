@@ -21,7 +21,6 @@ import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.CriterionResearchCount;
 import snownee.researchtable.core.CriterionResearches;
 import snownee.researchtable.core.CriterionScore;
-import snownee.researchtable.core.CriterionStages;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.ICriterion;
 import snownee.researchtable.core.IReward;
@@ -30,7 +29,6 @@ import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.RewardExecute;
 import snownee.researchtable.core.RewardItems;
-import snownee.researchtable.core.RewardUnlockStages;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -41,13 +39,13 @@ public class ResearchBuilder
 
     private final String name;
     private final ResearchCategory category;
-    private List<ICriterion> criteria = new LinkedList<>();
-    private List<IReward> triggers = new LinkedList<>();
-    private List<IReward> rewards = new LinkedList<>();
-    private List<ItemStack> icons;
+    public List<ICriterion> criteria = new LinkedList<>();
+    public List<IReward> triggers = new LinkedList<>();
+    public List<IReward> rewards = new LinkedList<>();
+    public List<ICondition> conditions = new ArrayList<>(4);
+    public List<ItemStack> icons;
     private String title;
     private String description;
-    private List<ICondition> conditions = new ArrayList<>(4);
     private int maxCount = 1;
 
     public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategory category)
@@ -69,26 +67,10 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public ResearchBuilder setRequiredStages(@Nonnull String... stages)
-    {
-        Set<String> set = ImmutableSet.copyOf(stages);
-        criteria.add(new CriterionStages(set, set.size()));
-        return this;
-    }
-
-    @ZenMethod
     public ResearchBuilder setRequiredResearches(@Nonnull String... researches)
     {
         Set<String> set = ImmutableSet.copyOf(researches);
         criteria.add(new CriterionResearches(set, set.size()));
-        return this;
-    }
-
-    @ZenMethod
-    public ResearchBuilder setOptionalStages(int amount, @Nonnull String... stages)
-    {
-        Set<String> set = ImmutableSet.copyOf(stages);
-        criteria.add(new CriterionStages(set, amount));
         return this;
     }
 
@@ -110,13 +92,6 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public ResearchBuilder setRewardStages(@Nonnull String... stages)
-    {
-        rewards.add(new RewardUnlockStages(stages));
-        return this;
-    }
-
-    @ZenMethod
     public ResearchBuilder setRewardCommands(@Nonnull String... commands)
     {
         rewards.add(new RewardExecute(commands));
@@ -128,13 +103,6 @@ public class ResearchBuilder
     {
         NonNullList<ItemStack> rawItems = NonNullList.from(ItemStack.EMPTY, CraftTweakerMC.getItemStacks(items));
         rewards.add(new RewardItems(rawItems));
-        return this;
-    }
-
-    @ZenMethod
-    public ResearchBuilder setTriggerStages(@Nonnull String... stages)
-    {
-        triggers.add(new RewardUnlockStages(stages));
         return this;
     }
 

@@ -1,4 +1,4 @@
-package snownee.researchtable.core;
+package snownee.researchtable.plugin.gamestages;
 
 import java.util.Collection;
 
@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.core.ICriterion;
 
 public class CriterionStages implements ICriterion
 {
