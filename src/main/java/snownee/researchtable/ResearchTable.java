@@ -30,6 +30,9 @@ public class ResearchTable
 
     private static final ResearchTable INSTANCE = new ResearchTable();
 
+    public static String scoreFormattingText;
+    public static String scores[];
+
     @Mod.InstanceFactory
     public static ResearchTable getInstance()
     {

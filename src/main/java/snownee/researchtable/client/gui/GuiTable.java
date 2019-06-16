@@ -1,11 +1,19 @@
 package snownee.researchtable.client.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
@@ -13,8 +21,10 @@ import snownee.kiwi.client.gui.GuiContainerMod;
 import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
+import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.ModConfig;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
 import snownee.researchtable.core.ResearchCategory;
@@ -27,6 +37,8 @@ public class GuiTable extends GuiContainerMod
     private final TileTable table;
     private ComponentResearchDetail detail;
     private ComponentResearchList researchList;
+    private DrawableResource globe;
+    private List<String> scoreText;
 
     public GuiTable(TileTable tile, InventoryPlayer inventory)
     {
@@ -66,6 +78,54 @@ public class GuiTable extends GuiContainerMod
         control.addComponent(panel);
         panel.control.addComponent(researchList);
         panel.control.addComponent(detail);
+
+        if (ResearchTable.scoreFormattingText != null)
+        {
+            boolean failed = false;
+            Integer[] values = new Integer[ResearchTable.scores.length];
+            int i = 0;
+            for (String s : ResearchTable.scores)
+            {
+                Scoreboard scoreboard = mc.player.world.getScoreboard();
+                ScoreObjective scoreobjective = scoreboard.getObjective(s);
+                if (scoreobjective == null)
+                {
+                    failed = true;
+                }
+
+                // String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
+                String key = mc.player.getName();
+                if (!scoreboard.entityHasObjective(key, scoreobjective))
+                {
+                    failed = true;
+                }
+
+                Score score = scoreboard.getOrCreateScore(key, scoreobjective);
+                values[i] = score.getScorePoints();
+                ++i;
+            }
+            if (!failed)
+            {
+                String string = ResearchTable.scoreFormattingText;
+                if (I18n.hasKey(string))
+                {
+                    string = I18n.format(ResearchTable.scoreFormattingText, values);
+                }
+                else
+                {
+                    try
+                    {
+                        string = String.format(ResearchTable.scoreFormattingText, values);
+                    }
+                    catch (IllegalFormatException var5)
+                    {
+                        string = "Format error: " + string;
+                    }
+                }
+                scoreText = Arrays.asList(string.split("\\n"));
+                globe = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/globe.png"), 0, 0, 11, 10, 0, 0, 0, 0, 11, 10);
+            }
+        }
     }
 
     @Override
@@ -88,10 +148,6 @@ public class GuiTable extends GuiContainerMod
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        //        if (detail != null && detail.researching != table.getResearch())
-        //        {
-        //            table.hasChanged = true;
-        //        }
         if (table.hasChanged)
         {
             if (detail != null)
@@ -114,6 +170,17 @@ public class GuiTable extends GuiContainerMod
             table.hasChanged = false;
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
+        if (globe != null && scoreText != null)
+        {
+            RenderHelper.enableGUIStandardItemLighting();
+            int x = (width + xSize) / 2 + 2;
+            int y = (height - ySize) / 2 + 2;
+            globe.draw(mc, x, y);
+            if (isInRegion(x, y, x + 11, y + 11, mouseX, mouseY))
+            {
+                drawHoveringText(scoreText, mouseX, mouseY);
+            }
+        }
     }
 
     public static boolean isInRegion(int left, int top, int right, int bottom, int x, int y)
@@ -184,7 +251,8 @@ public class GuiTable extends GuiContainerMod
 
     public void resetProgress()
     {
-        if (detail == null) return;
+        if (detail == null)
+            return;
         List<ComponentResearchProgress> components = detail.control.getComponents(ComponentResearchProgress.class);
         for (ComponentResearchProgress component : components)
         {

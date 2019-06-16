@@ -55,6 +55,8 @@ ResearchTable.builder("testResearch4", cat)
   .setTriggerCommands("/scoreboard players remove @s points 1")
   .build();
 
+ResearchTable.scoreIndicator("points: %d", "points");
+
 // Reskillable Integration
 ResearchTable.builder("testResearch5", cat)
   .setTitle("Reskillable Test")

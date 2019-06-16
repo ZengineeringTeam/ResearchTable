@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -36,5 +37,12 @@ public class CrTPlugin
     public static void removeAll()
     {
         ResearchList.LIST.clear();
+    }
+
+    @ZenMethod
+    public static void scoreIndicator(String formattingText, String... scores)
+    {
+        ResearchTable.scoreFormattingText = formattingText;
+        ResearchTable.scores = scores;
     }
 }
