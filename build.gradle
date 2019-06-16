@@ -74,6 +74,7 @@ dependencies {
     compile "net.darkhax.gamestages:GameStages-1.12.2:${gamestages_version}"
     compile "net.darkhax.itemstages:ItemStages-1.12.2:${itemstages_version}"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+    deobfCompile "codersafterdark.reskillable:Reskillable:1.12.2-1.12.5-PR-156.1"
     deobfCompile("mcjty.theoneprobe:TheOneProbe-1.12:${top_version}") {
         exclude group: 'cofh'
     }

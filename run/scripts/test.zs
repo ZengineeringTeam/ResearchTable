@@ -54,3 +54,11 @@ ResearchTable.builder("testResearch4", cat)
   .setRequiredScore("points", "your.language.key", 1, 3) // inclusive
   .setTriggerCommands("/scoreboard players remove @s points 1")
   .build();
+
+// Reskillable Integration
+ResearchTable.builder("testResearch5", cat)
+  .setTitle("Reskillable Test")
+  .setIcons(<minecraft:command_block>)
+  .setRequiredSkill("reskillable.building", 1)
+  .setRewardSkill("reskillable.building")
+  .build();
