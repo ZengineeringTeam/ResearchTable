@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ICriterion;
-import snownee.researchtable.plugin.reskillable.CrTReskillableExpansion.Helper;
 
 public class CriterionSkill implements ICriterion
 {
@@ -29,7 +28,7 @@ public class CriterionSkill implements ICriterion
     public boolean matches(EntityPlayer player)
     {
         int lv = Helper.getLevel(player, skill);
-        return r == 0 ? lv == 0 : lv >= r;
+        return lv >= r;
     }
 
     @Override

@@ -11,7 +11,6 @@ import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentList;
 import snownee.kiwi.client.gui.component.ComponentText;
-import snownee.kiwi.util.Util;
 import snownee.researchtable.client.gui.ComponentButtonList.State;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.ICriterion;

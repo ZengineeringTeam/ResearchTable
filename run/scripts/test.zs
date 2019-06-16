@@ -59,6 +59,6 @@ ResearchTable.builder("testResearch4", cat)
 ResearchTable.builder("testResearch5", cat)
   .setTitle("Reskillable Test")
   .setIcons(<minecraft:command_block>)
-  .setRequiredSkill("reskillable.building", 1)
+  .setRequiredSkill("reskillable.building", 3)
   .setRewardSkill("reskillable.building")
   .build();

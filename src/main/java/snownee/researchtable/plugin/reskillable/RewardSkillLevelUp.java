@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import snownee.researchtable.core.IReward;
-import snownee.researchtable.plugin.reskillable.CrTReskillableExpansion.Helper;
 
 public class RewardSkillLevelUp implements IReward
 {

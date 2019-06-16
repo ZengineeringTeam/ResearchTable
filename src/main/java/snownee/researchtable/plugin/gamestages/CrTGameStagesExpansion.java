@@ -6,10 +6,14 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableSet;
 
+import crafttweaker.annotations.ModOnly;
+import crafttweaker.annotations.ZenRegister;
 import snownee.researchtable.plugin.crafttweaker.ResearchBuilder;
 import stanhebben.zenscript.annotations.ZenExpansion;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ModOnly("gamestages")
+@ZenRegister
 @ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
 public class CrTGameStagesExpansion
 {
