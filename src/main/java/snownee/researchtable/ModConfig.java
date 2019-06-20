@@ -38,7 +38,10 @@ public final class  ModConfig
     public static int guiDetailWidth = 150;
 
     @Config.Name("HideUnavailableResearch")
-    public static boolean hide = false;
+    public static boolean hideUnavailableResearch = false;
+
+    @Config.Name("HideCompletedResearch")
+    public static boolean hideCompletedResearch = false;
 
     @Config.Comment("If enabled, the player will execute the rewarded command as if he is executing the command on his own. " +
             "Use this option if you encountered issue with a certain permission management system.")

@@ -51,15 +51,21 @@ public class ComponentResearchList extends ComponentList
             {
                 researchesAvailable.add(research);
             }
-            else if (!ModConfig.hide)
+            else
             {
                 if (DataStorage.count(parent.mc.player.getName(), research) > 0)
                 {
-                    researchesCompleted.add(research);
+                    if (!ModConfig.hideCompletedResearch)
+                    {
+                        researchesCompleted.add(research);
+                    }
                 }
                 else
                 {
-                    researchesUnavailable.add(research);
+                    if (!ModConfig.hideUnavailableResearch)
+                    {
+                        researchesUnavailable.add(research);
+                    }
                 }
             }
         }
