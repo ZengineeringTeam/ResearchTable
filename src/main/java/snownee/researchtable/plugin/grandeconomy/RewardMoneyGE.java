@@ -26,7 +26,7 @@ public class RewardMoneyGE implements IReward
         }
         else
         {
-            GrandEconomyApi.takeFromBalance(player.getUniqueID(), money, showMsg);
+            GrandEconomyApi.takeFromBalance(player.getUniqueID(), -money, showMsg);
         }
     }
 }

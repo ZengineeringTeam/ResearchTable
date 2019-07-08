@@ -64,3 +64,13 @@ ResearchTable.builder("testResearch5", cat)
   .setRequiredSkill("reskillable.building", 3)
   .setRewardSkill("reskillable.building")
   .build();
+
+// Grand Economy Integration
+ResearchTable.builder("testResearch6", cat)
+  .setTitle("Grand Economy")
+  .setIcons(<minecraft:emerald>)
+  .setRequiredMoneyGE(10000)
+  .setTriggerMoneyGE(-9999, true)
+  //.addCondition(<ore:ingotIron>)
+  .setRewardMoneyGE(10000, true)
+  .build();
