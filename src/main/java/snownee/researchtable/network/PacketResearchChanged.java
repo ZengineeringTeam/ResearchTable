@@ -50,7 +50,7 @@ public class PacketResearchChanged implements PacketMod
             switch (action)
             {
             case START:
-                if (!research.canResearch(player))
+                if (!research.canResearch(player, table.getData()))
                 {
                     return;
                 }

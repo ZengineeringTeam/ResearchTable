@@ -15,7 +15,7 @@ import snownee.researchtable.core.IReward;
 
 public class RewardSkillLevelUp implements IReward
 {
-    protected Skill skill;
+    protected final Skill skill;
 
     public RewardSkillLevelUp(String skillName)
     {

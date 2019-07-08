@@ -148,22 +148,22 @@ public class ComponentResearchDetail extends ComponentList
             if (buttons.visible)
             {
                 buttons.states[0] = State.INVISIBLE;
-                buttons.states[1] = displaying.canResearch(parent.mc.player) ? State.NORMAL : State.DISABLED;
+                buttons.states[1] = displaying.canResearch(parent.mc.player, GuiTable.data) ? State.NORMAL : State.DISABLED;
                 buttons.texts[1] = "research";
             }
         }
 
-        if (displaying != null && researching != displaying && !displaying.canResearch(control.mc.player))
+        if (displaying != null && researching != displaying && !displaying.canResearch(control.mc.player, GuiTable.data))
         {
             String string = "";
             boolean wrap = false;
             for (ICriterion criterion : displaying.getCriteria())
             {
-                if (criterion.matches(control.mc.player))
+                if (criterion.matches(control.mc.player, GuiTable.data))
                     continue;
                 if (wrap)
                     string += "\n";
-                string += TextFormatting.RESET + criterion.getFailingText(control.mc.player);
+                string += TextFormatting.RESET + criterion.getFailingText(control.mc.player, GuiTable.data);
                 wrap = true;
             }
             info.setText(string);

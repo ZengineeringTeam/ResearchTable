@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -37,6 +38,7 @@ import snownee.kiwi.util.NBTHelper;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.ResearchTable;
+import snownee.researchtable.core.EventOpenTable;
 import snownee.researchtable.core.Research;
 
 public class BlockTable extends BlockModHorizontal
@@ -112,7 +114,15 @@ public class BlockTable extends BlockModHorizontal
         }
         else
         {
-            playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileTable)
+            {
+                TileTable table = (TileTable) tile;
+                if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)))
+                {
+                    playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                }
+            }
         }
         return true;
     }

@@ -9,7 +9,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 public class RewardItems implements IReward
 {
-    NonNullList<ItemStack> items;
+    private final NonNullList<ItemStack> items;
 
     public RewardItems(NonNullList<ItemStack> items)
     {

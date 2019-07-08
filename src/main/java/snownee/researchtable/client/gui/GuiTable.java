@@ -34,6 +34,7 @@ import snownee.researchtable.network.PacketResearchChanged.Action;
 @SideOnly(Side.CLIENT)
 public class GuiTable extends GuiContainerMod
 {
+    public static NBTTagCompound data;
     private final TileTable table;
     private ComponentResearchDetail detail;
     private ComponentResearchList researchList;
@@ -44,6 +45,7 @@ public class GuiTable extends GuiContainerMod
     {
         super(new ContainerTable(tile, inventory));
         this.table = tile;
+        data = table.getData();
         xSize = ModConfig.guiListWidth + ModConfig.guiDetailWidth + 8;
         ySize = ModConfig.guiHeight;
     }
@@ -150,6 +152,7 @@ public class GuiTable extends GuiContainerMod
     {
         if (table.hasChanged)
         {
+            data = table.getData();
             if (detail != null)
             {
                 detail.researching = table.getResearch();
@@ -265,6 +268,7 @@ public class GuiTable extends GuiContainerMod
     {
         researchList = null;
         detail = null;
+        data = null;
         super.onGuiClosed();
     }
 

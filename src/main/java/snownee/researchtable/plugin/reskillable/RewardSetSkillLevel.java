@@ -13,7 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class RewardSetSkillLevel extends RewardSkillLevelUp
 {
-    private int newLevel;
+    private final int newLevel;
 
     public RewardSetSkillLevel(String skillName, int newLevel)
     {

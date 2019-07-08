@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,21 +14,17 @@ import snownee.researchtable.ResearchTable;
 
 public class CriterionResearches implements ICriterion
 {
-    private Collection<String> researches;
-    private int r;
+    private final Collection<String> researches;
+    private final int r;
 
     public CriterionResearches(Collection<String> researches, int requirement)
     {
-        this.r = requirement;
+        this.r = requirement > 0 ? requirement : researches.size();
         this.researches = researches;
-        if (r <= 0)
-        {
-            r = researches.size();
-        }
     }
 
     @Override
-    public boolean matches(EntityPlayer player)
+    public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
         int c = 0;
         for (String research : researches)
@@ -42,7 +39,7 @@ public class CriterionResearches implements ICriterion
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player)
+    public String getFailingText(EntityPlayer player, NBTTagCompound data)
     {
         String string = "";
         boolean first = true;

@@ -5,6 +5,7 @@ import java.util.Collection;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,21 +15,17 @@ import snownee.researchtable.core.ICriterion;
 
 public class CriterionStages implements ICriterion
 {
-    private Collection<String> stages;
-    private int r;
+    private final Collection<String> stages;
+    private final int r;
 
     public CriterionStages(Collection<String> stages, int requirement)
     {
-        this.r = requirement;
+        this.r = requirement > 0 ? requirement : stages.size();
         this.stages = stages;
-        if (r <= 0)
-        {
-            r = stages.size();
-        }
     }
 
     @Override
-    public boolean matches(EntityPlayer player)
+    public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
         int c = 0;
         for (String stage : stages)
@@ -43,7 +40,7 @@ public class CriterionStages implements ICriterion
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player)
+    public String getFailingText(EntityPlayer player, NBTTagCompound data)
     {
         String string = "";
         boolean first = true;

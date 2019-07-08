@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -12,8 +13,8 @@ import snownee.researchtable.ResearchTable;
 
 public class CriterionResearchCount implements ICriterion
 {
-    private String id;
-    private int c;
+    private final String id;
+    private final int c;
 
     public CriterionResearchCount(String id, int count)
     {
@@ -22,14 +23,14 @@ public class CriterionResearchCount implements ICriterion
     }
 
     @Override
-    public boolean matches(EntityPlayer player)
+    public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
         return DataStorage.count(player.getName(), id) < c;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player)
+    public String getFailingText(EntityPlayer player, NBTTagCompound data)
     {
         Optional<Research> result = ResearchList.find(id);
         if (!result.isPresent())

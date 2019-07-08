@@ -10,6 +10,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -92,9 +93,9 @@ public class Research
         return Collections.unmodifiableList(conditions);
     }
 
-    public boolean canResearch(EntityPlayer player)
+    public boolean canResearch(EntityPlayer player, NBTTagCompound data)
     {
-        return criteria.stream().allMatch(c -> c.matches(player));
+        return criteria.stream().allMatch(c -> c.matches(player, data));
     }
 
     public Collection<ICriterion> getCriteria()

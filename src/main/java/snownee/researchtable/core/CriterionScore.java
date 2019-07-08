@@ -2,6 +2,7 @@ package snownee.researchtable.core;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
@@ -10,10 +11,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CriterionScore implements ICriterion
 {
-    private String s;
-    private int min;
-    private int max;
-    private String failingText;
+    private final String s;
+    private final int min;
+    private final int max;
+    private final String failingText;
 
     public CriterionScore(String score, int min, int max, String failingText)
     {
@@ -24,7 +25,7 @@ public class CriterionScore implements ICriterion
     }
 
     @Override
-    public boolean matches(EntityPlayer player)
+    public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
         Scoreboard scoreboard = player.world.getScoreboard();
         ScoreObjective scoreobjective = scoreboard.getObjective(s);
@@ -48,7 +49,7 @@ public class CriterionScore implements ICriterion
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player)
+    public String getFailingText(EntityPlayer player, NBTTagCompound data)
     {
         return I18n.format(failingText);
     }

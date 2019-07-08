@@ -214,6 +214,7 @@ public class TileTable extends TileBase
     private ResearchEnergyWrapper energyHandler = new ResearchEnergyWrapper();
     private ResearchFluidWrapper fluidHandler = new ResearchFluidWrapper();
     private boolean canComplete;
+    private NBTTagCompound data = new NBTTagCompound();
 
     @Nullable
     public Research getResearch()
@@ -221,7 +222,8 @@ public class TileTable extends TileBase
         return research;
     }
 
-    public UUID getOwnerUUID() {
+    public UUID getOwnerUUID()
+    {
         return this.ownerUUID;
     }
 
@@ -255,15 +257,19 @@ public class TileTable extends TileBase
     }
 
     @Override
-    protected void readPacketData(NBTTagCompound data)
+    protected void readPacketData(NBTTagCompound tag)
     {
-        if (data.hasKey("owner", Constants.NBT.TAG_STRING))
+        if (tag.hasKey("data", Constants.NBT.TAG_COMPOUND))
         {
-            ownerName = data.getString("owner");
+            data = tag.getCompoundTag("data");
         }
-        else if (data.hasKey("owner", Constants.NBT.TAG_COMPOUND))
+        if (tag.hasKey("owner", Constants.NBT.TAG_STRING))
         {
-            NBTTagCompound credential = data.getCompoundTag("owner");
+            ownerName = tag.getString("owner");
+        }
+        else if (tag.hasKey("owner", Constants.NBT.TAG_COMPOUND))
+        {
+            NBTTagCompound credential = tag.getCompoundTag("owner");
             this.ownerName = credential.getString("name");
             this.ownerUUID = NBTUtil.getUUIDFromTag(credential.getCompoundTag("uuid"));
         }
@@ -271,20 +277,20 @@ public class TileTable extends TileBase
         {
             // TODO Warn about missing owner info
         }
-        if (data.hasKey("research", Constants.NBT.TAG_STRING))
+        if (tag.hasKey("research", Constants.NBT.TAG_STRING))
         {
-            String name = data.getString("research");
+            String name = tag.getString("research");
             Optional<Research> result = ResearchList.find(name);
             if (result.isPresent())
             {
                 setResearch(result.get());
                 for (int i = 0; i < progress.length; i++)
                 {
-                    if (!data.hasKey("progress" + i, Constants.NBT.TAG_LONG))
+                    if (!tag.hasKey("progress" + i, Constants.NBT.TAG_LONG))
                     {
                         break;
                     }
-                    progress[i] = data.getLong("progress" + i);
+                    progress[i] = tag.getLong("progress" + i);
                 }
                 refreshCanComplete();
             }
@@ -304,7 +310,7 @@ public class TileTable extends TileBase
     }
 
     @Override
-    protected NBTTagCompound writePacketData(NBTTagCompound data)
+    protected NBTTagCompound writePacketData(NBTTagCompound tag)
     {
         NBTTagCompound credential = new NBTTagCompound();
         if (ownerName != null)
@@ -315,16 +321,17 @@ public class TileTable extends TileBase
         {
             credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
         }
-        data.setTag("owner", credential);
+        tag.setTag("owner", credential);
         if (research != null)
         {
-            data.setString("research", research.getName());
+            tag.setString("research", research.getName());
             for (int i = 0; i < progress.length; i++)
             {
-                data.setLong("progress" + i, progress[i]);
+                tag.setLong("progress" + i, progress[i]);
             }
         }
-        return data;
+        tag.setTag("data", data);
+        return tag;
     }
 
     @Override
@@ -358,6 +365,16 @@ public class TileTable extends TileBase
             return progress[index];
         }
         return 0;
+    }
+
+    public NBTTagCompound getData()
+    {
+        return data;
+    }
+
+    public void setData(NBTTagCompound data)
+    {
+        this.data = data;
     }
 
     @Override
@@ -402,10 +419,7 @@ public class TileTable extends TileBase
         }
         else
         {
-            ResearchTable.logger.warn(
-                    "Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.",
-                    player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID
-            );
+            ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
             return false;
         }
     }

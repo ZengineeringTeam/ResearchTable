@@ -47,7 +47,7 @@ public class ComponentResearchList extends ComponentList
 
         for (Research research : ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category)).collect(Collectors.toList()))
         {
-            if (research.canResearch(parent.mc.player))
+            if (research.canResearch(parent.mc.player, GuiTable.data))
             {
                 researchesAvailable.add(research);
             }
@@ -103,7 +103,7 @@ public class ComponentResearchList extends ComponentList
         renderItem.renderItemAndEffectIntoGUI(research.getIcon(), offsetX + 6, offsetY + slotTop + 1);
         renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6, offsetY + slotTop + 1, null);
         String title = research.getTitle();
-        if (!research.canResearch(Minecraft.getMinecraft().player))
+        if (!research.canResearch(Minecraft.getMinecraft().player, GuiTable.data))
         {
             title = Util.color(0x808080) + title;
         }
