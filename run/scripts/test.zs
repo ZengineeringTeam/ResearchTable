@@ -67,10 +67,10 @@ ResearchTable.builder("testResearch5", cat)
 
 // Grand Economy Integration
 ResearchTable.builder("testResearch6", cat)
-  .setTitle("Grand Economy")
+  .setTitle("Click for Money")
   .setIcons(<minecraft:emerald>)
   .setRequiredMoneyGE(10000)
   .setTriggerMoneyGE(-9999, true)
-  //.addCondition(<ore:ingotIron>)
+  .setNoMaxCount()
   .setRewardMoneyGE(10000, true)
   .build();
