@@ -15,35 +15,34 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import snownee.kiwi.util.NBTHelper.Tag;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
-import snownee.researchtable.core.Research;
 
-@Deprecated
 public class TableInfoProvider implements IWailaDataProvider
 {
     @Override
     @SideOnly(Side.CLIENT)
     public List<String> getWailaBody(ItemStack itemStack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
-        if (accessor.getTileEntity() instanceof TileTable)
+        if (accessor.getTileEntity() instanceof TileTable && accessor.getNBTData() != null)
         {
-            TileTable table = (TileTable) accessor.getTileEntity();
-            if (accessor.getNBTData() != null)
+            NBTTagCompound tag = accessor.getNBTData();
+            if (tag.hasKey("owner", Tag.STRING))
             {
-                table.handleUpdateTag(accessor.getNBTData());
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + tag.getString("owner")));
             }
-            if (table.ownerName != null && !table.ownerName.isEmpty())
+            if (tag.hasKey("research", Tag.STRING))
             {
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + table.ownerName));
-            }
-            Research research = table.getResearch();
-            if (research != null)
-            {
-                String title = research.getTitle();
+                String title = tag.getString("research");
+                title = I18n.hasKey(title) ? I18n.format(title) : title;
                 tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { table.getProgress() }) + "%"));
+            }
+            if (tag.hasKey("progress", Tag.FLOAT))
+            {
+                float progress = tag.getFloat("progress");
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%"));
             }
         }
         return tooltip;
@@ -54,7 +53,16 @@ public class TableInfoProvider implements IWailaDataProvider
     {
         if (te instanceof TileTable)
         {
-            tag = ((TileTable) te).getUpdateTag();
+            TileTable table = (TileTable) te;
+            if (table.ownerName != null && !table.ownerName.isEmpty())
+            {
+                tag.setString("owner", table.ownerName);
+            }
+            if (table.getResearch() != null)
+            {
+                tag.setString("research", table.getResearch().getTitleRaw());
+                tag.setFloat("progress", table.getProgress());
+            }
         }
         return tag;
     }
