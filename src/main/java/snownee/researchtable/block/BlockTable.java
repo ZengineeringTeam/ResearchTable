@@ -126,7 +126,7 @@ public class BlockTable extends BlockModHorizontal
                         playerIn.sendMessage(new TextComponentTranslation(ResearchTable.MODID + ".noPermission"));
                     }
                 }
-                else if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)))
+                else if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)) && !worldIn.isRemote)
                 {
                     playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
