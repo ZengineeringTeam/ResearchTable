@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -22,7 +23,7 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 @Mod(
         modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)", useMetadata = true
 )
-// @EventBusSubscriber(value = Side.CLIENT)
+@EventBusSubscriber
 public class ResearchTable
 {
     public static final String MODID = "researchtable";

@@ -21,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -118,7 +119,14 @@ public class BlockTable extends BlockModHorizontal
             if (tile instanceof TileTable)
             {
                 TileTable table = (TileTable) tile;
-                if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)))
+                if (!table.hasPermission(playerIn))
+                {
+                    if (worldIn.isRemote)
+                    {
+                        playerIn.sendMessage(new TextComponentTranslation(ResearchTable.MODID + ".noPermission"));
+                    }
+                }
+                else if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)))
                 {
                     playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }

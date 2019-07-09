@@ -13,7 +13,7 @@ import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.core.ConditionForgeEnergy;
+import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
 
 @SideOnly(Side.CLIENT)
 public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy>

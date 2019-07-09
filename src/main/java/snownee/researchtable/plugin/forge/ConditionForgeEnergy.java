@@ -1,6 +1,9 @@
-package snownee.researchtable.core;
+package snownee.researchtable.plugin.forge;
 
 import java.util.function.Supplier;
+
+import snownee.researchtable.core.ConditionTypes;
+import snownee.researchtable.core.ICondition;
 
 public class ConditionForgeEnergy implements ICondition<Long>
 {

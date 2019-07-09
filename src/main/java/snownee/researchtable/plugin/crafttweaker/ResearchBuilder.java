@@ -17,7 +17,6 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.CriterionResearchCount;
 import snownee.researchtable.core.CriterionResearches;
 import snownee.researchtable.core.CriterionScore;
@@ -29,6 +28,7 @@ import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.core.RewardExecute;
 import snownee.researchtable.core.RewardItems;
+import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenMethod;
 

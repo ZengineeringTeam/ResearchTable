@@ -3,6 +3,7 @@ tile.researchtable.table.tip=Keeping progress after breaking
 
 researchtable.title.missing=Untitled
 researchtable.description.missing=No description.
+researchtable.noPermission=Access denied.
 
 researchtable.gui.owner=Owner: %s
 researchtable.gui.researching=Researching: %s

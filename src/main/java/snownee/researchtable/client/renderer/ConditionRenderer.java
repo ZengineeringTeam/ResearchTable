@@ -11,8 +11,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import snownee.researchtable.core.ConditionForgeEnergy;
 import snownee.researchtable.core.ICondition;
+import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
 
 @SideOnly(Side.CLIENT)
 public abstract class ConditionRenderer<T extends ICondition>

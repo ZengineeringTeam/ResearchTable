@@ -419,7 +419,7 @@ public class TileTable extends TileBase
         }
         else
         {
-            ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
+            //ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
             return false;
         }
     }
