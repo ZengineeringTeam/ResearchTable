@@ -349,13 +349,20 @@ public class TileTable extends TileBase
             return 0;
         }
         List<ICondition> conditions = research.getConditions();
-        double p = 0, sum = 0;
+        if (conditions.isEmpty())
+        {
+            return 100;
+        }
+        double sum = 0;
         for (int i = 0; i < conditions.size(); i++)
         {
-            p += progress[i];
-            sum += conditions.get(i).getGoal();
+            if (conditions.get(i).getGoal() == 0)
+            {
+                continue;
+            }
+            sum += progress[i] / conditions.get(i).getGoal();
         }
-        return sum == 0 ? 0 : (float) (p / sum) * 100;
+        return (float) (sum / conditions.size()) * 100;
     }
 
     public long getProgress(int index)
