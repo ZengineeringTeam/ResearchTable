@@ -3,11 +3,9 @@ package snownee.researchtable.core;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import snownee.kiwi.util.NBTHelper;
 
 public class CriterionScore implements ICriterion
 {
@@ -27,23 +25,7 @@ public class CriterionScore implements ICriterion
     @Override
     public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
-        Scoreboard scoreboard = player.world.getScoreboard();
-        ScoreObjective scoreobjective = scoreboard.getObjective(s);
-        if (scoreobjective == null)
-        {
-            return false;
-        }
-
-        // String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
-        String key = player.getName();
-        if (!scoreboard.entityHasObjective(key, scoreobjective))
-        {
-            return false;
-        }
-
-        Score score = scoreboard.getOrCreateScore(key, scoreobjective);
-        int i = score.getScorePoints();
-
+        int i = NBTHelper.of(data).getInt("score." + s, 0);
         return i >= min && i <= max;
     }
 

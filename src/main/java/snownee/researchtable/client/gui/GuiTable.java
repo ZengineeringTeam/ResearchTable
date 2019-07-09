@@ -10,9 +10,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,6 +20,7 @@ import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.network.NetworkChannel;
+import snownee.kiwi.util.NBTHelper;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
@@ -53,6 +51,7 @@ public class GuiTable extends GuiContainerMod
     @Override
     public void initGui()
     {
+        data = table.getData();
         super.initGui();
         fontRenderer = AdvancedFontRenderer.INSTANCE;
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
@@ -86,24 +85,10 @@ public class GuiTable extends GuiContainerMod
             boolean failed = false;
             Integer[] values = new Integer[ResearchTable.scores.length];
             int i = 0;
+            NBTHelper helper = NBTHelper.of(data);
             for (String s : ResearchTable.scores)
             {
-                Scoreboard scoreboard = mc.player.world.getScoreboard();
-                ScoreObjective scoreobjective = scoreboard.getObjective(s);
-                if (scoreobjective == null)
-                {
-                    failed = true;
-                }
-
-                // String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
-                String key = mc.player.getName();
-                if (!scoreboard.entityHasObjective(key, scoreobjective))
-                {
-                    failed = true;
-                }
-
-                Score score = scoreboard.getOrCreateScore(key, scoreobjective);
-                values[i] = score.getScorePoints();
+                values[i] = helper.getInt("score." + s, 0);
                 ++i;
             }
             if (!failed)
@@ -111,13 +96,13 @@ public class GuiTable extends GuiContainerMod
                 String string = ResearchTable.scoreFormattingText;
                 if (I18n.hasKey(string))
                 {
-                    string = I18n.format(ResearchTable.scoreFormattingText, values);
+                    string = I18n.format(ResearchTable.scoreFormattingText, (Object[]) values);
                 }
                 else
                 {
                     try
                     {
-                        string = String.format(ResearchTable.scoreFormattingText, values);
+                        string = String.format(ResearchTable.scoreFormattingText, (Object[]) values);
                     }
                     catch (IllegalFormatException var5)
                     {
