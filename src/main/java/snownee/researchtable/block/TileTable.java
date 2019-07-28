@@ -288,7 +288,7 @@ public class TileTable extends TileBase
                 {
                     if (!tag.hasKey("progress" + i, Constants.NBT.TAG_LONG))
                     {
-                        break;
+                        continue;
                     }
                     progress[i] = tag.getLong("progress" + i);
                 }
