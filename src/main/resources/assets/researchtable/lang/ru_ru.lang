@@ -1,0 +1,31 @@
+tile.researchtable.table.name=Исследовательский стол
+tile.researchtable.table.tip=Сохраняет прогресс после разрушения
+
+researchtable.title.missing=Без названия
+researchtable.description.missing=Без описания.
+researchtable.noPermission=Доступ запрещён.
+
+researchtable.gui.owner=Владелец: %s
+researchtable.gui.researching=Исследование: %s
+researchtable.gui.progress=Прогресс: %s
+researchtable.gui.needStages=Необходимы этапы: %s
+researchtable.gui.needResearches=Необходимы исследования: %s
+researchtable.gui.needSkill=Необходим навык: %s Ур. %d %s
+researchtable.gui.needMoney=Требуется денег：%s %s
+researchtable.gui.moneyFormat=%d %s
+researchtable.gui.maxCount=Это исследование может быть проведено только %s раз(а)!
+researchtable.gui.researchNoFound=Невозможно найти исследование %s.
+researchtable.gui.youHave=(у вас %s)
+researchtable.gui.of=(%d из %d)
+researchtable.gui.fe=Энергия
+researchtable.gui.button.research=Исследовать
+researchtable.gui.button.submit=Передать
+researchtable.gui.button.complete=Завершить
+researchtable.gui.button.cancel=Отмена
+researchtable.gui.button.shift=Нажмите Shift
+researchtable.gui.unknown_item=Неизвестный предмет
+
+commands.researchtable.usage=/researchtable <Игрок> <Исследование> [количество]
+commands.researchtable.researchNotFound=Исследование не найдено.
+commands.researchtable.get=%s: %s
+commands.researchtable.set=%s: успешно
