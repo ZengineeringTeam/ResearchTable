@@ -32,12 +32,7 @@ public class CriterionResearchCount implements ICriterion
     @SideOnly(Side.CLIENT)
     public String getFailingText(EntityPlayer player, NBTTagCompound data)
     {
-        Optional<Research> result = ResearchList.find(id);
-        if (!result.isPresent())
-        {
-            return I18n.format(ResearchTable.MODID + ".gui.researchNoFound", id);
-        }
-        return I18n.format(ResearchTable.MODID + ".gui.maxCount", result.get().getTitle(), Util.color(0xFFFF0000) + c + TextFormatting.RESET);
+        return I18n.format(ResearchTable.MODID + ".gui.maxCount", c, Util.color(0xFFFF0000) + c + TextFormatting.RESET);
     }
 
 }
