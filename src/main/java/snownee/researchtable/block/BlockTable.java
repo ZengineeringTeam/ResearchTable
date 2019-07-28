@@ -30,10 +30,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 import snownee.kiwi.block.BlockModHorizontal;
 import snownee.kiwi.util.NBTHelper;
 import snownee.kiwi.util.Util;
@@ -100,16 +103,25 @@ public class BlockTable extends BlockModHorizontal
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         ItemStack stack = playerIn.getHeldItem(hand);
-        IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
+        ItemStack copy = ItemHandlerHelper.copyStackWithSize(stack, 1);
+        IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(copy);
         if (fluidHandler != null)
         {
             IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldIn, pos, facing);
             if (fluidDestination != null)
             {
-                FluidActionResult result = FluidUtil.tryEmptyContainer(stack, fluidDestination, Integer.MAX_VALUE, playerIn, true);
-                if (result.isSuccess() && !playerIn.isCreative())
+                FluidStack transferred = FluidUtil.tryFluidTransfer(fluidDestination, fluidHandler, Integer.MAX_VALUE, true);
+                if (transferred != null && !playerIn.isCreative())
                 {
-                    playerIn.setHeldItem(hand, result.getResult());
+                    if (stack.getCount() > 1)
+                    {
+                        stack.shrink(1);
+                        ItemHandlerHelper.giveItemToPlayer(playerIn, fluidHandler.getContainer());
+                    }
+                    else
+                    {
+                        playerIn.setHeldItem(hand, fluidHandler.getContainer());
+                    }
                 }
             }
         }
