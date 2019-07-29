@@ -25,8 +25,10 @@ public class ComponentButtonList extends Component
     private static final DrawableNineSlice DRAWABLE_DISABLED;
     private static final DrawableNineSlice DRAWABLE_HOVERED;
     private static final DrawableNineSlice[] DRAWABLES;
-    public State[] states = new State[] { State.INVISIBLE, State.NORMAL };
-    public String[] texts = new String[] { "submit", "research" };
+    private State[] states = new State[] { State.INVISIBLE, State.NORMAL };
+    private String[] texts = new String[2];
+    private int[] widths = new int[2];
+    private boolean cancel;
 
     static
     {
@@ -45,21 +47,40 @@ public class ComponentButtonList extends Component
     public ComponentButtonList(GuiControl parent, int width, int height)
     {
         super(parent, width, height);
+        setText(0, "submit");
+        setText(1, "research");
+    }
+
+    public void setText(int index, String key)
+    {
+        String text = I18n.format(ResearchTable.MODID + ".gui.button." + key);
+        texts[index] = text;
+        widths[index] = Math.max(AdvancedFontRenderer.INSTANCE.getStringWidth(text) + 4, 40);
+        if (index == 1)
+        {
+            cancel = key.equals("cancel");
+        }
+    }
+
+    public void setState(int index, State state)
+    {
+        states[index] = state;
     }
 
     @Override
     public void drawScreen(int offsetX, int offsetY, int relMouseX, int relMouseY, float partialTicks)
     {
-        offsetX += width - 90;
-        for (int i = 0; i < states.length; i++)
+        int x = width;
+        for (int i = states.length - 1; i >= 0; i--)
         {
             if (states[i] == State.INVISIBLE)
             {
                 continue;
             }
+            x -= widths[i];
             if (states[i] != State.DISABLED)
             {
-                if (GuiTable.isInRegion(width - 90 + 45 * i, 0, width - 90 + 45 * i + 40, 12, relMouseX, relMouseY))
+                if (GuiTable.isInRegion(x, 0, x + widths[i], 12, relMouseX, relMouseY))
                 {
                     if (Mouse.isButtonDown(0))
                     {
@@ -68,7 +89,7 @@ public class ComponentButtonList extends Component
                     else
                     {
                         states[i] = State.HOVERED;
-                        if (texts[i].equals("cancel"))
+                        if (i == 1 && cancel)
                         {
                             setTooltip(Collections.singletonList(I18n.format("researchtable.gui.button.shift")), AdvancedFontRenderer.INSTANCE);
                         }
@@ -82,25 +103,31 @@ public class ComponentButtonList extends Component
             Tessellator.getInstance().getBuffer().setTranslation(0, 0, 0);
             GlStateManager.color(1, 1, 1, 1);
             DrawableNineSlice drawable = DRAWABLES[states[i].ordinal()];
-            drawable.setWidth(40);
+            drawable.setWidth(widths[i]);
             drawable.setHeight(12);
-            drawable.draw(parent.mc, offsetX + 45 * i, offsetY);
-            String text = I18n.format(ResearchTable.MODID + ".gui.button." + texts[i]);
-            int width = AdvancedFontRenderer.INSTANCE.getStringWidth(text);
-            AdvancedFontRenderer.INSTANCE.drawString(text, offsetX + 45 * i + 20 - width / 2, offsetY + 2, states[i] == State.DISABLED ? 0x999999 : 0);
+            drawable.draw(parent.mc, x + offsetX, offsetY);
+            int stringWidth = AdvancedFontRenderer.INSTANCE.getStringWidth(texts[i]);
+            AdvancedFontRenderer.INSTANCE.drawString(texts[i], x + offsetX + (widths[i] - stringWidth) / 2, offsetY + 2, states[i] == State.DISABLED ? 0x999999 : 0);
+            x -= 5;
         }
     }
 
     @Override
     public void handleMouseInput(int relMouseX, int relMouseY)
     {
-        for (int i = 0; i < states.length; i++)
+        int x = width;
+        for (int i = states.length - 1; i >= 0; i--)
         {
-            int x = width - 90;
-            if (states[i] != State.DISABLED && states[i] != State.INVISIBLE && GuiTable.isInRegion(x + 45 * i, 0, x + 45 * i + 40, 12, relMouseX, relMouseY))
+            if (states[i] == State.INVISIBLE)
+            {
+                continue;
+            }
+            x -= widths[i];
+            if (states[i] != State.DISABLED && GuiTable.isInRegion(x, 0, x + widths[i], 12, relMouseX, relMouseY))
             {
                 sendMessage(i, states[i].ordinal());
             }
+            x -= 5;
         }
     }
 

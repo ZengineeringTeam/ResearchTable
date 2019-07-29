@@ -132,13 +132,13 @@ public class ComponentResearchDetail extends ComponentList
             {
                 if (canComplete)
                 {
-                    buttons.states[0] = State.INVISIBLE;
-                    buttons.texts[1] = "complete";
+                    buttons.setState(0, State.INVISIBLE);
+                    buttons.setText(1, "complete");
                 }
                 else
                 {
-                    buttons.states[0] = State.NORMAL;
-                    buttons.texts[1] = "cancel";
+                    buttons.setState(0, State.NORMAL);
+                    buttons.setText(1, "cancel");
                 }
             }
         }
@@ -147,9 +147,9 @@ public class ComponentResearchDetail extends ComponentList
             buttons.visible = this.researching == null;
             if (buttons.visible)
             {
-                buttons.states[0] = State.INVISIBLE;
-                buttons.states[1] = displaying.canResearch(parent.mc.player, GuiTable.data) ? State.NORMAL : State.DISABLED;
-                buttons.texts[1] = "research";
+                buttons.setState(0, State.INVISIBLE);
+                buttons.setState(1, displaying.canResearch(parent.mc.player, GuiTable.data) ? State.NORMAL : State.DISABLED);
+                buttons.setText(1, "research");
             }
         }
 

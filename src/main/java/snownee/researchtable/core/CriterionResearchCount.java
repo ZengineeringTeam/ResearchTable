@@ -1,7 +1,5 @@
 package snownee.researchtable.core;
 
-import java.util.Optional;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
