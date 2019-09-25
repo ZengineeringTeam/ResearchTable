@@ -3,6 +3,8 @@ package snownee.researchtable.plugin.crafttweaker;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.client.Minecraft;
@@ -24,6 +26,8 @@ import snownee.researchtable.client.renderer.EventShowItemCondition;
 public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
 {
     private final NonNullList<ItemStack> stacks;
+    @Nullable
+    private final String name;
 
     public RendererCrTItem(ConditionCrTItem condition)
     {
@@ -42,6 +46,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
             }
         }
         MinecraftForge.EVENT_BUS.post(new EventShowItemCondition(stacks));
+        name = condition.customName;
     }
 
     @Override
@@ -56,6 +61,10 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     @Override
     public String name()
     {
+        if (name != null)
+        {
+            return I18n.format(name);
+        }
         if (!stacks.isEmpty())
         {
             return stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())).getDisplayName();

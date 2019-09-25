@@ -2,6 +2,8 @@ package snownee.researchtable.plugin.crafttweaker;
 
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
@@ -12,6 +14,8 @@ public class ConditionCrTItem implements ICondition<ItemStack>
 {
     final IIngredient ingredient;
     final long count;
+    @Nullable
+    String customName;
 
     public ConditionCrTItem(IIngredient ingredient)
     {
@@ -46,4 +50,9 @@ public class ConditionCrTItem implements ICondition<ItemStack>
         return ConditionTypes.ITEM;
     }
 
+    public ConditionCrTItem setCustomName(String name)
+    {
+        customName = name;
+        return this;
+    }
 }

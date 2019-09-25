@@ -18,7 +18,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
 ResearchTable.builder("testResearch2", cat)
   .setTitle("Energetic Wool")
   .setIcons(<minecraft:wool:3>)
-  .addCondition(<minecraft:wool:32767> * 2048)
+  .addCondition(<minecraft:wool:32767>, 2048, "Any Wool") // language key is better
   .addEnergyCondition(123456)
   .setMaxCount(2) // How many times can a player do this research?
   .build();

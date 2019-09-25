@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -153,9 +152,9 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public ResearchBuilder addCondition(@Nonnull IIngredient ingredient, long amount)
+    public ResearchBuilder addCondition(@Nonnull IIngredient ingredient, long amount, @Optional String customName)
     {
-        conditions.add(new ConditionCrTItem(ingredient, amount));
+        conditions.add(new ConditionCrTItem(ingredient, amount).setCustomName(customName));
         return this;
     }
 
