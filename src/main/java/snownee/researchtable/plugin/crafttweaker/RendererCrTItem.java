@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import snownee.kiwi.util.Util;
+import snownee.researchtable.client.gui.GuiTable;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.client.renderer.EventShowItemCondition;
 
@@ -49,12 +50,17 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         name = condition.customName;
     }
 
+    private ItemStack getStack()
+    {
+        return stacks.get((int) ((GuiTable.ticks / 30) % stacks.size()));
+    }
+
     @Override
     public void draw(Minecraft mc, int x, int y)
     {
         if (!stacks.isEmpty())
         {
-            mc.getRenderItem().renderItemAndEffectIntoGUI(stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())), x, y);
+            mc.getRenderItem().renderItemAndEffectIntoGUI(getStack(), x, y);
         }
     }
 
@@ -67,7 +73,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         }
         if (!stacks.isEmpty())
         {
-            return stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size())).getDisplayName();
+            return getStack().getDisplayName();
         }
         return I18n.format("researchtable.gui.unknown_item");
     }
@@ -95,7 +101,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         FontRenderer font = null;
         if (!stacks.isEmpty())
         {
-            ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
+            ItemStack stack = getStack();
             font = stack.getItem().getFontRenderer(stack);
         }
         if (font == null)
@@ -111,8 +117,7 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     {
         if (!stacks.isEmpty())
         {
-            ItemStack stack = stacks.get((int) ((Minecraft.getSystemTime() / 1500) % stacks.size()));
-            return stack.getTooltip(null, flag);
+            return getStack().getTooltip(null, flag);
         }
         else
         {

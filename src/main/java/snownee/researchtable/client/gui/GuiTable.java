@@ -6,6 +6,7 @@ import java.util.IllegalFormatException;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -34,6 +35,7 @@ import snownee.researchtable.network.PacketResearchChanged.Action;
 @SideOnly(Side.CLIENT)
 public class GuiTable extends GuiContainerMod
 {
+    public static float ticks;
     public static NBTTagCompound data;
     private final TileTable table;
     private ComponentResearchDetail detail;
@@ -143,6 +145,10 @@ public class GuiTable extends GuiContainerMod
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        if (!GuiScreen.isCtrlKeyDown())
+        {
+            ticks += partialTicks;
+        }
         if (table.hasChanged)
         {
             data = table.getData();
@@ -168,6 +174,7 @@ public class GuiTable extends GuiContainerMod
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (globe != null && scoreText != null)
         {
+            GlStateManager.color(1, 1, 1, 1);
             RenderHelper.enableGUIStandardItemLighting();
             int x = (width + xSize) / 2 + 2;
             int y = (height - ySize) / 2 + 2;

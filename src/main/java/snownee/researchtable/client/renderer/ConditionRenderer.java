@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
+import snownee.researchtable.plugin.forge.RendererForgeEnergy;
 
 @SideOnly(Side.CLIENT)
 public abstract class ConditionRenderer<T extends ICondition>

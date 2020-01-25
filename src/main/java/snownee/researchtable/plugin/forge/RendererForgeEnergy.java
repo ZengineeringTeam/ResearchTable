@@ -1,4 +1,4 @@
-package snownee.researchtable.client.renderer;
+package snownee.researchtable.plugin.forge;
 
 import java.util.List;
 
@@ -13,7 +13,8 @@ import snownee.kiwi.client.AdvancedFontRenderer;
 import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
-import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
+import snownee.researchtable.client.renderer.ConditionRenderer;
+import snownee.researchtable.client.renderer.ConditionRenderer.ConditionRendererFactory;
 
 @SideOnly(Side.CLIENT)
 public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy>
