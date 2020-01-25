@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -15,6 +16,7 @@ import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.CriterionResearchCount;
 import snownee.researchtable.core.CriterionResearches;
@@ -54,12 +56,26 @@ public class ResearchBuilder
     }
 
     @ZenMethod
-    public ResearchBuilder setIcons(@Nonnull IItemStack... items)
+    public ResearchBuilder setIcons(@Nonnull IIngredient... items)
     {
-        List<ItemStack> actualItems = new ArrayList<>(items.length);
-        for (IItemStack item : items)
+        NonNullList<ItemStack> actualItems = NonNullList.create();
+        for (IIngredient item : items)
         {
-            actualItems.add(CraftTweakerMC.getItemStack(item));
+            for (IItemStack iItemStack : item.getItems())
+            {
+                if (iItemStack != null)
+                {
+                    ItemStack stack = CraftTweakerMC.getItemStack(iItemStack);
+                    if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
+                    {
+                        stack.getItem().getSubItems(stack.getItem().getCreativeTab(), actualItems);
+                    }
+                    else
+                    {
+                        actualItems.add(stack);
+                    }
+                }
+            }
         }
         icons = ImmutableList.copyOf(actualItems);
         return this;
@@ -84,7 +100,7 @@ public class ResearchBuilder
     @ZenMethod
     public ResearchBuilder setRequiredScore(String score, String failingText, int min, @Optional int max)
     {
-        if (max <= 0)
+        if (max < min)
             max = min;
         criteria.add(new CriterionScore(score, min, max, failingText));
         return this;
