@@ -2,6 +2,7 @@ package snownee.researchtable.block;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -60,7 +61,8 @@ public class BlockTable extends BlockModHorizontal
     @SideOnly(Side.CLIENT)
     public void mapModel()
     {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "facing=north"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
+                new ModelResourceLocation(getRegistryName(), "facing=north"));
     }
 
     @Override
@@ -110,7 +112,8 @@ public class BlockTable extends BlockModHorizontal
             IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldIn, pos, facing);
             if (fluidDestination != null)
             {
-                FluidStack transferred = FluidUtil.tryFluidTransfer(fluidDestination, fluidHandler, Integer.MAX_VALUE, true);
+                FluidStack transferred = FluidUtil.tryFluidTransfer(fluidDestination, fluidHandler, Integer.MAX_VALUE,
+                        true);
                 if (transferred != null && !playerIn.isCreative())
                 {
                     if (stack.getCount() > 1)
@@ -168,7 +171,8 @@ public class BlockTable extends BlockModHorizontal
                 }
                 if (ownerName != null)
                 {
-                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.RESET + ownerName + TextFormatting.GRAY));
+                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner",
+                            TextFormatting.RESET + ownerName + TextFormatting.GRAY));
                 }
             }
             if (compound.hasKey("title", Constants.NBT.TAG_STRING))
@@ -178,11 +182,13 @@ public class BlockTable extends BlockModHorizontal
                 {
                     title = I18n.format(title);
                 }
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.RESET + title + TextFormatting.GRAY));
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching",
+                        TextFormatting.RESET + title + TextFormatting.GRAY));
                 if (compound.hasKey("progress", Constants.NBT.TAG_FLOAT))
                 {
                     float progress = compound.getFloat("progress");
-                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.RESET + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%" + TextFormatting.GRAY));
+                    tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.RESET
+                            + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%" + TextFormatting.GRAY));
                 }
             }
         }
@@ -273,5 +279,21 @@ public class BlockTable extends BlockModHorizontal
             return 1 + MathHelper.ceil(table.getProgress() * 0.13f);
         }
         return 0;
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileTable)
+        {
+            TileTable table = (TileTable) tile;
+            boolean powered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up());
+            if (powered && !table.powered)
+            {
+                // TODO
+            }
+            table.powered = powered;
+        }
     }
 }

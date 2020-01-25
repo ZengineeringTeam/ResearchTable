@@ -206,6 +206,8 @@ public class TileTable extends TileBase
     @Nullable
     private Research research;
     @Nullable
+    private Research lastResearch;
+    @Nullable
     private long[] progress;
     public boolean hasChanged;
     public String ownerName;
@@ -215,11 +217,18 @@ public class TileTable extends TileBase
     private ResearchFluidWrapper fluidHandler = new ResearchFluidWrapper();
     private boolean canComplete;
     private NBTTagCompound data = new NBTTagCompound();
+    public boolean powered;
 
     @Nullable
     public Research getResearch()
     {
         return research;
+    }
+
+    @Nullable
+    public Research getLastResearch()
+    {
+        return lastResearch;
     }
 
     public UUID getOwnerUUID()
@@ -241,19 +250,24 @@ public class TileTable extends TileBase
 
     public void setResearch(@Nullable Research research)
     {
-        if (this.research != research)
+        if (this.research == research)
         {
-            this.research = research;
-            if (research == null)
-            {
-                progress = null;
-            }
-            else
-            {
-                progress = new long[research.getConditions().size()];
-            }
-            refreshCanComplete();
+            return;
         }
+        if (this.research != null)
+        {
+            lastResearch = this.research;
+        }
+        this.research = research;
+        if (research == null)
+        {
+            progress = null;
+        }
+        else
+        {
+            progress = new long[research.getConditions().size()];
+        }
+        refreshCanComplete();
     }
 
     @Override
@@ -306,6 +320,14 @@ public class TileTable extends TileBase
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
+        if (compound.hasKey("last", Constants.NBT.TAG_STRING))
+        {
+            lastResearch = ResearchList.find(compound.getString("last")).orElse(null);
+        }
+        if (compound.hasKey("powered", Constants.NBT.TAG_BYTE))
+        {
+            powered = compound.getBoolean("powered");
+        }
         readPacketData(compound);
     }
 
@@ -339,6 +361,11 @@ public class TileTable extends TileBase
     {
         super.writeToNBT(compound);
         writePacketData(compound);
+        if (lastResearch != null)
+        {
+            compound.setString("last", lastResearch.getName());
+        }
+        compound.setBoolean("powered", powered);
         return compound;
     }
 
@@ -408,9 +435,9 @@ public class TileTable extends TileBase
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    public boolean hasPermission(EntityPlayer player)
+    public boolean hasPermission(@Nullable EntityPlayer player)
     {
-        if (player.getUniqueID().equals(this.ownerUUID))
+        if (player != null && player.getUniqueID().equals(this.ownerUUID))
         {
             return true;
         }
@@ -418,6 +445,10 @@ public class TileTable extends TileBase
         if (ownerName == null || ownerName.isEmpty())
         {
             return true;
+        }
+        if (player == null)
+        {
+            return false;
         }
 
         if (player.getName().equals(ownerName))
