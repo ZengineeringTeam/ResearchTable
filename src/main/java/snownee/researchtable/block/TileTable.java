@@ -360,7 +360,7 @@ public class TileTable extends TileBase
             {
                 continue;
             }
-            sum += progress[i] / conditions.get(i).getGoal();
+            sum += (double) progress[i] / conditions.get(i).getGoal();
         }
         return (float) (sum / conditions.size()) * 100;
     }
@@ -441,6 +441,7 @@ public class TileTable extends TileBase
         if (research == null)
         {
             canComplete = false;
+            markDirty();
             return;
         }
         List<ICondition> conditions = research.getConditions();
@@ -449,10 +450,12 @@ public class TileTable extends TileBase
             if (conditions.get(i).getGoal() > progress[i])
             {
                 canComplete = false;
+                markDirty();
                 return;
             }
         }
         canComplete = true;
+        markDirty();
     }
 
     public void complete(EntityPlayer player)

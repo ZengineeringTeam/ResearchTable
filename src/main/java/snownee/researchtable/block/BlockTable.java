@@ -21,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -248,4 +249,29 @@ public class BlockTable extends BlockModHorizontal
         return AABB;
     }
 
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
+    {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileTable)
+        {
+            TileTable table = (TileTable) tile;
+            if (table.getResearch() == null)
+            {
+                return 0;
+            }
+            if (table.canComplete())
+            {
+                return 15;
+            }
+            return 1 + MathHelper.ceil(table.getProgress() * 0.13f);
+        }
+        return 0;
+    }
 }
