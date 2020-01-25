@@ -16,7 +16,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
   .build();
 
 ResearchTable.builder("testResearch2", cat)
-  .setTitle("Energetic Wool")
+  .setTitle("Energetic Wool loooooooong")
   .setIcons(<ore:plankWood>)
   .addCondition(<minecraft:wool:32767>, 2048, "Any Wool") // language key is better
   .addEnergyCondition(123456)

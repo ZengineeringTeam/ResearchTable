@@ -25,7 +25,9 @@ import snownee.researchtable.ModConfig;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
+import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchCategory;
+import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.network.PacketResearchChanged.Action;
 
@@ -38,13 +40,21 @@ public class GuiTable extends GuiContainerMod
     private ComponentResearchList researchList;
     private DrawableResource globe;
     private List<String> scoreText;
+    private int listWidth = ModConfig.guiListWidth;
 
     public GuiTable(TileTable tile, InventoryPlayer inventory)
     {
         super(new ContainerTable(tile, inventory));
         this.table = tile;
         data = table.getData();
-        xSize = ModConfig.guiListWidth + ModConfig.guiDetailWidth + 8;
+        fontRenderer = AdvancedFontRenderer.INSTANCE;
+        AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
+        if (ModConfig.guiListAutoWidth)
+        {
+            int titleWidth = ResearchList.LIST.stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth).max().orElse(0);
+            listWidth = Math.max(listWidth, 40 + titleWidth);
+        }
+        xSize = listWidth + ModConfig.guiDetailWidth + 8;
         ySize = ModConfig.guiHeight;
     }
 
@@ -53,10 +63,8 @@ public class GuiTable extends GuiContainerMod
     {
         data = table.getData();
         super.initGui();
-        fontRenderer = AdvancedFontRenderer.INSTANCE;
-        AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
-        researchList = new ComponentResearchList(panel.control, ModConfig.guiListWidth, ySize - 8, 0, 0, 20, width, height);
+        researchList = new ComponentResearchList(panel.control, listWidth, ySize - 8, 0, 0, 20, width, height);
         // ResearchList.LIST.clear();
         //        int r = new Random().nextInt(6) + 1;
         //        List<ICondition> conditions = new ArrayList<>(8);
