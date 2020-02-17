@@ -1,0 +1,31 @@
+tile.researchtable.table.name=Mesa de Pesquisa
+tile.researchtable.table.tip=Mantém o progresso mesmo depois de quebrar
+
+researchtable.title.missing=Sem título
+researchtable.description.missing=Sem descrição.
+researchtable.noPermission=Acesso negado.
+
+researchtable.gui.owner=Dono: %s
+researchtable.gui.researching=Pesquisando: %s
+researchtable.gui.progress=Progresso: %s
+researchtable.gui.needStages=Etapas necessárias: %s
+researchtable.gui.needResearches=Pesquisas necessárias: %s
+researchtable.gui.needSkill=Habilidades necessárias: %s Nv. %d %s
+researchtable.gui.needMoney=Dinheiro necessário：%s %s
+researchtable.gui.moneyFormat=%d %s
+researchtable.gui.maxCount=This research can only be done %s time(s)!
+researchtable.gui.researchNoFound=Não foi possível encontrar a pesquisa %s.
+researchtable.gui.youHave=(você tem %s)
+researchtable.gui.of=(%d de %d)
+researchtable.gui.fe=Energia
+researchtable.gui.button.research=Pesquisar
+researchtable.gui.button.submit=Enviar
+researchtable.gui.button.complete=Completar
+researchtable.gui.button.cancel=Cancelar
+researchtable.gui.button.shift=Segure Shift
+researchtable.gui.unknown_item=Item desconhecido
+
+commands.researchtable.usage=/researchtable <Jogador> <Pesquisa> [contagem]
+commands.researchtable.researchNotFound=Pesquisa não encontrada.
+commands.researchtable.get=%s: %s
+commands.researchtable.set=%s: bem-sucedido
