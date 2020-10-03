@@ -1,5 +1,5 @@
 tile.researchtable.table.name=Research Table
-tile.researchtable.table.tip=Keeping progress after breaking
+tile.researchtable.table.tip=Keeps progress if broken
 
 researchtable.title.missing=Untitled
 researchtable.description.missing=No description.
