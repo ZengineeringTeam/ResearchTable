@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -31,9 +33,9 @@ public class DataStorage
 {
     private static DataStorage INSTANCE;
     private final WorldServer world;
-    private final Map<String, Map<String, Integer>> players = new HashMap<>();
+    private final Map<String, Object2IntMap<String>> players = new HashMap<>();
     private boolean changed = false;
-    public static Map<String, Integer> clientData;
+    public static Object2IntMap<String> clientData;
 
     public DataStorage(WorldServer world)
     {
@@ -75,7 +77,7 @@ public class DataStorage
             if (data.hasKey(player, Constants.NBT.TAG_COMPOUND))
             {
                 NBTTagCompound compound = data.getCompoundTag(player);
-                Map<String, Integer> researches = readPlayerData(compound);
+                Object2IntMap<String> researches = readPlayerData(compound);
                 if (!researches.isEmpty())
                 {
                     players.put(player, researches);
@@ -139,9 +141,9 @@ public class DataStorage
         {
             if (!INSTANCE.players.containsKey(playerName))
             {
-                INSTANCE.players.put(playerName, new HashMap<>());
+                INSTANCE.players.put(playerName, new Object2IntOpenHashMap<>());
             }
-            Map<String, Integer> researches = INSTANCE.players.get(playerName);
+            Object2IntMap<String> researches = INSTANCE.players.get(playerName);
             if (count > 0)
             {
                 researches.put(research.getName(), count);
@@ -160,19 +162,19 @@ public class DataStorage
         }
         return 0;
     }
-    
+
     public static int count(String playerName, String research)
     {
         if (loaded())
         {
             if (INSTANCE.players.containsKey(playerName))
             {
-                return INSTANCE.players.get(playerName).getOrDefault(research, 0);
+                return INSTANCE.players.get(playerName).getInt(research);
             }
         }
         else if (clientData != null)
         {
-            return clientData.getOrDefault(research, 0);
+            return clientData.getInt(research);
         }
         return 0;
     }
@@ -181,12 +183,13 @@ public class DataStorage
     {
         return count(playerName, research.getName());
     }
-    
+
     public static boolean hasAllOf(String playerName, Collection<String> researches)
     {
         for (String research : researches)
         {
-            if (count(playerName, research) == 0) return false;
+            if (count(playerName, research) == 0)
+                return false;
         }
         return true;
     }
@@ -217,16 +220,18 @@ public class DataStorage
 
     private static void syncClient(EntityPlayer player)
     {
-        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer) && INSTANCE.players.containsKey(player.getName()))
+        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer)
+                && INSTANCE.players.containsKey(player.getName()))
         {
-            NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(INSTANCE.players.get(player.getName())), (EntityPlayerMP) player);
+            NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(INSTANCE.players.get(player.getName())),
+                    (EntityPlayerMP) player);
         }
     }
 
-    public static Map<String, Integer> readPlayerData(NBTTagCompound data)
+    public static Object2IntMap<String> readPlayerData(NBTTagCompound data)
     {
         Set<String> keySet = data.getKeySet();
-        Map<String, Integer> researches = new HashMap<>(keySet.size());
+        Object2IntMap<String> researches = new Object2IntOpenHashMap<>(keySet.size());
         for (String research : keySet)
         {
             if (data.hasKey(research, Constants.NBT.TAG_INT))

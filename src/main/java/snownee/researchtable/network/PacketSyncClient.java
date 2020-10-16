@@ -1,8 +1,7 @@
 package snownee.researchtable.network;
 
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -13,13 +12,13 @@ import snownee.researchtable.core.DataStorage;
 
 public class PacketSyncClient implements PacketMod
 {
-    private Map<String, Integer> map;
+    private Object2IntMap<String> map;
 
     public PacketSyncClient()
     {
     }
 
-    public PacketSyncClient(Map<String, Integer> map)
+    public PacketSyncClient(Object2IntMap<String> map)
     {
         this.map = map;
     }
