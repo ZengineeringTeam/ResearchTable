@@ -14,7 +14,6 @@ import snownee.kiwi.client.gui.element.DrawableResource;
 import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.client.renderer.ConditionRenderer;
-import snownee.researchtable.client.renderer.ConditionRenderer.ConditionRendererFactory;
 
 @SideOnly(Side.CLIENT)
 public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy>

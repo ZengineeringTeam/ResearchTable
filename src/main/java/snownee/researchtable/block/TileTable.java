@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +31,7 @@ import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.core.ICondition;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
+import snownee.researchtable.core.team.TeamHelper;
 
 public class TileTable extends TileBase
 {
@@ -210,7 +212,9 @@ public class TileTable extends TileBase
     @Nullable
     private long[] progress;
     public boolean hasChanged;
+    @Nonnull
     public String ownerName;
+    @Nonnull
     private UUID ownerUUID;
     private ResearchItemWrapper itemHandler = new ResearchItemWrapper();
     private ResearchEnergyWrapper energyHandler = new ResearchEnergyWrapper();
@@ -277,11 +281,7 @@ public class TileTable extends TileBase
         {
             data = tag.getCompoundTag("data");
         }
-        if (tag.hasKey("owner", Constants.NBT.TAG_STRING))
-        {
-            ownerName = tag.getString("owner");
-        }
-        else if (tag.hasKey("owner", Constants.NBT.TAG_COMPOUND))
+        if (tag.hasKey("owner", Constants.NBT.TAG_COMPOUND))
         {
             NBTTagCompound credential = tag.getCompoundTag("owner");
             this.ownerName = credential.getString("name");
@@ -289,6 +289,8 @@ public class TileTable extends TileBase
         }
         else
         {
+            ResearchTable.logger.error("Invalid table data: pos={} tag={}", pos, tag);
+            invalidate();
             // TODO Warn about missing owner info
         }
         if (tag.hasKey("research", Constants.NBT.TAG_STRING))
@@ -335,14 +337,8 @@ public class TileTable extends TileBase
     protected NBTTagCompound writePacketData(NBTTagCompound tag)
     {
         NBTTagCompound credential = new NBTTagCompound();
-        if (ownerName != null)
-        {
-            credential.setString("name", ownerName);
-        }
-        if (ownerUUID != null)
-        {
-            credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
-        }
+        credential.setString("name", ownerName);
+        credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
         tag.setTag("owner", credential);
         if (research != null)
         {
@@ -432,34 +428,24 @@ public class TileTable extends TileBase
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY
+                || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+                || super.hasCapability(capability, facing);
     }
 
     public boolean hasPermission(@Nullable EntityPlayer player)
     {
-        if (player != null && player.getUniqueID().equals(this.ownerUUID))
+        if (player == null) // Minecraft.player sometimes can be null
         {
             return true;
         }
+        if (player.getUniqueID().equals(this.ownerUUID))
+        {
+            return true;
+        }
+        return TeamHelper.isIn(player, ownerUUID);
 
-        if (ownerName == null || ownerName.isEmpty())
-        {
-            return true;
-        }
-        if (player == null)
-        {
-            return false;
-        }
-
-        if (player.getName().equals(ownerName))
-        {
-            return true;
-        }
-        else
-        {
-            //ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
-            return false;
-        }
+        //ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
     }
 
     public boolean canComplete()
