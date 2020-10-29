@@ -11,7 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +28,7 @@ import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -51,6 +55,11 @@ public class DataStorage
 
     private void load()
     {
+        records.clear();
+        players.clear();
+        changed = false;
+        clientData = null;
+
         File folder = new File(world.getSaveHandler().getWorldDirectory(), "data/");
         File file = new File(folder, ResearchTable.MODID + ".dat");
         NBTTagCompound data = null;
@@ -208,11 +217,7 @@ public class DataStorage
             researches.remove(research.getName());
         }
         changed = true;
-        EntityPlayer player = INSTANCE.world.getPlayerEntityByUUID(uuid);
-        if (player != null)
-        {
-            syncClient(player);
-        }
+        syncClientAllMembers(uuid);
         return count;
     }
 
@@ -282,13 +287,53 @@ public class DataStorage
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
     {
-
-        syncClient(event.player);
+        if (!loaded() || event.player instanceof FakePlayer)
+        {
+            return;
+        }
+        String name = event.player.getName();
+        UUID uuid = event.player.getGameProfile().getId();
+        if (players.containsKey(name))
+        {
+            Object2IntMap<String> data = players.get(name);
+            players.remove(name);
+            mergeProgress(data, uuid);
+            syncClientAllMembers(uuid);
+        }
+        else
+        {
+            syncClient(uuid);
+        }
     }
 
-    private static void syncClient(EntityPlayer player)
+    public static void mergeProgress(Object2IntMap<String> from, UUID uuid)
     {
-        if (loaded() && player instanceof EntityPlayerMP && !(player instanceof FakePlayer))
+        Object2IntMap<String> to = getRecords(uuid);
+        for (Entry<String> entry : from.object2IntEntrySet())
+        {
+            int fromInt = entry.getIntValue();
+            int toInt = to.getInt(entry.getKey());
+            if (fromInt > toInt)
+            {
+                to.put(entry.getKey(), fromInt);
+            }
+        }
+        changed = true;
+    }
+
+    private static void syncClientAllMembers(UUID uuid)
+    {
+        TeamHelper.provider.getMembers(uuid).forEach(DataStorage::syncClient);
+    }
+
+    private static void syncClient(UUID uuid)
+    {
+        EntityPlayer player = getPlayer(uuid);
+        if (player == null)
+        {
+            return;
+        }
+        if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer))
         {
             Object2IntMap<String> data = getRecords(player.getGameProfile().getId());
             if (!data.isEmpty())
@@ -325,4 +370,16 @@ public class DataStorage
         return data;
     }
 
+    @Nullable
+    public static EntityPlayerMP getPlayer(UUID uuid)
+    {
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid);
+    }
+
+    public static void onPlayerAdd(UUID uuid, UUID owner)
+    {
+        mergeProgress(records.getOrDefault(uuid, Object2IntMaps.EMPTY_MAP), owner);
+        records.remove(uuid);
+        syncClientAllMembers(owner);
+    }
 }
