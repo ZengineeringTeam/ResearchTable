@@ -439,11 +439,8 @@ public class TileTable extends TileBase
         {
             return true;
         }
-        if (player.getUniqueID().equals(this.ownerUUID))
-        {
-            return true;
-        }
-        return TeamHelper.isIn(player, ownerUUID);
+        return player.getGameProfile().getId().equals(this.ownerUUID)
+                || TeamHelper.provider.getOwner(player.getGameProfile().getId()).equals(ownerUUID);
 
         //ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
     }
@@ -481,17 +478,12 @@ public class TileTable extends TileBase
         {
             return;
         }
-        if (ownerName != null)
+        if (DataStorage.complete(ownerUUID, research) > 0)
         {
-            DataStorage.complete(ownerName, research);
+            research.complete(world, pos, player);
+            hasChanged = true; // server
         }
-        else
-        {
-            DataStorage.complete(player.getName(), research);
-        }
-        research.complete(world, pos, player);
         setResearch(null);
-        hasChanged = true; // server
     }
 
     public void submit(EntityPlayer player)

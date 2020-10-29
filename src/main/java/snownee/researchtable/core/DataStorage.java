@@ -205,7 +205,7 @@ public class DataStorage
     {
         if (!loaded())
         {
-            return 0;
+            return -1;
         }
         Object2IntMap<String> researches = getRecords(uuid);
         if (count > 0)

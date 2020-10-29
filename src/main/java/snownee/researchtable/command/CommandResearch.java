@@ -60,7 +60,8 @@ public class CommandResearch extends CommandBase
         {
             for (Research research : researchs)
             {
-                notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(), DataStorage.count(player.getName(), research));
+                notifyCommandListener(sender, this, "commands." + getName() + ".get", player.getName(),
+                        DataStorage.count(player.getGameProfile().getId(), research));
             }
         }
         else
@@ -68,7 +69,7 @@ public class CommandResearch extends CommandBase
             for (Research research : researchs)
             {
                 int count = parseInt(args[2], 0);
-                DataStorage.setCount(player.getName(), research, count);
+                DataStorage.setCount(player.getGameProfile().getId(), research, count);
                 notifyCommandListener(sender, this, "commands." + getName() + ".set", player.getName());
             }
         }
