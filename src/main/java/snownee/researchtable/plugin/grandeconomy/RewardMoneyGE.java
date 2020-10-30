@@ -8,10 +8,10 @@ import the_fireplace.grandeconomy.api.GrandEconomyApi;
 
 public class RewardMoneyGE implements IReward
 {
-    private final long money;
+    private final double money;
     private final boolean showMsg;
 
-    public RewardMoneyGE(long money, boolean showMsg)
+    public RewardMoneyGE(double money, boolean showMsg)
     {
         this.money = money;
         this.showMsg = showMsg;

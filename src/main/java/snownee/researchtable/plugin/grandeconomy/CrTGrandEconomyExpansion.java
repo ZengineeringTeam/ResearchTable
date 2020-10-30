@@ -13,21 +13,21 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class CrTGrandEconomyExpansion
 {
     @ZenMethod
-    public static ResearchBuilder setRewardMoneyGE(ResearchBuilder builder, long money, @Optional boolean showMsg)
+    public static ResearchBuilder setRewardMoneyGE(ResearchBuilder builder, double money, @Optional boolean showMsg)
     {
         builder.rewards.add(new RewardMoneyGE(money, showMsg));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setTriggerMoneyGE(ResearchBuilder builder, long money, @Optional boolean showMsg)
+    public static ResearchBuilder setTriggerMoneyGE(ResearchBuilder builder, double money, @Optional boolean showMsg)
     {
         builder.triggers.add(new RewardMoneyGE(money, showMsg));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setRequiredMoneyGE(ResearchBuilder builder, long money)
+    public static ResearchBuilder setRequiredMoneyGE(ResearchBuilder builder, double money)
     {
         builder.criteria.add(new CriterionMoneyGE(money));
         return builder;

@@ -8,13 +8,17 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.base.Objects;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -337,8 +341,17 @@ public class TileTable extends TileBase
     protected NBTTagCompound writePacketData(NBTTagCompound tag)
     {
         NBTTagCompound credential = new NBTTagCompound();
-        credential.setString("name", ownerName);
-        credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
+        if (ownerName != null || ownerUUID != null)
+        {
+            if (ownerName != null)
+            {
+                credential.setString("name", ownerName);
+            }
+            if (ownerUUID != null)
+            {
+                credential.setTag("uuid", NBTUtil.createUUIDTag(this.ownerUUID));
+            }
+        }
         tag.setTag("owner", credential);
         if (research != null)
         {
@@ -435,12 +448,12 @@ public class TileTable extends TileBase
 
     public boolean hasPermission(@Nullable EntityPlayer player)
     {
-        if (player == null) // Minecraft.player sometimes can be null
+        if (player == null || player.world.isRemote) // Minecraft.player sometimes can be null
         {
             return true;
         }
         return player.getGameProfile().getId().equals(this.ownerUUID)
-                || TeamHelper.provider.getOwner(player.getGameProfile().getId()).equals(ownerUUID);
+                || Objects.equal(TeamHelper.provider.getOwner(player.getGameProfile().getId()), ownerUUID);
 
         //ResearchTable.logger.warn("Player {} ('{}', UUID '{}') tried to access this table with owner of '{}' (UUID: '{}') but failed. This may be a bug.", player.getName(), player, player.getUniqueID(), this.ownerName, this.ownerUUID);
     }
@@ -544,4 +557,33 @@ public class TileTable extends TileBase
         }
         return matched;
     }
+
+    public void putOwnerInfo(EntityPlayer player)
+    {
+        if (player instanceof FakePlayer)
+        {
+            return;
+        }
+        UUID uuid = player.getGameProfile().getId();
+        UUID owner = TeamHelper.provider.getOwner(uuid);
+        if (owner != null)
+        {
+            ownerName = TeamHelper.provider.getTeamName(owner);
+            if (ownerName == null)
+            {
+                ownerName = UsernameCache.getLastKnownUsername(owner);
+            }
+            if (ownerName == null)
+            {
+                ownerName = player.getName();
+            }
+            setOwnerUUID(owner);
+        }
+        else
+        {
+            ownerName = player.getName();
+            setOwnerUUID(uuid);
+        }
+    }
+
 }

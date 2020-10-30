@@ -29,7 +29,7 @@ public class CriterionResearches implements ICriterion
         int c = 0;
         for (String research : researches)
         {
-            if (DataStorage.count(player.getName(), research) > 0)
+            if (DataStorage.count(player.getGameProfile().getId(), research) > 0)
             {
                 ++c;
             }
@@ -52,7 +52,7 @@ public class CriterionResearches implements ICriterion
                 string += Util.color(0) + ", ";
             }
             first = false;
-            if (DataStorage.count(player.getName(), research) == 0)
+            if (DataStorage.count(player.getGameProfile().getId(), research) == 0)
             {
                 string += Util.color(0xFFFF0000);
             }

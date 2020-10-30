@@ -53,16 +53,22 @@ public class GuiTable extends GuiContainerMod
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
         if (ModConfig.guiListAutoWidth)
         {
-            int titleWidth = ResearchList.LIST.stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth).max().orElse(0);
+            int titleWidth = ResearchList.LIST.stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth)
+                    .max().orElse(0);
             listWidth = Math.max(listWidth, 40 + titleWidth);
         }
-        xSize = listWidth + ModConfig.guiDetailWidth + 8;
-        ySize = ModConfig.guiHeight;
+        //        xSize = listWidth + ModConfig.guiDetailWidth + 8;
+        //        ySize = ModConfig.guiHeight;
+        width = 10000;
+        height = 10000;
     }
 
     @Override
     public void initGui()
     {
+        xSize = width + 8;
+        ySize = height + 8;
+        ModConfig.guiDetailWidth = xSize - 12 - listWidth;
         data = table.getData();
         super.initGui();
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
@@ -78,7 +84,8 @@ public class GuiTable extends GuiContainerMod
         //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "À²À²À²",
         //                ImmutableSet.of("stageA", "stageB"), Collections.EMPTY_LIST, conditions, null));
         researchList.setCategory(ResearchCategory.GENERAL);
-        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8, researchList.left + researchList.width, 0, width, height);
+        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8,
+                researchList.left + researchList.width, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
         if (detail.researching != null)
@@ -120,7 +127,8 @@ public class GuiTable extends GuiContainerMod
                     }
                 }
                 scoreText = Arrays.asList(string.split("\\n"));
-                globe = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/globe.png"), 0, 0, 11, 10, 0, 0, 0, 0, 11, 10);
+                globe = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/globe.png"), 0, 0,
+                        11, 10, 0, 0, 0, 0, 11, 10);
             }
         }
     }
@@ -151,6 +159,7 @@ public class GuiTable extends GuiContainerMod
         }
         if (table.hasChanged)
         {
+            System.out.println(mc.player.getName() + " has changed");
             data = table.getData();
             if (detail != null)
             {
@@ -159,7 +168,8 @@ public class GuiTable extends GuiContainerMod
                 researchList.setCategory(researchList.category);
                 if (detail.getResearch() != null)
                 {
-                    List<ComponentResearchProgress> progresses = detail.control.getComponents(ComponentResearchProgress.class);
+                    List<ComponentResearchProgress> progresses = detail.control
+                            .getComponents(ComponentResearchProgress.class);
                     boolean flag = table.getResearch() == detail.getResearch();
                     for (int i = 0; i < progresses.size(); ++i)
                     {
@@ -176,8 +186,8 @@ public class GuiTable extends GuiContainerMod
         {
             GlStateManager.color(1, 1, 1, 1);
             RenderHelper.enableGUIStandardItemLighting();
-            int x = (width + xSize) / 2 + 2;
-            int y = (height - ySize) / 2 + 2;
+            int x = (width + xSize) / 2 - 18;
+            int y = (height + ySize) / 2 - 18;
             globe.draw(mc, x, y);
             if (isInRegion(x, y, x + 11, y + 11, mouseX, mouseY))
             {
@@ -210,7 +220,8 @@ public class GuiTable extends GuiContainerMod
             {
                 if (table.getResearch() == detail.getResearch())
                 {
-                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), Action.SUBMIT);
+                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
+                            Action.SUBMIT);
                     NetworkChannel.INSTANCE.sendToServer(packet);
                 }
             }
@@ -220,7 +231,8 @@ public class GuiTable extends GuiContainerMod
                 {
                     if (detail.getResearch() != null)
                     {
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(), Action.START);
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(),
+                                Action.START);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }
@@ -234,7 +246,8 @@ public class GuiTable extends GuiContainerMod
                         {
                             return 0;
                         }
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), action);
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
+                                action);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }

@@ -13,6 +13,9 @@ public interface TeamProvider
 
     Collection<UUID> getMembers(UUID player);
 
+    @Nullable
+    String getTeamName(UUID player);
+
     public static enum Stub implements TeamProvider
     {
         INSTANCE;
@@ -27,6 +30,12 @@ public interface TeamProvider
         public Collection<UUID> getMembers(UUID player)
         {
             return Collections.singleton(player);
+        }
+
+        @Override
+        public String getTeamName(UUID player)
+        {
+            return null;
         }
 
     }

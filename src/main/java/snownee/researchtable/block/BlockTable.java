@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -136,13 +135,11 @@ public class BlockTable extends BlockModHorizontal
                 TileTable table = (TileTable) tile;
                 if (!table.hasPermission(playerIn))
                 {
-                    if (worldIn.isRemote)
-                    {
-                        playerIn.sendMessage(new TextComponentTranslation(ResearchTable.MODID + ".noPermission"));
-                    }
+                    playerIn.sendMessage(new TextComponentTranslation(ResearchTable.MODID + ".noPermission"));
                 }
-                else if (!MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)) && !worldIn.isRemote)
+                else if (!worldIn.isRemote && !MinecraftForge.EVENT_BUS.post(new EventOpenTable(playerIn, table)))
                 {
+                    table.putOwnerInfo(playerIn);
                     playerIn.openGui(ResearchTable.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
             }
@@ -239,12 +236,7 @@ public class BlockTable extends BlockModHorizontal
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileTable)
             {
-                TileTable table = (TileTable) tile;
-                if (table.getOwnerUUID() == null && placer instanceof EntityPlayer && !(placer instanceof FakePlayer))
-                {
-                    table.ownerName = ((EntityPlayer) placer).getName();
-                    table.setOwnerUUID(placer.getUniqueID());
-                }
+                ((TileTable) tile).putOwnerInfo((EntityPlayer) placer);
             }
         }
     }

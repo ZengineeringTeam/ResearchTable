@@ -23,7 +23,7 @@ public class CriterionResearchCount implements ICriterion
     @Override
     public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
-        return DataStorage.count(player.getName(), id) < c;
+        return DataStorage.count(player.getGameProfile().getId(), id) < c;
     }
 
     @Override

@@ -10,9 +10,6 @@ import snownee.researchtable.plugin.togetherforever.TeamProviderTF;
 
 public class TeamHelper
 {
-    @Nonnull
-    public static TeamProvider provider;
-
     static
     {
         if (Loader.isModLoaded("togetherforever"))
@@ -24,6 +21,9 @@ public class TeamHelper
             provider = TeamProvider.Stub.INSTANCE;
         }
     }
+
+    @Nonnull
+    public static TeamProvider provider;
 
     public static void onPlayerAdd(UUID uuid, UUID owner)
     {

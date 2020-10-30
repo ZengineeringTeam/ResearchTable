@@ -24,6 +24,15 @@ public enum TeamProviderTF implements TeamProvider
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public void onPlayerAdd(TeamEvent.PlayerAdd event)
+    {
+        if (TeamHelper.provider == this)
+        {
+            TeamHelper.onPlayerAdd(event.getPlayerInformation().getUUID(), event.getTogetherTeam().getOwner());
+        }
+    }
+
     @Override
     public UUID getOwner(UUID player)
     {
@@ -42,13 +51,11 @@ public enum TeamProviderTF implements TeamProvider
         return team.getPlayers().stream().map(IPlayerInformation::getUUID).collect(Collectors.toSet());
     }
 
-    @SubscribeEvent
-    public void onPlayerAdd(TeamEvent.PlayerAdd event)
+    @Override
+    public String getTeamName(UUID player)
     {
-        if (TeamHelper.provider == this)
-        {
-            TeamHelper.onPlayerAdd(event.getPlayerInformation().getUUID(), event.getTogetherTeam().getOwner());
-        }
+        ITogetherTeam team = TogetherForeverAPI.getInstance().getPlayerTeam(player);
+        return team == null ? null : team.getTeamName();
     }
 
 }
