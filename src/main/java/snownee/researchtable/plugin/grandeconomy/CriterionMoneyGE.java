@@ -23,7 +23,7 @@ public class CriterionMoneyGE implements ICriterion
     public boolean matches(EntityPlayer player, NBTTagCompound data)
     {
         NBTHelper helper = NBTHelper.of(data);
-        long balance = helper.getLong("grandeconomy.money");
+        double balance = helper.getDouble("grandeconomy.money");
         return balance >= money;
     }
 
@@ -33,7 +33,7 @@ public class CriterionMoneyGE implements ICriterion
     {
         NBTHelper helper = NBTHelper.of(data);
         return I18n.format(ResearchTable.MODID + ".gui.needMoney", money(money, helper), Util.color(0xFF0000) + I18n
-                .format(ResearchTable.MODID + ".gui.youHave", money(helper.getLong("grandeconomy.money"), helper)));
+                .format(ResearchTable.MODID + ".gui.youHave", money(helper.getDouble("grandeconomy.money"), helper)));
     }
 
     @SideOnly(Side.CLIENT)

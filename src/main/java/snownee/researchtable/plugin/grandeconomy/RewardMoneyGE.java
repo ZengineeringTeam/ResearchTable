@@ -9,12 +9,10 @@ import the_fireplace.grandeconomy.api.GrandEconomyApi;
 public class RewardMoneyGE implements IReward
 {
     private final double money;
-    private final boolean showMsg;
 
-    public RewardMoneyGE(double money, boolean showMsg)
+    public RewardMoneyGE(double money)
     {
         this.money = money;
-        this.showMsg = showMsg;
     }
 
     @Override
@@ -22,11 +20,11 @@ public class RewardMoneyGE implements IReward
     {
         if (money >= 0)
         {
-            GrandEconomyApi.addToBalance(player.getUniqueID(), money, showMsg);
+            GrandEconomyApi.addToBalance(player.getUniqueID(), money, true);
         }
         else
         {
-            GrandEconomyApi.takeFromBalance(player.getUniqueID(), -money, showMsg);
+            GrandEconomyApi.takeFromBalance(player.getUniqueID(), -money, true);
         }
     }
 }
