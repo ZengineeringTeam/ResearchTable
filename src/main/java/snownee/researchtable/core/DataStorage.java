@@ -146,24 +146,34 @@ public class DataStorage
         NBTTagCompound data = new NBTTagCompound();
         data.setInteger("__v", 1);
 
-        NBTTagCompound playersData = new NBTTagCompound();
+        NBTTagList playersDataList = new NBTTagList();
         players.forEach((player, researches) -> {
             if (!researches.isEmpty())
             {
+                NBTTagCompound playersData = new NBTTagCompound();
                 playersData.setTag(player, writePlayerData(researches));
+                playersDataList.appendTag(playersData);
             }
         });
-        data.setTag("oldRecords", playersData);
+        if (!playersDataList.isEmpty())
+        {
+            data.setTag("oldRecords", playersDataList);
+        }
 
-        NBTTagCompound recordsData = new NBTTagCompound();
+        NBTTagList recordsDataList = new NBTTagList();
         records.forEach((k, v) -> {
             if (!v.isEmpty())
             {
+                NBTTagCompound recordsData = new NBTTagCompound();
                 recordsData.setUniqueId("k", k);
                 recordsData.setTag("v", writePlayerData(v));
+                recordsDataList.appendTag(recordsData);
             }
         });
-        data.setTag("records", playersData);
+        if (!recordsDataList.isEmpty())
+        {
+            data.setTag("records", recordsDataList);
+        }
 
         File folder = new File(world.getSaveHandler().getWorldDirectory(), "data/");
         File file = new File(folder, ResearchTable.MODID + ".dat");

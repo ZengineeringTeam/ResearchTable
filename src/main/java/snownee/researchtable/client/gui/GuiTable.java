@@ -159,7 +159,6 @@ public class GuiTable extends GuiContainerMod
         }
         if (table.hasChanged)
         {
-            System.out.println(mc.player.getName() + " has changed");
             data = table.getData();
             if (detail != null)
             {
