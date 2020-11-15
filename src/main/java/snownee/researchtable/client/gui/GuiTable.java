@@ -27,7 +27,6 @@ import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
 import snownee.researchtable.core.Research;
-import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
 import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.network.PacketResearchChanged.Action;
@@ -53,8 +52,8 @@ public class GuiTable extends GuiContainerMod
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
         if (ModConfig.guiListAutoWidth)
         {
-            int titleWidth = ResearchList.LIST.stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth)
-                    .max().orElse(0);
+            int titleWidth = ResearchList.LIST.values().stream().map(Research::getTitle)
+                    .mapToInt(fontRenderer::getStringWidth).max().orElse(0);
             listWidth = Math.max(listWidth, 40 + titleWidth);
         }
         //        xSize = listWidth + ModConfig.guiDetailWidth + 8;
@@ -68,11 +67,13 @@ public class GuiTable extends GuiContainerMod
     {
         xSize = width + 8;
         ySize = height + 8;
-        ModConfig.guiDetailWidth = xSize - 12 - listWidth;
+        ModConfig.guiDetailWidth = width - listWidth;
         data = table.getData();
         super.initGui();
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
-        researchList = new ComponentResearchList(panel.control, listWidth, ySize - 8, 0, 0, 20, width, height);
+        boolean showTabs = ResearchList.CATEGORIES.size() > 1;
+        researchList = new ComponentResearchList(panel.control, listWidth, ySize - 8, 0, 0, 20, width, height,
+                showTabs);
         // ResearchList.LIST.clear();
         //        int r = new Random().nextInt(6) + 1;
         //        List<ICondition> conditions = new ArrayList<>(8);
@@ -83,12 +84,29 @@ public class GuiTable extends GuiContainerMod
         //        }
         //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "À²À²À²",
         //                ImmutableSet.of("stageA", "stageB"), Collections.EMPTY_LIST, conditions, null));
-        researchList.setCategory(ResearchCategory.GENERAL);
+        if (!ResearchList.CATEGORIES.isEmpty())
+        {
+            researchList.setCategory(ResearchList.CATEGORIES.get(0));
+        }
+        if (showTabs)
+        {
+            ModConfig.guiDetailWidth -= ComponentResearchList.TAB_WIDTH;
+        }
+        Research displaying = null;
+        if (detail != null)
+        {
+            displaying = detail.getResearch();
+        }
         detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8,
-                researchList.left + researchList.width, 0, width, height);
+                researchList.left + listWidth, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
-        if (detail.researching != null)
+        if (displaying != null)
+        {
+            detail.setResearch(displaying, table.canComplete());
+            table.hasChanged = true;
+        }
+        else if (detail.researching != null)
         {
             detail.setResearch(detail.researching, table.canComplete());
             table.hasChanged = true;

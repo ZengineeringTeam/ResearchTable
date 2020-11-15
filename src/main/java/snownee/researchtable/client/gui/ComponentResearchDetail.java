@@ -38,7 +38,7 @@ public class ComponentResearchDetail extends ComponentList
         this.control.offsetY = top;
         this.info = new ComponentText(this.control, width, 5, 5);
         this.control.addComponent(this.info);
-        this.buttons = new ComponentButtonList(this.control, width, 15);
+        this.buttons = new ComponentButtonList(this.control, width - 8, 20);
         this.control.addComponent(this.buttons);
         this.text = new ComponentText(this.control, width, 5, 5);
         this.control.addComponent(this.text);

@@ -1,8 +1,10 @@
 package snownee.researchtable.client.gui;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import org.lwjgl.input.Mouse;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -25,28 +27,41 @@ import snownee.researchtable.core.ResearchList;
 @SideOnly(Side.CLIENT)
 public class ComponentResearchList extends ComponentList
 {
-    final List<Research> researches = new ArrayList<>();
+    public static final int TAB_WIDTH = 28;
+
+    final List<Research> researches = Lists.newLinkedList();
+    final List<GuiButtonStack> btns = Lists.newLinkedList();
     ResearchCategory category;
 
     private final int slotHeight;
+    private final boolean showTabs;
 
-    public ComponentResearchList(GuiControl parent, int width, int height, int left, int top, int entryHeight, int screenWidth, int screenHeight)
+    public ComponentResearchList(GuiControl parent, int width, int height, int left, int top, int entryHeight, int screenWidth, int screenHeight, boolean showTabs)
     {
-        super(parent, width, height, left, top, screenWidth, screenHeight);
+        super(parent, width, height, showTabs ? left + TAB_WIDTH : left, top, screenWidth, screenHeight);
         this.slotHeight = entryHeight;
+        this.showTabs = showTabs;
     }
 
     public void setCategory(ResearchCategory category)
     {
+        if (this.category == category || category == null)
+        {
+            return;
+        }
         this.category = category;
         researches.clear();
 
-        List<Research> researchesAvailable = new ArrayList<>();
-        List<Research> researchesUnavailable = new ArrayList<>();
-        List<Research> researchesCompleted = new ArrayList<>();
+        List<Research> researchesAvailable = Lists.newLinkedList();
+        List<Research> researchesUnavailable = Lists.newLinkedList();
+        List<Research> researchesCompleted = Lists.newLinkedList();
 
-        for (Research research : ResearchList.LIST.stream().filter(e -> e.getCategory().equals(category)).collect(Collectors.toList()))
+        for (Research research : ResearchList.LIST.values())
         {
+            if (research.getCategory() != category)
+            {
+                continue;
+            }
             if (research.canResearch(parent.mc.player, GuiTable.data))
             {
                 researchesAvailable.add(research);
@@ -72,6 +87,34 @@ public class ComponentResearchList extends ComponentList
         researches.addAll(researchesAvailable);
         researches.addAll(researchesUnavailable);
         researches.addAll(researchesCompleted);
+        if (showTabs)
+        {
+            if (btns.isEmpty())
+            {
+                int btnLeft = left - TAB_WIDTH;
+                int btnTop = top;
+                int id = 114514;
+                for (ResearchCategory category2 : ResearchList.CATEGORIES)
+                {
+                    GuiButtonStack btn = new GuiButtonStack(id++, btnLeft, btnTop, category2.icon)
+                    {
+                        @Override
+                        public void onClick()
+                        {
+                            setCategory(category2);
+                        }
+
+                        @Override
+                        public boolean isSelected()
+                        {
+                            return ComponentResearchList.this.category == category2;
+                        }
+                    };
+                    btns.add(btn);
+                    btnTop += TAB_WIDTH;
+                }
+            }
+        }
     }
 
     @Override
@@ -101,7 +144,8 @@ public class ComponentResearchList extends ComponentList
         GlStateManager.disableLighting();
         RenderHelper.enableGUIStandardItemLighting();
         renderItem.renderItemAndEffectIntoGUI(research.getIcon(), offsetX + 6, offsetY + slotTop + 1);
-        renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6, offsetY + slotTop + 1, null);
+        renderItem.renderItemOverlayIntoGUI(parent.mc.fontRenderer, research.getIcon(), offsetX + 6,
+                offsetY + slotTop + 1, null);
         String title = research.getTitle();
         if (!research.canResearch(Minecraft.getMinecraft().player, GuiTable.data))
         {
@@ -120,6 +164,26 @@ public class ComponentResearchList extends ComponentList
     protected int getSlotHeight(int index)
     {
         return slotHeight;
+    }
+
+    @Override
+    public void handleMouseInput(int mouseX, int mouseY)
+    {
+        super.handleMouseInput(mouseX, mouseY);
+    }
+
+    @Override
+    public void drawScreen(int arg0, int arg1, int mouseX, int mouseY, float arg4)
+    {
+        for (GuiButtonStack btn : btns)
+        {
+            btn.drawButton(parent.mc, mouseX, mouseY, 0);
+            if (btn.isMouseOver() && Mouse.isButtonDown(0))
+            {
+                btn.mousePressed(parent.mc, mouseX, mouseY);
+            }
+        }
+        super.drawScreen(arg0, arg1, mouseX, mouseY, arg4);
     }
 
 }

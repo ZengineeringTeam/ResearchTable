@@ -30,7 +30,7 @@ public class CrTPlugin
     @ZenMethod
     public static boolean remove(@Nonnull String name)
     {
-        return ResearchList.LIST.removeIf(e -> e.getName().equals(name));
+        return ResearchList.LIST.remove(name) != null;
     }
 
     @ZenMethod

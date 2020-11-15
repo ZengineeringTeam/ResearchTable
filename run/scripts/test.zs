@@ -3,6 +3,7 @@ import mods.ResearchTable;
 // use `/researchtable @p all 0` to clear all progress
 
 var cat = ResearchTable.addCategory(<minecraft:grass>);
+var cat2 = ResearchTable.addCategory(<minecraft:stone>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
   .setIcons(<minecraft:grass>)
@@ -15,7 +16,7 @@ ResearchTable.builder("testResearch1", cat) // The second parameter has no use c
 //.setNoMaxCount()
   .build();
 
-ResearchTable.builder("testResearch2", cat)
+ResearchTable.builder("testResearch2", cat2)
   .setTitle("Energetic Wool loooooooong")
   .setIcons(<ore:plankWood>)
   .addCondition(<minecraft:wool:32767>, 2048, "Any Wool") // language key is better
@@ -23,7 +24,7 @@ ResearchTable.builder("testResearch2", cat)
   .setMaxCount(2) // How many times can a player do this research?
   .build();
 
-ResearchTable.builder("testResearch3", cat)
+ResearchTable.builder("testResearch3", cat2)
   .setTitle("Produce Seller")
   .setIcons(<minecraft:bread>)
   .setRequiredResearches("testResearch1")

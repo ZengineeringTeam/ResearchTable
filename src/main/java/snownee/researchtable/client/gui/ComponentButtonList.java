@@ -70,6 +70,7 @@ public class ComponentButtonList extends Component
     @Override
     public void drawScreen(int offsetX, int offsetY, int relMouseX, int relMouseY, float partialTicks)
     {
+        offsetY += 4;
         int x = width;
         for (int i = states.length - 1; i >= 0; i--)
         {
@@ -80,7 +81,7 @@ public class ComponentButtonList extends Component
             x -= widths[i];
             if (states[i] != State.DISABLED)
             {
-                if (GuiTable.isInRegion(x, 0, x + widths[i], 12, relMouseX, relMouseY))
+                if (GuiTable.isInRegion(x, 4, x + widths[i], 16, relMouseX, relMouseY))
                 {
                     if (Mouse.isButtonDown(0))
                     {
@@ -123,7 +124,7 @@ public class ComponentButtonList extends Component
                 continue;
             }
             x -= widths[i];
-            if (states[i] != State.DISABLED && GuiTable.isInRegion(x, 0, x + widths[i], 12, relMouseX, relMouseY))
+            if (states[i] != State.DISABLED && GuiTable.isInRegion(x, 4, x + widths[i], 16, relMouseX, relMouseY))
             {
                 sendMessage(i, states[i].ordinal());
             }

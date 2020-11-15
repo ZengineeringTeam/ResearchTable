@@ -1,9 +1,9 @@
 package snownee.researchtable.command;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -41,10 +41,10 @@ public class CommandResearch extends CommandBase
         }
         EntityPlayerMP player = getPlayer(server, sender, args[0]);
         boolean all = false;
-        List<Research> researchs;
+        Collection<Research> researchs;
         if (args[1].equals("all"))
         {
-            researchs = ResearchList.LIST;
+            researchs = ResearchList.LIST.values();
         }
         else
         {
@@ -84,7 +84,7 @@ public class CommandResearch extends CommandBase
         }
         if (args.length == 2)
         {
-            List<String> names = ResearchList.LIST.stream().map(Research::getName).collect(Collectors.toList());
+            Collection<String> names = ResearchList.LIST.keySet();
             return getListOfStringsMatchingLastWord(args, names);
         }
         return super.getTabCompletions(server, sender, args, targetPos);

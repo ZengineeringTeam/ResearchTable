@@ -216,8 +216,9 @@ public class ResearchBuilder
         {
             criteria.add(new CriterionResearchCount(name, maxCount));
         }
-        Research research = new Research(name, ResearchCategory.GENERAL, title, description, criteria, triggers, rewards, conditions, icons);
-        return ResearchList.LIST.add(research);
+        Research research = new Research(name, category, title, description, criteria, triggers, rewards, conditions,
+                icons);
+        return ResearchList.add(research);
     }
 
 }

@@ -1,25 +1,37 @@
 package snownee.researchtable.core;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public final class ResearchList
 {
-    public static final List<ResearchCategory> CATEGORIES = new ArrayList<>(8);
-    public static final List<Research> LIST = new ArrayList<>();
-
-    static
-    {
-        CATEGORIES.add(ResearchCategory.GENERAL);
-    }
+    public static final List<ResearchCategory> CATEGORIES = Lists.newLinkedList();
+    public static final Map<String, Research> LIST = Maps.newLinkedHashMap();
 
     private ResearchList()
     {
     }
 
+    public static synchronized boolean add(Research research)
+    {
+        if (LIST.containsKey(research.getName()))
+        {
+            return false;
+        }
+        if (!CATEGORIES.contains(research.getCategory()))
+        {
+            CATEGORIES.add(research.getCategory());
+        }
+        LIST.put(research.getName(), research);
+        return true;
+    }
+
     public static Optional<Research> find(String name)
     {
-        return ResearchList.LIST.stream().filter(v -> v.getName().equals(name)).findFirst();
+        return Optional.ofNullable(ResearchList.LIST.get(name));
     }
 }
