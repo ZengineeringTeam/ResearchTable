@@ -16,13 +16,13 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 public class CrTPlugin {
     @ZenMethod
-    public static ResearchBuilder builder(@Nonnull String name, @Nonnull ResearchCategory category) {
+    public static ResearchBuilder builder(@Nonnull String name, @Nonnull ResearchCategoryWrapper category) {
         return new ResearchBuilder(name, category);
     }
 
     @ZenMethod
-    public static ResearchCategory addCategory(@Nonnull IItemStack stack, @Optional String name) {
-        return new ResearchCategory(CraftTweakerMC.getItemStack(stack), name);
+    public static ResearchCategoryWrapper addCategory(@Nonnull IItemStack stack, @Optional String name) {
+        return new ResearchCategoryWrapper(new ResearchCategory(CraftTweakerMC.getItemStack(stack), name));
     }
 
     @ZenMethod

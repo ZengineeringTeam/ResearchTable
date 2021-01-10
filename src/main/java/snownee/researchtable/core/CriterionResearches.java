@@ -51,8 +51,10 @@ public class CriterionResearches implements ICriterion {
             string += result.get().getTitle();
         }
         string += TextFormatting.RESET;
-        string = I18n.format(ResearchTable.MODID + ".gui.needResearches", string);
-        if (r != researches.size()) {
+        if (r == researches.size()) {
+            string = I18n.format(ResearchTable.MODID + ".gui.requiredResearch", string);
+        } else {
+            string = I18n.format(ResearchTable.MODID + ".gui.optionalResearch", string);
             string += I18n.format(ResearchTable.MODID + ".gui.of", r, researches.size());
         }
         return string;

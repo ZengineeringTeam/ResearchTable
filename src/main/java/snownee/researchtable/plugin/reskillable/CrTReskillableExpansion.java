@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ModOnly("reskillable")
 @ZenRegister
-@ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
+@ZenExpansion("ResearchTable.Builder")
 public class CrTReskillableExpansion {
     @ZenMethod
     public static ResearchBuilder setRewardSkill(ResearchBuilder builder, String skillName) {

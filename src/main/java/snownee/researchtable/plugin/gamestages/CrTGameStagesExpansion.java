@@ -14,7 +14,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ModOnly("gamestages")
 @ZenRegister
-@ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
+@ZenExpansion("ResearchTable.Builder")
 public class CrTGameStagesExpansion {
     @ZenMethod
     public static ResearchBuilder setRewardStages(ResearchBuilder builder, @Nonnull String... stages) {

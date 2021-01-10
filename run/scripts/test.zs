@@ -1,4 +1,6 @@
 import mods.ResearchTable;
+import ResearchTable.Category;
+import ResearchTable.Builder;
 
 // use `/researchtable @p all 0` to clear all progress
 

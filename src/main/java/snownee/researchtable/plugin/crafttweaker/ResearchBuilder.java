@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
@@ -31,8 +32,11 @@ import snownee.researchtable.core.RewardExecute;
 import snownee.researchtable.core.RewardItems;
 import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
 import stanhebben.zenscript.annotations.Optional;
+import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenClass("ResearchTable.Builder")
+@ZenRegister
 public class ResearchBuilder {
     private static final String KEY_NO_TITLE = ResearchTable.MODID + ".title.missing";
     private static final String KEY_NO_DESCRIPTION = ResearchTable.MODID + ".description.missing";
@@ -48,9 +52,9 @@ public class ResearchBuilder {
     private String description;
     private int maxCount = 1;
 
-    public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategory category) {
+    public ResearchBuilder(@Nonnull String name, @Nonnull ResearchCategoryWrapper category) {
         this.name = name;
-        this.category = category;
+        this.category = category.category;
     }
 
     @ZenMethod

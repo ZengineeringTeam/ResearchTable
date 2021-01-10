@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ModOnly("grandeconomy")
 @ZenRegister
-@ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
+@ZenExpansion("ResearchTable.Builder")
 public class CrTGrandEconomyExpansion {
     @ZenMethod
     public static ResearchBuilder setRewardMoneyGE(ResearchBuilder builder, double money) {
