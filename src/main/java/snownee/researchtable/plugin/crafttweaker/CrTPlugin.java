@@ -8,6 +8,7 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ResearchCategory;
 import snownee.researchtable.core.ResearchList;
+import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -22,9 +23,9 @@ public class CrTPlugin
     }
 
     @ZenMethod
-    public static ResearchCategory addCategory(@Nonnull IItemStack stack)
+    public static ResearchCategory addCategory(@Nonnull IItemStack stack, @Optional String name)
     {
-        return new ResearchCategory(CraftTweakerMC.getItemStack(stack));
+        return new ResearchCategory(CraftTweakerMC.getItemStack(stack), name);
     }
 
     @ZenMethod

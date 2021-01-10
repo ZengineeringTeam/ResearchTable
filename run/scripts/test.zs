@@ -2,7 +2,7 @@ import mods.ResearchTable;
 
 // use `/researchtable @p all 0` to clear all progress
 
-var cat = ResearchTable.addCategory(<minecraft:grass>);
+var cat = ResearchTable.addCategory(<minecraft:grass>, "hello");
 var cat2 = ResearchTable.addCategory(<minecraft:stone>);
 
 ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
@@ -70,8 +70,8 @@ ResearchTable.builder("testResearch5", cat)
 ResearchTable.builder("testResearch6", cat)
   .setTitle("Click for Money")
   .setIcons(<minecraft:emerald>)
-  .setRequiredMoneyGE(10000)
-  .setTriggerMoneyGE(-9999)
+//  .setRequiredMoneyGE(10000)
+//  .setTriggerMoneyGE(-9999)
   .setNoMaxCount()
-  .setRewardMoneyGE(10000)
+//  .setRewardMoneyGE(10000)
   .build();

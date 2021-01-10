@@ -1,5 +1,6 @@
 package snownee.researchtable.client.gui;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.lwjgl.input.Mouse;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
@@ -108,6 +110,21 @@ public class ComponentResearchList extends ComponentList
                         public boolean isSelected()
                         {
                             return ComponentResearchList.this.category == category2;
+                        }
+
+                        @Override
+                        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
+                        {
+                            super.drawButton(mc, mouseX, mouseY, partialTicks);
+                            if (category2.nameKey != null && visible && hovered)
+                            {
+                                String tooltip = category2.nameKey;
+                                if (I18n.hasKey(tooltip))
+                                {
+                                    tooltip = I18n.format(tooltip);
+                                }
+                                setTooltip(Collections.singletonList(tooltip), null);
+                            }
                         }
                     };
                     btns.add(btn);

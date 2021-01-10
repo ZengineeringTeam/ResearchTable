@@ -32,15 +32,13 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven"
     }
     maven {
-        url = "https://www.cursemaven.com"
-    }
-    maven {
         name = 'tterrag maven'
         url = "https://maven.tterrag.com/"
     }
     maven {
         name = 'stages'
-        url = 'https://maven.mcmoddev.com'
+        url = 'https://mmdmaven.blamejared.com/'
+        //url = 'https://maven.mcmoddev.com'
     }
     maven {
         name = "jared"
@@ -49,6 +47,9 @@ repositories {
     maven {
         name = "tehnut"
         url = "https://maven.tehnut.info"
+    }
+    maven {
+        url = "https://www.cursemaven.com"
     }
 
     flatDir {
@@ -76,16 +77,17 @@ dependencies {
     compile "net.darkhax.bookshelf:Bookshelf-1.12.2:${bookshelf_version}"
     compile "net.darkhax.gamestages:GameStages-1.12.2:${gamestages_version}"
     compile "net.darkhax.itemstages:ItemStages-1.12.2:${itemstages_version}"
-    deobfCompile "curse.maven:hwyla:2568751"
+    deobfCompile "curse.maven:hwyla-253449:2568751"
     deobfCompile "codersafterdark.reskillable:Reskillable:1.12.2-1.12.5-PR-156.1"
-    deobfCompile("curse.maven:the-one-probe:2667280") {
+    deobfCompile("curse.maven:the-one-probe-245211:2667280") {
         exclude group: 'cofh'
     }
-    deobfCompile "curse.maven:together-forever:2700901"
+    deobfCompile "curse.maven:together-forever-285968:2700901"
     compile files(
-        'Kiwi-1.12.2-0.5.3.32-deobf.jar'
+        'libs/Kiwi-1.12.2-0.5.3.32-deobf.jar',
+        'libs/GrandEconomy-1.12.2-2.0.0-api.jar'
     )
-    deobfCompile "curse.maven:grand-economy:2981771"
+    //deobfCompile "curse.maven:grand-economy-312141:3139910"
 }
 
 processResources {
