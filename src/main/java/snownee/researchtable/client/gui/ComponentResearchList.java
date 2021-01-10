@@ -44,7 +44,7 @@ public class ComponentResearchList extends ComponentList {
     }
 
     public void setCategory(ResearchCategory category) {
-        if (this.category == category || category == null) {
+        if (category == null) {
             return;
         }
         this.category = category;
