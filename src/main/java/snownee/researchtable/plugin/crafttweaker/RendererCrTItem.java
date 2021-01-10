@@ -24,25 +24,19 @@ import snownee.researchtable.client.renderer.ConditionRenderer;
 import snownee.researchtable.client.renderer.EventShowItemCondition;
 
 @SideOnly(Side.CLIENT)
-public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
-{
+public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem> {
     private final NonNullList<ItemStack> stacks;
     @Nullable
     private final String name;
 
-    public RendererCrTItem(ConditionCrTItem condition)
-    {
+    public RendererCrTItem(ConditionCrTItem condition) {
         stacks = NonNullList.create();
         List<IItemStack> items = condition.ingredient.getItems();
-        for (IItemStack stack : items)
-        {
-            if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
-            {
+        for (IItemStack stack : items) {
+            if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
                 Item item = CraftTweakerMC.getItemStack(stack).getItem();
                 item.getSubItems(item.getCreativeTab(), stacks);
-            }
-            else if (!stack.isEmpty())
-            {
+            } else if (!stack.isEmpty()) {
                 stacks.add(CraftTweakerMC.getItemStack(stack));
             }
         }
@@ -50,62 +44,50 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
         name = condition.customName;
     }
 
-    private ItemStack getStack()
-    {
+    private ItemStack getStack() {
         return stacks.get((int) ((GuiTable.ticks / 30) % stacks.size()));
     }
 
     @Override
-    public void draw(Minecraft mc, int x, int y)
-    {
-        if (!stacks.isEmpty())
-        {
+    public void draw(Minecraft mc, int x, int y) {
+        if (!stacks.isEmpty()) {
             mc.getRenderItem().renderItemAndEffectIntoGUI(getStack(), x, y);
         }
     }
 
     @Override
-    public String name()
-    {
-        if (name != null)
-        {
+    public String name() {
+        if (name != null) {
             return I18n.format(name);
         }
-        if (!stacks.isEmpty())
-        {
+        if (!stacks.isEmpty()) {
             return getStack().getDisplayName();
         }
         return I18n.format("researchtable.gui.unknown_item");
     }
 
     @Override
-    public String format(long number)
-    {
+    public String format(long number) {
         return Util.formatComma(number);
     }
 
-    public static class Factory implements ConditionRendererFactory<ConditionCrTItem>
-    {
+    public static class Factory implements ConditionRendererFactory<ConditionCrTItem> {
 
         @Override
-        public ConditionRenderer<ConditionCrTItem> get(ConditionCrTItem condition)
-        {
+        public ConditionRenderer<ConditionCrTItem> get(ConditionCrTItem condition) {
             return new RendererCrTItem(condition);
         }
 
     }
 
     @Override
-    public FontRenderer getFont()
-    {
+    public FontRenderer getFont() {
         FontRenderer font = null;
-        if (!stacks.isEmpty())
-        {
+        if (!stacks.isEmpty()) {
             ItemStack stack = getStack();
             font = stack.getItem().getFontRenderer(stack);
         }
-        if (font == null)
-        {
+        if (font == null) {
             font = Minecraft.getMinecraft().fontRenderer;
         }
         // font.setUnicodeFlag(true);
@@ -113,14 +95,10 @@ public class RendererCrTItem extends ConditionRenderer<ConditionCrTItem>
     }
 
     @Override
-    public List<String> getTooltip(ITooltipFlag flag)
-    {
-        if (!stacks.isEmpty())
-        {
+    public List<String> getTooltip(ITooltipFlag flag) {
+        if (!stacks.isEmpty()) {
             return getStack().getTooltip(null, flag);
-        }
-        else
-        {
+        } else {
             return Collections.EMPTY_LIST;
         }
     }

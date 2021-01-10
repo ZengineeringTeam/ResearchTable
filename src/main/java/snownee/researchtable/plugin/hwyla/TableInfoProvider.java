@@ -20,48 +20,36 @@ import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.block.TileTable;
 
-public class TableInfoProvider implements IWailaDataProvider
-{
+public class TableInfoProvider implements IWailaDataProvider {
     @Override
     @SideOnly(Side.CLIENT)
-    public List<String> getWailaBody(ItemStack itemStack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        if (accessor.getTileEntity() instanceof TileTable && accessor.getNBTData() != null)
-        {
+    public List<String> getWailaBody(ItemStack itemStack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        if (accessor.getTileEntity() instanceof TileTable && accessor.getNBTData() != null) {
             NBTTagCompound tag = accessor.getNBTData();
-            if (tag.hasKey("owner", Tag.STRING))
-            {
-                tooltip.add(
-                        I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + tag.getString("owner")));
+            if (tag.hasKey("owner", Tag.STRING)) {
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + tag.getString("owner")));
             }
-            if (tag.hasKey("research", Tag.STRING))
-            {
+            if (tag.hasKey("research", Tag.STRING)) {
                 String title = tag.getString("research");
                 title = I18n.hasKey(title) ? I18n.format(title) : title;
                 tooltip.add(I18n.format(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));
             }
-            if (tag.hasKey("progress", Tag.FLOAT))
-            {
+            if (tag.hasKey("progress", Tag.FLOAT)) {
                 float progress = tag.getFloat("progress");
-                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress",
-                        TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%"));
+                tooltip.add(I18n.format(ResearchTable.MODID + ".gui.progress", TextFormatting.WHITE + Util.MESSAGE_FORMAT.format(new Float[] { progress }) + "%"));
             }
         }
         return tooltip;
     }
 
     @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos)
-    {
-        if (te instanceof TileTable)
-        {
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
+        if (te instanceof TileTable) {
             TileTable table = (TileTable) te;
-            if (table.ownerName != null && !table.ownerName.isEmpty())
-            {
+            if (table.ownerName != null && !table.ownerName.isEmpty()) {
                 tag.setString("owner", table.ownerName);
             }
-            if (table.getResearch() != null)
-            {
+            if (table.getResearch() != null) {
                 tag.setString("research", table.getResearch().getTitleRaw());
                 tag.setFloat("progress", table.getProgress());
             }

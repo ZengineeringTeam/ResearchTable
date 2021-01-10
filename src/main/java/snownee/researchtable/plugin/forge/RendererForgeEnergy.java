@@ -16,53 +16,44 @@ import snownee.researchtable.ResearchTable;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 
 @SideOnly(Side.CLIENT)
-public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy>
-{
+public class RendererForgeEnergy extends ConditionRenderer<ConditionForgeEnergy> {
     private static final RendererForgeEnergy INSTANCE = new RendererForgeEnergy();
     private static final DrawableResource ICON = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/energy.png"), 0, 0, 16, 16, 0, 0, 0, 0, 16, 16);
 
-    private RendererForgeEnergy()
-    {
+    private RendererForgeEnergy() {
     }
 
     @Override
-    public void draw(Minecraft mc, int x, int y)
-    {
+    public void draw(Minecraft mc, int x, int y) {
         ICON.draw(mc, x, y);
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return I18n.format(ResearchTable.MODID + ".gui.fe");
     }
 
     @Override
-    public String format(long number)
-    {
+    public String format(long number) {
         return Util.formatComma(number);
     }
 
-    public static class Factory implements ConditionRendererFactory<ConditionForgeEnergy>
-    {
+    public static class Factory implements ConditionRendererFactory<ConditionForgeEnergy> {
 
         @Override
-        public ConditionRenderer<ConditionForgeEnergy> get(ConditionForgeEnergy condition)
-        {
+        public ConditionRenderer<ConditionForgeEnergy> get(ConditionForgeEnergy condition) {
             return RendererForgeEnergy.INSTANCE;
         }
 
     }
 
     @Override
-    public FontRenderer getFont()
-    {
+    public FontRenderer getFont() {
         return AdvancedFontRenderer.INSTANCE;
     }
 
     @Override
-    public List<String> getTooltip(ITooltipFlag flag)
-    {
+    public List<String> getTooltip(ITooltipFlag flag) {
         return null;
     }
 

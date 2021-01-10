@@ -38,8 +38,7 @@ import snownee.researchtable.core.team.TeamHelper;
 import snownee.researchtable.network.PacketSyncClient;
 
 @EventBusSubscriber(modid = ResearchTable.MODID)
-public class DataStorage
-{
+public class DataStorage {
     private static DataStorage INSTANCE;
     private final WorldServer world;
     private static final Map<UUID, Object2IntMap<String>> records = new HashMap<>();
@@ -47,14 +46,12 @@ public class DataStorage
     private static boolean changed = false;
     public static Object2IntMap<String> clientData;
 
-    public DataStorage(WorldServer world)
-    {
+    public DataStorage(WorldServer world) {
         this.world = world;
         load();
     }
 
-    private void load()
-    {
+    private void load() {
         records.clear();
         players.clear();
         changed = false;
@@ -64,83 +61,60 @@ public class DataStorage
         File file = new File(folder, ResearchTable.MODID + ".dat");
         NBTTagCompound data = null;
 
-        if (file.exists() && file.isFile())
-        {
-            try (InputStream stream = new FileInputStream(file))
-            {
+        if (file.exists() && file.isFile()) {
+            try (InputStream stream = new FileInputStream(file)) {
                 data = CompressedStreamTools.readCompressed(stream);
-            }
-            catch (Exception ex1)
-            {
-                try
-                {
+            } catch (Exception ex1) {
+                try {
                     data = CompressedStreamTools.read(file);
-                }
-                catch (Exception ex2)
-                {
+                } catch (Exception ex2) {
                     ex2.printStackTrace();
                 }
             }
         }
-        if (data == null)
-        {
+        if (data == null) {
             return;
         }
 
         int format = data.getInteger("__v");
-        if (format == 0)
-        {
-            for (String player : data.getKeySet())
-            {
-                if (data.hasKey(player, Constants.NBT.TAG_COMPOUND))
-                {
+        if (format == 0) {
+            for (String player : data.getKeySet()) {
+                if (data.hasKey(player, Constants.NBT.TAG_COMPOUND)) {
                     NBTTagCompound compound = data.getCompoundTag(player);
                     Object2IntMap<String> researches = readPlayerData(compound);
-                    if (!researches.isEmpty())
-                    {
+                    if (!researches.isEmpty()) {
                         players.put(player, researches);
                     }
                 }
             }
-        }
-        else if (format == 1)
-        {
+        } else if (format == 1) {
             NBTTagCompound playersData = data.getCompoundTag("oldRecords");
-            for (String player : playersData.getKeySet())
-            {
-                if (data.hasKey(player, Constants.NBT.TAG_COMPOUND))
-                {
+            for (String player : playersData.getKeySet()) {
+                if (data.hasKey(player, Constants.NBT.TAG_COMPOUND)) {
                     NBTTagCompound compound = playersData.getCompoundTag(player);
                     Object2IntMap<String> researches = readPlayerData(compound);
-                    if (!researches.isEmpty())
-                    {
+                    if (!researches.isEmpty()) {
                         players.put(player, researches);
                     }
                 }
             }
 
             NBTTagList recordsData = data.getTagList("records", Constants.NBT.TAG_COMPOUND);
-            for (NBTBase raw : recordsData)
-            {
+            for (NBTBase raw : recordsData) {
                 NBTTagCompound recordData = (NBTTagCompound) raw;
                 UUID k = recordData.getUniqueId("k");
                 Object2IntMap<String> v = readPlayerData(recordData.getCompoundTag("v"));
-                if (!v.isEmpty())
-                {
+                if (!v.isEmpty()) {
                     records.put(k, v);
                 }
             }
-        }
-        else
-        {
+        } else {
             throw new RuntimeException("Unsupported format version");
         }
     }
 
-    private void save()
-    {
-        if (!changed)
-        {
+    private void save() {
+        if (!changed) {
             return;
         }
         NBTTagCompound data = new NBTTagCompound();
@@ -148,42 +122,35 @@ public class DataStorage
 
         NBTTagList playersDataList = new NBTTagList();
         players.forEach((player, researches) -> {
-            if (!researches.isEmpty())
-            {
+            if (!researches.isEmpty()) {
                 NBTTagCompound playersData = new NBTTagCompound();
                 playersData.setTag(player, writePlayerData(researches));
                 playersDataList.appendTag(playersData);
             }
         });
-        if (!playersDataList.isEmpty())
-        {
+        if (!playersDataList.isEmpty()) {
             data.setTag("oldRecords", playersDataList);
         }
 
         NBTTagList recordsDataList = new NBTTagList();
         records.forEach((k, v) -> {
-            if (!v.isEmpty())
-            {
+            if (!v.isEmpty()) {
                 NBTTagCompound recordsData = new NBTTagCompound();
                 recordsData.setUniqueId("k", k);
                 recordsData.setTag("v", writePlayerData(v));
                 recordsDataList.appendTag(recordsData);
             }
         });
-        if (!recordsDataList.isEmpty())
-        {
+        if (!recordsDataList.isEmpty()) {
             data.setTag("records", recordsDataList);
         }
 
         File folder = new File(world.getSaveHandler().getWorldDirectory(), "data/");
         File file = new File(folder, ResearchTable.MODID + ".dat");
         ThreadedFileIOBase.getThreadedIOInstance().queueIO(() -> {
-            try
-            {
-                if (!file.exists())
-                {
-                    if (!folder.exists())
-                    {
+            try {
+                if (!file.exists()) {
+                    if (!folder.exists()) {
                         folder.mkdirs();
                     }
                     file.createNewFile();
@@ -191,39 +158,30 @@ public class DataStorage
                 OutputStream stream = new FileOutputStream(file);
                 CompressedStreamTools.writeCompressed(data, stream);
                 changed = false;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return false;
         });
     }
 
-    public static boolean loaded()
-    {
+    public static boolean loaded() {
         return INSTANCE != null;
     }
 
     // TODO: register event
-    public static int complete(UUID uuid, Research research)
-    {
+    public static int complete(UUID uuid, Research research) {
         return setCount(uuid, research, count(uuid, research) + 1);
     }
 
-    public static int setCount(UUID uuid, Research research, int count)
-    {
-        if (!loaded())
-        {
+    public static int setCount(UUID uuid, Research research, int count) {
+        if (!loaded()) {
             return -1;
         }
         Object2IntMap<String> researches = getRecords(uuid);
-        if (count > 0)
-        {
+        if (count > 0) {
             researches.put(research.getName(), count);
-        }
-        else
-        {
+        } else {
             researches.remove(research.getName());
         }
         changed = true;
@@ -231,45 +189,33 @@ public class DataStorage
         return count;
     }
 
-    public static Object2IntMap<String> getRecords(UUID uuid)
-    {
-        if (!loaded())
-        {
+    public static Object2IntMap<String> getRecords(UUID uuid) {
+        if (!loaded()) {
             return Object2IntMaps.EMPTY_MAP;
         }
         UUID owner = TeamHelper.provider.getOwner(uuid);
-        if (owner != null)
-        {
+        if (owner != null) {
             return records.computeIfAbsent(owner, $ -> new Object2IntOpenHashMap<>());
-        }
-        else
-        {
+        } else {
             return records.computeIfAbsent(uuid, $ -> new Object2IntOpenHashMap<>());
         }
     }
 
-    public static int count(UUID uuid, String research)
-    {
-        if (loaded())
-        {
+    public static int count(UUID uuid, String research) {
+        if (loaded()) {
             return getRecords(uuid).getInt(research);
-        }
-        else if (clientData != null)
-        {
+        } else if (clientData != null) {
             return clientData.getInt(research);
         }
         return 0;
     }
 
-    public static int count(UUID uuid, Research research)
-    {
+    public static int count(UUID uuid, Research research) {
         return count(uuid, research.getName());
     }
 
-    public static boolean hasAllOf(UUID uuid, Collection<String> researches)
-    {
-        for (String research : researches)
-        {
+    public static boolean hasAllOf(UUID uuid, Collection<String> researches) {
+        for (String research : researches) {
             if (count(uuid, research) == 0)
                 return false;
         }
@@ -277,93 +223,72 @@ public class DataStorage
     }
 
     @SubscribeEvent
-    public static void onWorldLoaded(WorldEvent.Load event)
-    {
-        if (event.getWorld().provider.getDimension() == 0 && !event.getWorld().isRemote)
-        {
+    public static void onWorldLoaded(WorldEvent.Load event) {
+        if (event.getWorld().provider.getDimension() == 0 && !event.getWorld().isRemote) {
             INSTANCE = new DataStorage((WorldServer) event.getWorld());
         }
     }
 
     @SubscribeEvent
-    public static void onWorldSaved(WorldEvent.Save event)
-    {
-        if (loaded() && event.getWorld() == INSTANCE.world)
-        {
+    public static void onWorldSaved(WorldEvent.Save event) {
+        if (loaded() && event.getWorld() == INSTANCE.world) {
             INSTANCE.save();
         }
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
-    {
-        if (!loaded() || event.player instanceof FakePlayer)
-        {
+    public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+        if (!loaded() || event.player instanceof FakePlayer) {
             return;
         }
         String name = event.player.getName();
         UUID uuid = event.player.getGameProfile().getId();
-        if (players.containsKey(name))
-        {
+        if (players.containsKey(name)) {
             Object2IntMap<String> data = players.get(name);
             players.remove(name);
             mergeProgress(data, uuid);
             syncClientAllMembers(uuid);
-        }
-        else
-        {
+        } else {
             syncClient(uuid);
         }
     }
 
-    public static void mergeProgress(Object2IntMap<String> from, UUID uuid)
-    {
+    public static void mergeProgress(Object2IntMap<String> from, UUID uuid) {
         Object2IntMap<String> to = getRecords(uuid);
-        for (Entry<String> entry : from.object2IntEntrySet())
-        {
+        for (Entry<String> entry : from.object2IntEntrySet()) {
             int fromInt = entry.getIntValue();
             int toInt = to.getInt(entry.getKey());
-            if (fromInt > toInt)
-            {
+            if (fromInt > toInt) {
                 to.put(entry.getKey(), fromInt);
             }
         }
         changed = true;
     }
 
-    private static void syncClientAllMembers(UUID uuid)
-    {
+    private static void syncClientAllMembers(UUID uuid) {
         TeamHelper.provider.getMembers(uuid).forEach(DataStorage::syncClient);
     }
 
-    private static void syncClient(UUID uuid)
-    {
+    private static void syncClient(UUID uuid) {
         EntityPlayer player = getPlayer(uuid);
-        if (player == null)
-        {
+        if (player == null) {
             return;
         }
-        if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer))
-        {
+        if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
             Object2IntMap<String> data = getRecords(player.getGameProfile().getId());
-            if (!data.isEmpty())
-            {
+            if (!data.isEmpty()) {
                 NetworkChannel.INSTANCE.sendToPlayer(new PacketSyncClient(data), (EntityPlayerMP) player);
             }
         }
     }
 
-    public static Object2IntMap<String> readPlayerData(NBTTagCompound data)
-    {
+    public static Object2IntMap<String> readPlayerData(NBTTagCompound data) {
         Set<String> keySet = data.getKeySet();
         Object2IntMap<String> researches = new Object2IntOpenHashMap<>(keySet.size());
-        for (String research : keySet)
-        {
-            if (data.hasKey(research, Constants.NBT.TAG_INT))
-            {
+        for (String research : keySet) {
+            if (data.hasKey(research, Constants.NBT.TAG_INT)) {
                 int count = data.getInteger(research);
-                if (count > 0)
-                {
+                if (count > 0) {
                     researches.put(research, count);
                 }
             }
@@ -371,8 +296,7 @@ public class DataStorage
         return researches;
     }
 
-    public static NBTTagCompound writePlayerData(Object2IntMap<String> map)
-    {
+    public static NBTTagCompound writePlayerData(Object2IntMap<String> map) {
         NBTTagCompound data = new NBTTagCompound();
         map.forEach((research, count) -> {
             data.setInteger(research, count);
@@ -381,13 +305,11 @@ public class DataStorage
     }
 
     @Nullable
-    public static EntityPlayerMP getPlayer(UUID uuid)
-    {
+    public static EntityPlayerMP getPlayer(UUID uuid) {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid);
     }
 
-    public static void onPlayerAdd(UUID uuid, UUID owner)
-    {
+    public static void onPlayerAdd(UUID uuid, UUID owner) {
         mergeProgress(records.getOrDefault(uuid, Object2IntMaps.EMPTY_MAP), owner);
         records.remove(uuid);
         syncClientAllMembers(owner);

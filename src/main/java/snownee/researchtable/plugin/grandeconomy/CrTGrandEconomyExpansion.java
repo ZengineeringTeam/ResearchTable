@@ -9,25 +9,21 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ModOnly("grandeconomy")
 @ZenRegister
 @ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
-public class CrTGrandEconomyExpansion
-{
+public class CrTGrandEconomyExpansion {
     @ZenMethod
-    public static ResearchBuilder setRewardMoneyGE(ResearchBuilder builder, double money)
-    {
+    public static ResearchBuilder setRewardMoneyGE(ResearchBuilder builder, double money) {
         builder.rewards.add(new RewardMoneyGE(money));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setTriggerMoneyGE(ResearchBuilder builder, double money)
-    {
+    public static ResearchBuilder setTriggerMoneyGE(ResearchBuilder builder, double money) {
         builder.triggers.add(new RewardMoneyGE(money));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setRequiredMoneyGE(ResearchBuilder builder, double money)
-    {
+    public static ResearchBuilder setRequiredMoneyGE(ResearchBuilder builder, double money) {
         builder.criteria.add(new CriterionMoneyGE(money));
         return builder;
     }

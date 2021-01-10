@@ -7,18 +7,15 @@ import net.minecraftforge.fluids.FluidStack;
 import snownee.researchtable.core.ConditionTypes;
 import snownee.researchtable.core.ICondition;
 
-public class ConditionCrTLiquid implements ICondition<FluidStack>
-{
+public class ConditionCrTLiquid implements ICondition<FluidStack> {
     final FluidStack fluid;
     final long count;
 
-    public ConditionCrTLiquid(ILiquidStack ingredient)
-    {
+    public ConditionCrTLiquid(ILiquidStack ingredient) {
         this(ingredient, ingredient.getAmount());
     }
 
-    public ConditionCrTLiquid(ILiquidStack ingredient, long count)
-    {
+    public ConditionCrTLiquid(ILiquidStack ingredient, long count) {
         this.count = count;
         Object raw = ingredient.withAmount(1).getInternal();
         if (!(raw instanceof FluidStack)) // FluidStack does not have final!
@@ -29,29 +26,24 @@ public class ConditionCrTLiquid implements ICondition<FluidStack>
     }
 
     @Override
-    public long matches(FluidStack e)
-    {
-        if (fluid.isFluidEqual(e))
-        {
+    public long matches(FluidStack e) {
+        if (fluid.isFluidEqual(e)) {
             return e.amount;
         }
         return 0;
     }
 
     @Override
-    public long getGoal()
-    {
+    public long getGoal() {
         return count;
     }
 
     @Override
-    public Supplier<Class<FluidStack>> getMatchType()
-    {
+    public Supplier<Class<FluidStack>> getMatchType() {
         return ConditionTypes.FLUID;
     }
 
-    public FluidStack getFluid()
-    {
+    public FluidStack getFluid() {
         return fluid;
     }
 

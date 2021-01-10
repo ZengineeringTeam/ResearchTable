@@ -11,19 +11,16 @@ import snownee.researchtable.block.TileTable;
 import snownee.researchtable.network.GuiHandler;
 
 @KiwiModule(modid = ResearchTable.MODID)
-public class ResearchTableModule implements IModule
-{
+public class ResearchTableModule implements IModule {
     public static final BlockTable TABLE = new BlockTable("table", Material.IRON);
 
     @Override
-    public void preInit()
-    {
+    public void preInit() {
         NetworkRegistry.INSTANCE.registerGuiHandler(ResearchTable.getInstance(), new GuiHandler());
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         GameRegistry.registerTileEntity(TileTable.class, new ResourceLocation(ResearchTable.MODID, "table"));
     }
 }

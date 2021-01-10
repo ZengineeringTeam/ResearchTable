@@ -16,8 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Research
-{
+public class Research {
     private static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
 
     private final String name;
@@ -31,8 +30,7 @@ public class Research
     private final Collection<IReward> triggers;
     private final Collection<IReward> rewards;
 
-    public Research(String name, ResearchCategory category, String title, String description, Collection<ICriterion> criteria, Collection<IReward> triggers, Collection<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons)
-    {
+    public Research(String name, ResearchCategory category, String title, String description, Collection<ICriterion> criteria, Collection<IReward> triggers, Collection<IReward> rewards, List<ICondition> conditions, @Nullable List<ItemStack> icons) {
         this.name = name;
         this.category = category;
         this.title = title;
@@ -44,83 +42,66 @@ public class Research
         this.icons = icons;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public ResearchCategory getCategory()
-    {
+    public ResearchCategory getCategory() {
         return category;
     }
 
-    public String getTitleRaw()
-    {
+    public String getTitleRaw() {
         return title;
     }
 
     @SideOnly(Side.CLIENT)
-    public String getTitle()
-    {
+    public String getTitle() {
         return I18n.hasKey(title) ? I18n.format(title) : title;
     }
 
-    public String getDescriptionRaw()
-    {
+    public String getDescriptionRaw() {
         return description;
     }
 
     @SideOnly(Side.CLIENT)
-    public String getDescription()
-    {
+    public String getDescription() {
         return I18n.hasKey(description) ? I18n.format(description) : description;
     }
 
-    public ItemStack getIcon()
-    {
-        if (icons == null || icons.isEmpty())
-        {
+    public ItemStack getIcon() {
+        if (icons == null || icons.isEmpty()) {
             return DEFAULT_ICON;
-        }
-        else
-        {
+        } else {
             return icons.get(0);
         }
     }
 
-    public List<ICondition> getConditions()
-    {
+    public List<ICondition> getConditions() {
         return Collections.unmodifiableList(conditions);
     }
 
-    public boolean canResearch(EntityPlayer player, NBTTagCompound data)
-    {
+    public boolean canResearch(EntityPlayer player, NBTTagCompound data) {
         return criteria.stream().allMatch(c -> c.matches(player, data));
     }
 
-    public Collection<ICriterion> getCriteria()
-    {
+    public Collection<ICriterion> getCriteria() {
         return Collections.unmodifiableCollection(criteria);
     }
 
-    public Collection<IReward> getTriggers()
-    {
+    public Collection<IReward> getTriggers() {
         return Collections.unmodifiableCollection(triggers);
     }
 
-    public void complete(World world, BlockPos pos, EntityPlayer player)
-    {
+    public void complete(World world, BlockPos pos, EntityPlayer player) {
         rewards.forEach(e -> e.earn(world, pos, player));
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Research@" + getName();
     }
 
-    public void start(World world, BlockPos pos, EntityPlayer player)
-    {
+    public void start(World world, BlockPos pos, EntityPlayer player) {
         triggers.forEach(r -> r.earn(world, pos, player));
     }
 }

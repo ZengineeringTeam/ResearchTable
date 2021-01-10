@@ -5,10 +5,8 @@ import java.util.function.Supplier;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class ConditionTypes
-{
-    private ConditionTypes()
-    {
+public class ConditionTypes {
+    private ConditionTypes() {
     }
 
     public static final Supplier<Class<ItemStack>> ITEM = () -> ItemStack.class;

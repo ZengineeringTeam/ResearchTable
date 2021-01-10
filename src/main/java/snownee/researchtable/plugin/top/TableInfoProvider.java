@@ -16,36 +16,27 @@ import snownee.researchtable.ResearchTableModule;
 import snownee.researchtable.block.TileTable;
 import snownee.researchtable.core.Research;
 
-public class TableInfoProvider implements IProbeInfoProvider
-{
+public class TableInfoProvider implements IProbeInfoProvider {
 
     @Override
-    public String getID()
-    {
+    public String getID() {
         return ResearchTable.MODID;
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data)
-    {
-        if (mode == ProbeMode.EXTENDED || mode == ProbeMode.DEBUG)
-        {
-            if (blockState.getBlock() == ResearchTableModule.TABLE)
-            {
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        if (mode == ProbeMode.EXTENDED || mode == ProbeMode.DEBUG) {
+            if (blockState.getBlock() == ResearchTableModule.TABLE) {
                 TileEntity tile = world.getTileEntity(data.getPos());
-                if (tile instanceof TileTable)
-                {
+                if (tile instanceof TileTable) {
                     TileTable table = (TileTable) tile;
-                    if (table.ownerName != null && !table.ownerName.isEmpty())
-                    {
+                    if (table.ownerName != null && !table.ownerName.isEmpty()) {
                         probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.owner", TextFormatting.WHITE + table.ownerName));
                     }
                     Research research = table.getResearch();
-                    if (research != null)
-                    {
+                    if (research != null) {
                         String title = research.getTitleRaw();
-                        if (I18n.canTranslate(title))
-                        {
+                        if (I18n.canTranslate(title)) {
                             title = I18n.translateToLocalFormatted(title);
                         }
                         probeInfo.text(I18n.translateToLocalFormatted(ResearchTable.MODID + ".gui.researching", TextFormatting.WHITE + title));

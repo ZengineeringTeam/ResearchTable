@@ -32,8 +32,7 @@ import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.network.PacketResearchChanged.Action;
 
 @SideOnly(Side.CLIENT)
-public class GuiTable extends GuiContainerMod
-{
+public class GuiTable extends GuiContainerMod {
     public static float ticks;
     public static NBTTagCompound data;
     private final TileTable table;
@@ -43,17 +42,14 @@ public class GuiTable extends GuiContainerMod
     private List<String> scoreText;
     private int listWidth = ModConfig.guiListWidth;
 
-    public GuiTable(TileTable tile, InventoryPlayer inventory)
-    {
+    public GuiTable(TileTable tile, InventoryPlayer inventory) {
         super(new ContainerTable(tile, inventory));
         this.table = tile;
         data = table.getData();
         fontRenderer = AdvancedFontRenderer.INSTANCE;
         AdvancedFontRenderer.INSTANCE.setUnicodeFlag(true);
-        if (ModConfig.guiListAutoWidth)
-        {
-            int titleWidth = ResearchList.LIST.values().stream().map(Research::getTitle)
-                    .mapToInt(fontRenderer::getStringWidth).max().orElse(0);
+        if (ModConfig.guiListAutoWidth) {
+            int titleWidth = ResearchList.LIST.values().stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth).max().orElse(0);
             listWidth = Math.max(listWidth, 40 + titleWidth);
         }
         //        xSize = listWidth + ModConfig.guiDetailWidth + 8;
@@ -63,8 +59,7 @@ public class GuiTable extends GuiContainerMod
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         xSize = width + 8;
         ySize = height + 8;
         ModConfig.guiDetailWidth = width - listWidth;
@@ -72,8 +67,7 @@ public class GuiTable extends GuiContainerMod
         super.initGui();
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
         boolean showTabs = ResearchList.CATEGORIES.size() > 1;
-        researchList = new ComponentResearchList(panel.control, listWidth, ySize - 8, 0, 0, 20, width, height,
-                showTabs);
+        researchList = new ComponentResearchList(panel.control, listWidth, ySize - 8, 0, 0, 20, width, height, showTabs);
         // ResearchList.LIST.clear();
         //        int r = new Random().nextInt(6) + 1;
         //        List<ICondition> conditions = new ArrayList<>(8);
@@ -82,32 +76,25 @@ public class GuiTable extends GuiContainerMod
         //        {
         //            conditions.add(new ConditionCrTStack(CraftTweakerMC.getIItemStack(new ItemStack(Items.CLAY_BALL, 256))));
         //        }
-        //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "À²À²À²",
+        //        ResearchList.LIST.add(new Research("hello", ResearchCategory.GENERAL, "hello", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
         //                ImmutableSet.of("stageA", "stageB"), Collections.EMPTY_LIST, conditions, null));
-        if (!ResearchList.CATEGORIES.isEmpty())
-        {
+        if (!ResearchList.CATEGORIES.isEmpty()) {
             researchList.setCategory(ResearchList.CATEGORIES.get(0));
         }
-        if (showTabs)
-        {
+        if (showTabs) {
             ModConfig.guiDetailWidth -= ComponentResearchList.TAB_WIDTH;
         }
         Research displaying = null;
-        if (detail != null)
-        {
+        if (detail != null) {
             displaying = detail.getResearch();
         }
-        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8,
-                researchList.left + listWidth, 0, width, height);
+        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8, researchList.left + listWidth, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
-        if (displaying != null)
-        {
+        if (displaying != null) {
             detail.setResearch(displaying, table.canComplete());
             table.hasChanged = true;
-        }
-        else if (detail.researching != null)
-        {
+        } else if (detail.researching != null) {
             detail.setResearch(detail.researching, table.canComplete());
             table.hasChanged = true;
         }
@@ -115,81 +102,61 @@ public class GuiTable extends GuiContainerMod
         panel.control.addComponent(researchList);
         panel.control.addComponent(detail);
 
-        if (ResearchTable.scoreFormattingText != null)
-        {
+        if (ResearchTable.scoreFormattingText != null) {
             boolean failed = false;
             Integer[] values = new Integer[ResearchTable.scores.length];
             int i = 0;
             NBTHelper helper = NBTHelper.of(data);
-            for (String s : ResearchTable.scores)
-            {
+            for (String s : ResearchTable.scores) {
                 values[i] = helper.getInt("score." + s, 0);
                 ++i;
             }
-            if (!failed)
-            {
+            if (!failed) {
                 String string = ResearchTable.scoreFormattingText;
-                if (I18n.hasKey(string))
-                {
+                if (I18n.hasKey(string)) {
                     string = I18n.format(ResearchTable.scoreFormattingText, (Object[]) values);
-                }
-                else
-                {
-                    try
-                    {
+                } else {
+                    try {
                         string = String.format(ResearchTable.scoreFormattingText, (Object[]) values);
-                    }
-                    catch (IllegalFormatException var5)
-                    {
+                    } catch (IllegalFormatException var5) {
                         string = "Format error: " + string;
                     }
                 }
                 scoreText = Arrays.asList(string.split("\\n"));
-                globe = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/globe.png"), 0, 0,
-                        11, 10, 0, 0, 0, 0, 11, 10);
+                globe = new DrawableResource(new ResourceLocation(ResearchTable.MODID, "textures/gui/globe.png"), 0, 0, 11, 10, 0, 0, 0, 0, 11, 10);
             }
         }
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state)
-    {
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        if (!GuiScreen.isCtrlKeyDown())
-        {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        if (!GuiScreen.isCtrlKeyDown()) {
             ticks += partialTicks;
         }
-        if (table.hasChanged)
-        {
+        if (table.hasChanged) {
             data = table.getData();
-            if (detail != null)
-            {
+            if (detail != null) {
                 detail.researching = table.getResearch();
                 detail.updateResearching(table.canComplete());
                 researchList.setCategory(researchList.category);
-                if (detail.getResearch() != null)
-                {
-                    List<ComponentResearchProgress> progresses = detail.control
-                            .getComponents(ComponentResearchProgress.class);
+                if (detail.getResearch() != null) {
+                    List<ComponentResearchProgress> progresses = detail.control.getComponents(ComponentResearchProgress.class);
                     boolean flag = table.getResearch() == detail.getResearch();
-                    for (int i = 0; i < progresses.size(); ++i)
-                    {
+                    for (int i = 0; i < progresses.size(); ++i) {
                         ComponentResearchProgress progress = progresses.get(i);
                         progress.setProgress(flag ? table.getProgress(i) : 0);
                         progress.setResearching(flag);
@@ -199,82 +166,62 @@ public class GuiTable extends GuiContainerMod
             table.hasChanged = false;
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
-        if (globe != null && scoreText != null)
-        {
+        if (globe != null && scoreText != null) {
             GlStateManager.color(1, 1, 1, 1);
             RenderHelper.enableGUIStandardItemLighting();
             int x = (width + xSize) / 2 - 18;
             int y = (height + ySize) / 2 - 18;
             globe.draw(mc, x, y);
-            if (isInRegion(x, y, x + 11, y + 11, mouseX, mouseY))
-            {
+            if (isInRegion(x, y, x + 11, y + 11, mouseX, mouseY)) {
                 drawHoveringText(scoreText, mouseX, mouseY);
             }
         }
     }
 
-    public static boolean isInRegion(int left, int top, int right, int bottom, int x, int y)
-    {
+    public static boolean isInRegion(int left, int top, int right, int bottom, int x, int y) {
         return x >= left && x < right && y >= top && y < bottom;
     }
 
     @Override
-    public int messageReceived(GuiControl control, Component component, NBTTagCompound data)
-    {
+    public int messageReceived(GuiControl control, Component component, NBTTagCompound data) {
         return 0;
     }
 
     @Override
-    public int messageReceived(GuiControl control, Component component, int param1, int param2)
-    {
-        if (component.getClass() == ComponentButtonList.class)
-        {
-            if (!table.hasPermission(mc.player))
-            {
+    public int messageReceived(GuiControl control, Component component, int param1, int param2) {
+        if (component.getClass() == ComponentButtonList.class) {
+            if (!table.hasPermission(mc.player)) {
                 return 0;
             }
             if (param1 == 0) // param1 == button id
             {
-                if (table.getResearch() == detail.getResearch())
-                {
-                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
-                            Action.SUBMIT);
+                if (table.getResearch() == detail.getResearch()) {
+                    PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), Action.SUBMIT);
                     NetworkChannel.INSTANCE.sendToServer(packet);
                 }
-            }
-            else if (param1 == 1) // param1 == button id
+            } else if (param1 == 1) // param1 == button id
             {
                 if (table.getResearch() == null) // no research doing
                 {
-                    if (detail.getResearch() != null)
-                    {
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(),
-                                Action.START);
+                    if (detail.getResearch() != null) {
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), detail.getResearch(), Action.START);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }
-                }
-                else
-                {
-                    if (detail.getResearch() == table.getResearch())
-                    {
+                } else {
+                    if (detail.getResearch() == table.getResearch()) {
                         Action action = table.canComplete() ? Action.COMPLETE : Action.STOP;
-                        if (action == Action.STOP && !GuiScreen.isShiftKeyDown())
-                        {
+                        if (action == Action.STOP && !GuiScreen.isShiftKeyDown()) {
                             return 0;
                         }
-                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(),
-                                action);
+                        PacketResearchChanged packet = new PacketResearchChanged(table.getPos(), table.getResearch(), action);
                         NetworkChannel.INSTANCE.sendToServer(packet);
                         return 0;
                     }
                 }
             }
-        }
-        else if (component.getClass() == ComponentResearchList.class)
-        {
-            if (detail != null)
-            {
+        } else if (component.getClass() == ComponentResearchList.class) {
+            if (detail != null) {
                 detail.setResearch(researchList.researches.get(param1), table.canComplete()); // param1 == index
                 table.hasChanged = true;
             }
@@ -282,20 +229,17 @@ public class GuiTable extends GuiContainerMod
         return 0;
     }
 
-    public void resetProgress()
-    {
+    public void resetProgress() {
         if (detail == null)
             return;
         List<ComponentResearchProgress> components = detail.control.getComponents(ComponentResearchProgress.class);
-        for (ComponentResearchProgress component : components)
-        {
+        for (ComponentResearchProgress component : components) {
             component.resetRenderer();
         }
     }
 
     @Override
-    public void onGuiClosed()
-    {
+    public void onGuiClosed() {
         researchList = null;
         detail = null;
         data = null;

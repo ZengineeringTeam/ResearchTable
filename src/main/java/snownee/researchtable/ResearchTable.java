@@ -31,8 +31,7 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
         modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)", useMetadata = true
 )
 @EventBusSubscriber
-public class ResearchTable
-{
+public class ResearchTable {
     public static final String MODID = "researchtable";
     public static final String NAME = "ResearchTable";
 
@@ -42,66 +41,55 @@ public class ResearchTable
     public static String scores[];
 
     @Mod.InstanceFactory
-    public static ResearchTable getInstance()
-    {
+    public static ResearchTable getInstance() {
         return INSTANCE;
     }
 
     public static Logger logger;
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         NetworkChannel.INSTANCE.register(PacketResearchChanged.class);
         NetworkChannel.INSTANCE.register(PacketSyncClient.class);
     }
 
     @Mod.EventHandler
     @SideOnly(Side.CLIENT)
-    public void clientPreInit(FMLPreInitializationEvent event)
-    {
-        if (Loader.isModLoaded("crafttweaker"))
-        {
+    public void clientPreInit(FMLPreInitializationEvent event) {
+        if (Loader.isModLoaded("crafttweaker")) {
             ConditionRenderer.register(ConditionCrTItem.class, new RendererCrTItem.Factory());
             ConditionRenderer.register(ConditionCrTLiquid.class, new RendererCrTLiquid.Factory());
         }
     }
 
     @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent event)
-    {
+    public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandResearch());
     }
 
     @SubscribeEvent
-    public static void onOpenTable(EventOpenTable event)
-    {
+    public static void onOpenTable(EventOpenTable event) {
         EntityPlayer player = event.getEntityPlayer();
-        if (scores == null || scores.length == 0 || player.world.isRemote)
-        {
+        if (scores == null || scores.length == 0 || player.world.isRemote) {
             return;
         }
 
         Scoreboard scoreboard = player.world.getScoreboard();
         NBTHelper helper = NBTHelper.of(event.getTable().getData());
 
-        for (String s : scores)
-        {
+        for (String s : scores) {
             ScoreObjective scoreobjective = scoreboard.getObjective(s);
-            if (scoreobjective == null)
-            {
+            if (scoreobjective == null) {
                 continue;
             }
             // String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
             String key = player.getName();
-            if (!scoreboard.entityHasObjective(key, scoreobjective))
-            {
+            if (!scoreboard.entityHasObjective(key, scoreobjective)) {
                 continue;
             }
             Score score = scoreboard.getOrCreateScore(key, scoreobjective);

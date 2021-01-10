@@ -16,26 +16,21 @@ import snownee.researchtable.plugin.forge.ConditionForgeEnergy;
 import snownee.researchtable.plugin.forge.RendererForgeEnergy;
 
 @SideOnly(Side.CLIENT)
-public abstract class ConditionRenderer<T extends ICondition>
-{
+public abstract class ConditionRenderer<T extends ICondition> {
     private static final Map<Class, ConditionRendererFactory> MAP = new HashMap<>();
 
-    static
-    {
+    static {
         ConditionRenderer.register(ConditionForgeEnergy.class, new RendererForgeEnergy.Factory());
     }
 
-    public static <T extends ICondition> void register(Class<T> clazz, ConditionRendererFactory<T> renderer)
-    {
+    public static <T extends ICondition> void register(Class<T> clazz, ConditionRendererFactory<T> renderer) {
         MAP.put(clazz, renderer);
     }
 
     @Nullable
-    public static <T extends ICondition> ConditionRenderer<T> get(T condition)
-    {
+    public static <T extends ICondition> ConditionRenderer<T> get(T condition) {
         ConditionRendererFactory<T> factory = MAP.get(condition.getClass());
-        if (factory != null)
-        {
+        if (factory != null) {
             return factory.get(condition);
         }
         return null;
@@ -51,8 +46,7 @@ public abstract class ConditionRenderer<T extends ICondition>
 
     public abstract List<String> getTooltip(ITooltipFlag flag);
 
-    public static interface ConditionRendererFactory<T extends ICondition>
-    {
+    public static interface ConditionRendererFactory<T extends ICondition> {
         ConditionRenderer<T> get(T condition);
     }
 }

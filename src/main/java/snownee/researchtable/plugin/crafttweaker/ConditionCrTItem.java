@@ -10,48 +10,40 @@ import net.minecraft.item.ItemStack;
 import snownee.researchtable.core.ConditionTypes;
 import snownee.researchtable.core.ICondition;
 
-public class ConditionCrTItem implements ICondition<ItemStack>
-{
+public class ConditionCrTItem implements ICondition<ItemStack> {
     final IIngredient ingredient;
     final long count;
     @Nullable
     String customName;
 
-    public ConditionCrTItem(IIngredient ingredient)
-    {
+    public ConditionCrTItem(IIngredient ingredient) {
         this(ingredient, ingredient.getAmount());
     }
 
-    public ConditionCrTItem(IIngredient ingredient, long count)
-    {
+    public ConditionCrTItem(IIngredient ingredient, long count) {
         this.count = count;
         this.ingredient = ingredient.amount(1);
     }
 
     @Override
-    public long matches(ItemStack e)
-    {
-        if (!e.isEmpty() && ingredient.matches(CraftTweakerMC.getIItemStack(e).amount(1)))
-        {
+    public long matches(ItemStack e) {
+        if (!e.isEmpty() && ingredient.matches(CraftTweakerMC.getIItemStack(e).amount(1))) {
             return e.getCount();
         }
         return 0;
     }
 
     @Override
-    public long getGoal()
-    {
+    public long getGoal() {
         return count;
     }
 
     @Override
-    public Supplier<Class<ItemStack>> getMatchType()
-    {
+    public Supplier<Class<ItemStack>> getMatchType() {
         return ConditionTypes.ITEM;
     }
 
-    public ConditionCrTItem setCustomName(String name)
-    {
+    public ConditionCrTItem setCustomName(String name) {
         customName = name;
         return this;
     }

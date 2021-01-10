@@ -11,82 +11,68 @@ import snownee.researchtable.ModConfig;
 
 import javax.annotation.Nullable;
 
-public class RewardExecute implements IReward
-{
+public class RewardExecute implements IReward {
     private final String[] commands;
 
-    public RewardExecute(String... commands)
-    {
+    public RewardExecute(String... commands) {
         this.commands = commands;
     }
 
     @Override
-    public void earn(World world, BlockPos pos, EntityPlayer player)
-    {
+    public void earn(World world, BlockPos pos, EntityPlayer player) {
         // Use player entity as ICommandSender directly if non-privileged mode is enabled.
         // Used for a slightly better compatibility with permission management systems like FTBUtils.
         ICommandSender sender = ModConfig.nonPrivilegedMode ? player : new PrivilegedPlayer(player);
-        for (String command : commands)
-        {
+        for (String command : commands) {
             player.getServer().getCommandManager().executeCommand(sender, command);
         }
     }
 
-    static final class PrivilegedPlayer implements ICommandSender
-    {
+    static final class PrivilegedPlayer implements ICommandSender {
         private final EntityPlayer player;
 
-        PrivilegedPlayer(EntityPlayer player)
-        {
+        PrivilegedPlayer(EntityPlayer player) {
             this.player = player;
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return player.getName();
         }
 
         @Override
-        public boolean canUseCommand(int permLevel, String commandName)
-        {
+        public boolean canUseCommand(int permLevel, String commandName) {
             return permLevel <= 2;
         }
 
         @Override
-        public World getEntityWorld()
-        {
+        public World getEntityWorld() {
             return player.getEntityWorld();
         }
 
         @Nullable
         @Override
-        public MinecraftServer getServer()
-        {
+        public MinecraftServer getServer() {
             return player.getServer();
         }
 
         @Override
-        public BlockPos getPosition()
-        {
+        public BlockPos getPosition() {
             return player.getPosition();
         }
 
         @Override
-        public Vec3d getPositionVector()
-        {
+        public Vec3d getPositionVector() {
             return player.getPositionVector();
         }
 
         @Override
-        public Entity getCommandSenderEntity()
-        {
+        public Entity getCommandSenderEntity() {
             return player;
         }
 
         @Override
-        public boolean sendCommandFeedback()
-        {
+        public boolean sendCommandFeedback() {
             return false;
         }
 

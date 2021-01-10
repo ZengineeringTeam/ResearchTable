@@ -17,8 +17,7 @@ import snownee.researchtable.core.ICriterion;
 import snownee.researchtable.core.Research;
 
 @SideOnly(Side.CLIENT)
-public class ComponentResearchDetail extends ComponentList
-{
+public class ComponentResearchDetail extends ComponentList {
     @Nullable
     private Research displaying;
     GuiControl control;
@@ -28,8 +27,7 @@ public class ComponentResearchDetail extends ComponentList
     @Nullable
     Research researching;
 
-    public ComponentResearchDetail(GuiControl control, int width, int height, int left, int top, int screenWidth, int screenHeight)
-    {
+    public ComponentResearchDetail(GuiControl control, int width, int height, int left, int top, int screenWidth, int screenHeight) {
         super(control, width, height, left, top, screenWidth, screenHeight);
         setDrawBackground(false);
         setDrawScrollBar(false);
@@ -45,24 +43,19 @@ public class ComponentResearchDetail extends ComponentList
     }
 
     @Nullable
-    public Research getResearch()
-    {
+    public Research getResearch() {
         return displaying;
     }
 
-    public void setResearch(@Nonnull Research displaying, boolean canComplete)
-    {
-        if (this.displaying != displaying)
-        {
+    public void setResearch(@Nonnull Research displaying, boolean canComplete) {
+        if (this.displaying != displaying) {
             this.displaying = displaying;
-            for (int i = control.getComponentSize(null) - 4; i >= 0; --i)
-            {
+            for (int i = control.getComponentSize(null) - 4; i >= 0; --i) {
                 // Last two components must be button list and text. remove others
                 control.removeComponent(i);
             }
             text.setText(displaying.getDescription());
-            for (ICondition condition : displaying.getConditions())
-            {
+            for (ICondition condition : displaying.getConditions()) {
                 ComponentResearchProgress progress = new ComponentResearchProgress(control, width, condition);
                 progress.setResearching(displaying == researching);
                 control.addComponent(progress);
@@ -72,30 +65,24 @@ public class ComponentResearchDetail extends ComponentList
     }
 
     @Override
-    protected void elementClicked(int index, int mouseX, int mouseY, boolean doubleClick)
-    {
-        if (index >= 0 && index < control.getComponentSize(null))
-        {
+    protected void elementClicked(int index, int mouseX, int mouseY, boolean doubleClick) {
+        if (index >= 0 && index < control.getComponentSize(null)) {
             control.getComponent(index).handleMouseInput(mouseX, mouseY);
         }
     }
 
     @Override
-    protected void drawBackground()
-    {
+    protected void drawBackground() {
     }
 
     @Override
-    protected int getSize()
-    {
+    protected int getSize() {
         return control.getComponentSize(null);
     }
 
     @Override
-    protected int getSlotHeight(int index)
-    {
-        if (index >= 0 && index < control.getComponentSize(null))
-        {
+    protected int getSlotHeight(int index) {
+        if (index >= 0 && index < control.getComponentSize(null)) {
             Component component = control.getComponent(index);
             return component.visible ? component.height : 0;
         }
@@ -103,62 +90,48 @@ public class ComponentResearchDetail extends ComponentList
     }
 
     @Override
-    protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess)
-    {
-        if (slotIdx >= 0 && slotIdx < control.getComponentSize(null))
-        {
+    protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
+        if (slotIdx >= 0 && slotIdx < control.getComponentSize(null)) {
             Component component = control.getComponent(slotIdx);
-            if (component.visible)
-            {
+            if (component.visible) {
                 component.drawScreen(offsetX, slotTop + offsetY, mouseX - left, mouseY - slotTop, control.mc.getRenderPartialTicks());
             }
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         control.onDestroy();
         super.onDestroy();
     }
 
-    public void updateResearching(boolean canComplete)
-    {
+    public void updateResearching(boolean canComplete) {
         visible = displaying != null;
-        if (this.researching == this.displaying)
-        {
+        if (this.researching == this.displaying) {
             buttons.visible = true;
             if (this.displaying != null) // Researching
             {
-                if (canComplete)
-                {
+                if (canComplete) {
                     buttons.setState(0, State.INVISIBLE);
                     buttons.setText(1, "complete");
-                }
-                else
-                {
+                } else {
                     buttons.setState(0, State.NORMAL);
                     buttons.setText(1, "cancel");
                 }
             }
-        }
-        else
-        {
+        } else {
             buttons.visible = this.researching == null;
-            if (buttons.visible)
-            {
+            if (buttons.visible) {
                 buttons.setState(0, State.INVISIBLE);
                 buttons.setState(1, displaying.canResearch(parent.mc.player, GuiTable.data) ? State.NORMAL : State.DISABLED);
                 buttons.setText(1, "research");
             }
         }
 
-        if (displaying != null && researching != displaying && !displaying.canResearch(control.mc.player, GuiTable.data))
-        {
+        if (displaying != null && researching != displaying && !displaying.canResearch(control.mc.player, GuiTable.data)) {
             String string = "";
             boolean wrap = false;
-            for (ICriterion criterion : displaying.getCriteria())
-            {
+            for (ICriterion criterion : displaying.getCriteria()) {
                 if (criterion.matches(control.mc.player, GuiTable.data))
                     continue;
                 if (wrap)
@@ -168,9 +141,7 @@ public class ComponentResearchDetail extends ComponentList
             }
             info.setText(string);
             info.visible = true;
-        }
-        else
-        {
+        } else {
             info.visible = false;
         }
     }

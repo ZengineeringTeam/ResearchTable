@@ -13,18 +13,15 @@ import snownee.researchtable.block.TileTable;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
 
-public class PacketResearchChanged implements PacketMod
-{
+public class PacketResearchChanged implements PacketMod {
     private BlockPos pos;
     private Research research;
     private Action action;
 
-    public PacketResearchChanged()
-    {
+    public PacketResearchChanged() {
     }
 
-    public PacketResearchChanged(BlockPos pos, Research research, Action action)
-    {
+    public PacketResearchChanged(BlockPos pos, Research research, Action action) {
         this.pos = pos;
         this.research = research;
         this.action = action;
@@ -32,49 +29,39 @@ public class PacketResearchChanged implements PacketMod
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void handleClient(EntityPlayerSP player)
-    {
+    public void handleClient(EntityPlayerSP player) {
     }
 
     @Override
-    public void handleServer(EntityPlayerMP player)
-    {
+    public void handleServer(EntityPlayerMP player) {
         TileEntity tile = player.world.getTileEntity(pos);
-        if (tile instanceof TileTable)
-        {
+        if (tile instanceof TileTable) {
             TileTable table = (TileTable) tile;
-            if (!table.hasPermission(player))
-            {
+            if (!table.hasPermission(player)) {
                 return;
             }
-            switch (action)
-            {
+            switch (action) {
             case START:
-                if (!research.canResearch(player, table.getData()))
-                {
+                if (!research.canResearch(player, table.getData())) {
                     return;
                 }
-                if (table.getResearch() == null && research != null)
-                {
+                if (table.getResearch() == null && research != null) {
                     research.start(player.world, pos, player);
                     table.setResearch(research);
                 }
                 break;
             case STOP:
-                if (table.getResearch() == research && !table.canComplete())
-                {
+                if (table.getResearch() == research && !table.canComplete()) {
                     table.setResearch(null);
                 }
                 break;
             case COMPLETE:
-                if (table.getResearch() == research && table.canComplete())
-                {
+                if (table.getResearch() == research && table.canComplete()) {
                     table.complete(player);
                 }
                 break;
             case SUBMIT:
-                if (table.getResearch() == research && !table.canComplete())
-                {
+                if (table.getResearch() == research && !table.canComplete()) {
                     table.submit(player);
                 }
                 break;
@@ -84,8 +71,7 @@ public class PacketResearchChanged implements PacketMod
     }
 
     @Override
-    public void readDataFrom(ByteBuf buf)
-    {
+    public void readDataFrom(ByteBuf buf) {
         int x = buf.readInt();
         int y = buf.readInt();
         int z = buf.readInt();
@@ -95,8 +81,7 @@ public class PacketResearchChanged implements PacketMod
     }
 
     @Override
-    public void writeDataTo(ByteBuf buf)
-    {
+    public void writeDataTo(ByteBuf buf) {
         buf.writeInt(pos.getX());
         buf.writeInt(pos.getY());
         buf.writeInt(pos.getZ());
@@ -104,8 +89,7 @@ public class PacketResearchChanged implements PacketMod
         buf.writeByte(action.ordinal());
     }
 
-    public enum Action
-    {
+    public enum Action {
         START, STOP, COMPLETE, SUBMIT
     }
 

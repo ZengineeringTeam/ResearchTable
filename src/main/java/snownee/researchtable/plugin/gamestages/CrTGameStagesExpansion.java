@@ -15,33 +15,28 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ModOnly("gamestages")
 @ZenRegister
 @ZenExpansion("snownee.researchtable.plugin.crafttweaker.ResearchBuilder")
-public class CrTGameStagesExpansion
-{
+public class CrTGameStagesExpansion {
     @ZenMethod
-    public static ResearchBuilder setRewardStages(ResearchBuilder builder, @Nonnull String... stages)
-    {
+    public static ResearchBuilder setRewardStages(ResearchBuilder builder, @Nonnull String... stages) {
         builder.rewards.add(new RewardUnlockStages(stages));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setTriggerStages(ResearchBuilder builder, @Nonnull String... stages)
-    {
+    public static ResearchBuilder setTriggerStages(ResearchBuilder builder, @Nonnull String... stages) {
         builder.triggers.add(new RewardUnlockStages(stages));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setRequiredStages(ResearchBuilder builder, @Nonnull String... stages)
-    {
+    public static ResearchBuilder setRequiredStages(ResearchBuilder builder, @Nonnull String... stages) {
         Set<String> set = ImmutableSet.copyOf(stages);
         builder.criteria.add(new CriterionStages(set, set.size()));
         return builder;
     }
 
     @ZenMethod
-    public static ResearchBuilder setOptionalStages(ResearchBuilder builder, int amount, @Nonnull String... stages)
-    {
+    public static ResearchBuilder setOptionalStages(ResearchBuilder builder, int amount, @Nonnull String... stages) {
         Set<String> set = ImmutableSet.copyOf(stages);
         builder.criteria.add(new CriterionStages(set, amount));
         return builder;

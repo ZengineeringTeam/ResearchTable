@@ -6,8 +6,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-public interface TeamProvider
-{
+public interface TeamProvider {
     @Nullable
     UUID getOwner(UUID player);
 
@@ -16,25 +15,21 @@ public interface TeamProvider
     @Nullable
     String getTeamName(UUID player);
 
-    public static enum Stub implements TeamProvider
-    {
+    public static enum Stub implements TeamProvider {
         INSTANCE;
 
         @Override
-        public UUID getOwner(UUID player)
-        {
+        public UUID getOwner(UUID player) {
             return null;
         }
 
         @Override
-        public Collection<UUID> getMembers(UUID player)
-        {
+        public Collection<UUID> getMembers(UUID player) {
             return Collections.singleton(player);
         }
 
         @Override
-        public String getTeamName(UUID player)
-        {
+        public String getTeamName(UUID player) {
             return null;
         }
 

@@ -23,27 +23,22 @@ import snownee.kiwi.util.Util;
 import snownee.researchtable.client.renderer.ConditionRenderer;
 
 @SideOnly(Side.CLIENT)
-public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid>
-{
+public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid> {
     private final FluidStack fluid;
 
-    public RendererCrTLiquid(ConditionCrTLiquid condition)
-    {
+    public RendererCrTLiquid(ConditionCrTLiquid condition) {
         this.fluid = condition.getFluid();
     }
 
     @Override
-    public void draw(Minecraft mc, int x, int y)
-    {
+    public void draw(Minecraft mc, int x, int y) {
         TextureMap textureMapBlocks = mc.getTextureMapBlocks();
         ResourceLocation still = fluid.getFluid().getStill(fluid);
         TextureAtlasSprite sprite = null;
-        if (still != null)
-        {
+        if (still != null) {
             sprite = textureMapBlocks.getTextureExtry(still.toString());
         }
-        if (sprite == null)
-        {
+        if (sprite == null) {
             sprite = textureMapBlocks.getMissingSprite();
         }
 
@@ -72,50 +67,39 @@ public class RendererCrTLiquid extends ConditionRenderer<ConditionCrTLiquid>
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return fluid.getLocalizedName();
     }
 
     @Override
-    public String format(long number)
-    {
-        if (number >= 10000)
-        {
+    public String format(long number) {
+        if (number >= 10000) {
             return Util.formatComma(number / 1000) + "B";
-        }
-        else
-        {
+        } else {
             return Util.formatComma(number) + "mB";
         }
     }
 
-    public static class Factory implements ConditionRendererFactory<ConditionCrTLiquid>
-    {
+    public static class Factory implements ConditionRendererFactory<ConditionCrTLiquid> {
 
         @Override
-        public ConditionRenderer<ConditionCrTLiquid> get(ConditionCrTLiquid condition)
-        {
+        public ConditionRenderer<ConditionCrTLiquid> get(ConditionCrTLiquid condition) {
             return new RendererCrTLiquid(condition);
         }
 
     }
 
     @Override
-    public FontRenderer getFont()
-    {
+    public FontRenderer getFont() {
         return AdvancedFontRenderer.INSTANCE;
     }
 
     @Override
-    public List<String> getTooltip(ITooltipFlag flag)
-    {
+    public List<String> getTooltip(ITooltipFlag flag) {
         List<String> tooltip = Lists.newArrayList(fluid.getLocalizedName());
-        if (flag.isAdvanced())
-        {
+        if (flag.isAdvanced()) {
             String s = TextFormatting.GRAY + fluid.getFluid().getName();
-            if (fluid.tag != null)
-            {
+            if (fluid.tag != null) {
                 s += fluid.tag;
             }
             tooltip.add(s);
