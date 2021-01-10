@@ -49,8 +49,10 @@ public class CriterionStages implements ICriterion {
             string += stage;
         }
         string += TextFormatting.RESET;
-        string = I18n.format(ResearchTable.MODID + ".gui.needStages", string);
-        if (r != stages.size()) {
+        if (r == stages.size()) {
+            string = I18n.format(ResearchTable.MODID + ".gui.requiredStage", string);
+        } else {
+            string = I18n.format(ResearchTable.MODID + ".gui.optionalStage", string);
             string += I18n.format(ResearchTable.MODID + ".gui.of", r, stages.size());
         }
         return string;
