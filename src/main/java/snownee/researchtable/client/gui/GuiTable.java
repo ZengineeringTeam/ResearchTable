@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.List;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,17 +54,21 @@ public class GuiTable extends GuiContainerMod {
             int titleWidth = ResearchList.LIST.values().stream().map(Research::getTitle).mapToInt(fontRenderer::getStringWidth).max().orElse(0);
             listWidth = Math.max(listWidth, 40 + titleWidth);
         }
-        //        xSize = listWidth + ModConfig.guiDetailWidth + 8;
-        //        ySize = ModConfig.guiHeight;
-        width = 10000;
-        height = 10000;
     }
 
     @Override
     public void initGui() {
-        xSize = width + 8;
-        ySize = height + 8;
-        ModConfig.guiDetailWidth = width - listWidth;
+        int guiDetailWidth;
+        if (ModConfig.guiFullScreen) {
+            xSize = width + 8;
+            ySize = height + 8;
+            guiDetailWidth = width - listWidth;
+        } else {
+            guiDetailWidth = ModConfig.guiDetailWidth;
+            xSize = listWidth + guiDetailWidth + 8;
+            ySize = ModConfig.guiHeight;
+        }
+
         data = table.getData();
         super.initGui();
         ComponentPanel panel = new ComponentPanel(control, xSize, ySize);
@@ -82,13 +88,13 @@ public class GuiTable extends GuiContainerMod {
             researchList.setCategory(ResearchList.CATEGORIES.get(0));
         }
         if (showTabs) {
-            ModConfig.guiDetailWidth -= ComponentResearchList.TAB_WIDTH;
+            guiDetailWidth -= ComponentResearchList.TAB_WIDTH;
         }
         Research displaying = null;
         if (detail != null) {
             displaying = detail.getResearch();
         }
-        detail = new ComponentResearchDetail(panel.control, ModConfig.guiDetailWidth, ySize - 8, researchList.left + listWidth, 0, width, height);
+        detail = new ComponentResearchDetail(panel.control, guiDetailWidth, ySize - 8, researchList.left + listWidth, 0, width, height);
         detail.visible = false;
         detail.researching = table.getResearch();
         if (displaying != null) {
@@ -165,7 +171,7 @@ public class GuiTable extends GuiContainerMod {
             }
             table.hasChanged = false;
         }
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        drawScreenInternal(mouseX, mouseY, partialTicks);
         if (globe != null && scoreText != null) {
             GlStateManager.color(1, 1, 1, 1);
             RenderHelper.enableGUIStandardItemLighting();
@@ -176,6 +182,20 @@ public class GuiTable extends GuiContainerMod {
                 drawHoveringText(scoreText, mouseX, mouseY);
             }
         }
+    }
+
+    private void drawScreenInternal(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        control.drawScreen(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        if (tooltip != null && !tooltip.isEmpty()) {
+            if (tooltipFont == null) {
+                tooltipFont = fontRenderer;
+            }
+            drawHoveringText(tooltip, mouseX, mouseY, tooltipFont);
+        }
+        this.tooltip = null;
+        this.tooltipFont = null;
     }
 
     public static boolean isInRegion(int left, int top, int right, int bottom, int x, int y) {
@@ -193,6 +213,7 @@ public class GuiTable extends GuiContainerMod {
             if (!table.hasPermission(mc.player)) {
                 return 0;
             }
+            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             if (param1 == 0) // param1 == button id
             {
                 if (table.getResearch() == detail.getResearch()) {

@@ -8,12 +8,14 @@ import org.lwjgl.input.Mouse;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import snownee.kiwi.client.AdvancedFontRenderer;
@@ -84,6 +86,7 @@ public class ComponentResearchList extends ComponentList {
                     GuiButtonStack btn = new GuiButtonStack(id++, btnLeft, btnTop, category2.icon) {
                         @Override
                         public void onClick() {
+                            parent.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                             setCategory(category2);
                         }
 
@@ -155,17 +158,24 @@ public class ComponentResearchList extends ComponentList {
     @Override
     public void handleMouseInput(int mouseX, int mouseY) {
         super.handleMouseInput(mouseX, mouseY);
+        if (Mouse.isButtonDown(0) && Mouse.getEventButtonState()) {
+            for (GuiButtonStack btn : btns) {
+                if (btn.isMouseOver()) {
+                    btn.mousePressed(parent.mc, mouseX, mouseY);
+                }
+            }
+        }
     }
 
     @Override
-    public void drawScreen(int arg0, int arg1, int mouseX, int mouseY, float arg4) {
+    public void drawScreen(int x, int y, int mouseX, int mouseY, float arg4) {
+        super.drawScreen(x, y, mouseX, mouseY, arg4);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
         for (GuiButtonStack btn : btns) {
             btn.drawButton(parent.mc, mouseX, mouseY, 0);
-            if (btn.isMouseOver() && Mouse.isButtonDown(0)) {
-                btn.mousePressed(parent.mc, mouseX, mouseY);
-            }
         }
-        super.drawScreen(arg0, arg1, mouseX, mouseY, arg4);
+        GlStateManager.popMatrix();
     }
 
 }

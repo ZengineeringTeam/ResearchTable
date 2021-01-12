@@ -24,6 +24,9 @@ public final class ModConfig {
     @Config.Name("RenderLayer")
     public static BlockRenderLayer renderLayer = BlockRenderLayer.CUTOUT_MIPPED;
 
+    @Config.Name("GuiFullScreen")
+    public static boolean guiFullScreen = true;
+
     @Config.Name("GuiHeight")
     public static int guiHeight = 158;
 
