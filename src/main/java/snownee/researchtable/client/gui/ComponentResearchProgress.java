@@ -72,6 +72,7 @@ public class ComponentResearchProgress extends Component {
             Gui.drawRect(left, top, left + (int) (width * current), bottom, 0x33339933);
 
             if (progress == 1) {
+                GlStateManager.enableBlend();
                 GlStateManager.color(1, 1, 1, 1);
                 SUCCESS_ICON.draw(parent.mc, right - 20, offsetY + 7);
             } else {

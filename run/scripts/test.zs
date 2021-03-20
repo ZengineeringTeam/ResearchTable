@@ -4,16 +4,16 @@ import ResearchTable.Builder;
 
 // use `/researchtable @p all 0` to clear all progress
 
-var cat = ResearchTable.addCategory(<minecraft:grass>, "hello");
+var cat = ResearchTable.addCategory(<minecraft:grass>, "hello"); //category icon and title (optional)
 var cat2 = ResearchTable.addCategory(<minecraft:stone>);
 
-ResearchTable.builder("testResearch1", cat) // The second parameter has no use currently
+ResearchTable.builder("testResearch1", cat)
   .setIcons(<minecraft:grass>)
   .setTitle("Alchemy") // I18n support: use language key
   .setDescription("Input your description")
   .addCondition(<ore:ingotIron> * 8, <liquid:lava> * 2000)
   .setRewardStages("stage")
-  .setRewardCommands("/say \"wow, @s has found a gold!\"")
+  .setRewardCommands("/tellraw @a {\"text\":\"wow, \",\"extra\":[{\"selector\":\"@s\"},{\"text\":\" has found a gold!\"}]}")
   .setRewardItems(<minecraft:gold_ingot>, <minecraft:gold_nugget>)
 //.setNoMaxCount()
   .build();

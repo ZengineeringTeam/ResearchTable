@@ -96,7 +96,7 @@ public class TileTable extends TileBase {
 
         @Override
         public int getMaxEnergyStored() {
-            return 0;
+            return Integer.MAX_VALUE;
         }
 
         @Override
