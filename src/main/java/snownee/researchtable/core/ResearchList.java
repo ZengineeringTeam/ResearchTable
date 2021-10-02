@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public final class ResearchList {
-	public static final List<ResearchCategory> CATEGORIES = Lists.newLinkedList();
+	public static final List<ResearchCategory> CATEGORIES = Lists.newArrayList();
 	public static final Map<String, Research> LIST = Maps.newLinkedHashMap();
 
 	private ResearchList() {
