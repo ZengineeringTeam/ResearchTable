@@ -7,15 +7,15 @@ import snownee.researchtable.block.TileTable;
 
 @Cancelable
 public class EventOpenTable extends PlayerEvent {
-    private final TileTable table;
+	private final TileTable table;
 
-    public EventOpenTable(EntityPlayer player, TileTable table) {
-        super(player);
-        this.table = table;
-    }
+	public EventOpenTable(EntityPlayer player, TileTable table) {
+		super(player);
+		this.table = table;
+	}
 
-    public TileTable getTable() {
-        return table;
-    }
+	public TileTable getTable() {
+		return table;
+	}
 
 }

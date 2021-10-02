@@ -3,9 +3,9 @@ package snownee.researchtable.core;
 import java.util.function.Supplier;
 
 public interface ICondition<T> {
-    Supplier<Class<T>> getMatchType();
+	Supplier<Class<T>> getMatchType();
 
-    long matches(T e);
+	long matches(T e);
 
-    long getGoal();
+	long getGoal();
 }

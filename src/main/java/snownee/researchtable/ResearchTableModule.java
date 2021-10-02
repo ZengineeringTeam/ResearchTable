@@ -12,15 +12,15 @@ import snownee.researchtable.network.GuiHandler;
 
 @KiwiModule(modid = ResearchTable.MODID)
 public class ResearchTableModule implements IModule {
-    public static final BlockTable TABLE = new BlockTable("table", Material.IRON);
+	public static final BlockTable TABLE = new BlockTable("table", Material.IRON);
 
-    @Override
-    public void preInit() {
-        NetworkRegistry.INSTANCE.registerGuiHandler(ResearchTable.getInstance(), new GuiHandler());
-    }
+	@Override
+	public void preInit() {
+		NetworkRegistry.INSTANCE.registerGuiHandler(ResearchTable.getInstance(), new GuiHandler());
+	}
 
-    @Override
-    public void init() {
-        GameRegistry.registerTileEntity(TileTable.class, new ResourceLocation(ResearchTable.MODID, "table"));
-    }
+	@Override
+	public void init() {
+		GameRegistry.registerTileEntity(TileTable.class, new ResourceLocation(ResearchTable.MODID, "table"));
+	}
 }

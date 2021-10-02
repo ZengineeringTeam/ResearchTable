@@ -10,23 +10,23 @@ import snownee.kiwi.util.Util;
 import snownee.researchtable.ResearchTable;
 
 public class CriterionResearchCount implements ICriterion {
-    private final String id;
-    private final int c;
+	private final String id;
+	private final int c;
 
-    public CriterionResearchCount(String id, int count) {
-        this.id = id;
-        this.c = count;
-    }
+	public CriterionResearchCount(String id, int count) {
+		this.id = id;
+		this.c = count;
+	}
 
-    @Override
-    public boolean matches(EntityPlayer player, NBTTagCompound data) {
-        return DataStorage.count(player.getGameProfile().getId(), id) < c;
-    }
+	@Override
+	public boolean matches(EntityPlayer player, NBTTagCompound data) {
+		return DataStorage.count(player.getGameProfile().getId(), id) < c;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player, NBTTagCompound data) {
-        return I18n.format(ResearchTable.MODID + ".gui.maxCount", c, Util.color(0xFFFF0000) + c + TextFormatting.RESET);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getFailingText(EntityPlayer player, NBTTagCompound data) {
+		return I18n.format(ResearchTable.MODID + ".gui.maxCount", c, Util.color(0xFFFF0000) + c + TextFormatting.RESET);
+	}
 
 }

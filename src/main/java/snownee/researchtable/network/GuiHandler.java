@@ -13,27 +13,27 @@ import snownee.researchtable.container.ContainerTable;
 
 public class GuiHandler implements IGuiHandler {
 
-    @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (ID == 0) {
-            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-            if (tile instanceof TileTable) {
-                return new ContainerTable((TileTable) tile, player.inventory);
-            }
-        }
-        return null;
-    }
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == 0) {
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+			if (tile instanceof TileTable) {
+				return new ContainerTable((TileTable) tile, player.inventory);
+			}
+		}
+		return null;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (ID == 0) {
-            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-            if (tile instanceof TileTable) {
-                return new GuiTable((TileTable) tile, player.inventory);
-            }
-        }
-        return null;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == 0) {
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+			if (tile instanceof TileTable) {
+				return new GuiTable((TileTable) tile, player.inventory);
+			}
+		}
+		return null;
+	}
 
 }

@@ -11,30 +11,30 @@ import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.ICriterion;
 
 public class CriterionMoneyGE implements ICriterion {
-    private final double money;
+	private final double money;
 
-    public CriterionMoneyGE(double money) {
-        this.money = money;
-    }
+	public CriterionMoneyGE(double money) {
+		this.money = money;
+	}
 
-    @Override
-    public boolean matches(EntityPlayer player, NBTTagCompound data) {
-        NBTHelper helper = NBTHelper.of(data);
-        double balance = helper.getDouble("grandeconomy.money");
-        return balance >= money;
-    }
+	@Override
+	public boolean matches(EntityPlayer player, NBTTagCompound data) {
+		NBTHelper helper = NBTHelper.of(data);
+		double balance = helper.getDouble("grandeconomy.money");
+		return balance >= money;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getFailingText(EntityPlayer player, NBTTagCompound data) {
-        NBTHelper helper = NBTHelper.of(data);
-        return I18n.format(ResearchTable.MODID + ".gui.needMoney", money(money, helper), Util.color(0xFF0000) + I18n.format(ResearchTable.MODID + ".gui.youHave", money(helper.getDouble("grandeconomy.money"), helper)));
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getFailingText(EntityPlayer player, NBTTagCompound data) {
+		NBTHelper helper = NBTHelper.of(data);
+		return I18n.format(ResearchTable.MODID + ".gui.needMoney", money(money, helper), Util.color(0xFF0000) + I18n.format(ResearchTable.MODID + ".gui.youHave", money(helper.getDouble("grandeconomy.money"), helper)));
+	}
 
-    @SideOnly(Side.CLIENT)
-    public String money(double amount, NBTHelper helper) {
-        String key = "grandeconomy." + (amount == 1 ? "singular" : "multiple");
-        return I18n.format(ResearchTable.MODID + ".gui.moneyFormat", amount, helper.getString(key, ""));
-    }
+	@SideOnly(Side.CLIENT)
+	public String money(double amount, NBTHelper helper) {
+		String key = "grandeconomy." + (amount == 1 ? "singular" : "multiple");
+		return I18n.format(ResearchTable.MODID + ".gui.moneyFormat", amount, helper.getString(key, ""));
+	}
 
 }

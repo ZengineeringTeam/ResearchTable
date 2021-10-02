@@ -28,89 +28,89 @@ import snownee.researchtable.plugin.crafttweaker.RendererCrTItem;
 import snownee.researchtable.plugin.crafttweaker.RendererCrTLiquid;
 
 @Mod(
-        modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)", useMetadata = true
+		modid = ResearchTable.MODID, name = ResearchTable.NAME, version = "@VERSION_INJECT@", acceptedMinecraftVersions = "[1.12, 1.13)", useMetadata = true
 )
 @EventBusSubscriber
 public class ResearchTable {
-    public static final String MODID = "researchtable";
-    public static final String NAME = "ResearchTable";
+	public static final String MODID = "researchtable";
+	public static final String NAME = "ResearchTable";
 
-    private static final ResearchTable INSTANCE = new ResearchTable();
+	private static final ResearchTable INSTANCE = new ResearchTable();
 
-    public static String scoreFormattingText;
-    public static String scores[];
+	public static String scoreFormattingText;
+	public static String scores[];
 
-    @Mod.InstanceFactory
-    public static ResearchTable getInstance() {
-        return INSTANCE;
-    }
+	@Mod.InstanceFactory
+	public static ResearchTable getInstance() {
+		return INSTANCE;
+	}
 
-    public static Logger logger;
+	public static Logger logger;
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
-    }
+	@Mod.EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		logger = event.getModLog();
+	}
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        NetworkChannel.INSTANCE.register(PacketResearchChanged.class);
-        NetworkChannel.INSTANCE.register(PacketSyncClient.class);
-    }
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		NetworkChannel.INSTANCE.register(PacketResearchChanged.class);
+		NetworkChannel.INSTANCE.register(PacketSyncClient.class);
+	}
 
-    @Mod.EventHandler
-    @SideOnly(Side.CLIENT)
-    public void clientPreInit(FMLPreInitializationEvent event) {
-        if (Loader.isModLoaded("crafttweaker")) {
-            ConditionRenderer.register(ConditionCrTItem.class, new RendererCrTItem.Factory());
-            ConditionRenderer.register(ConditionCrTLiquid.class, new RendererCrTLiquid.Factory());
-        }
-    }
+	@Mod.EventHandler
+	@SideOnly(Side.CLIENT)
+	public void clientPreInit(FMLPreInitializationEvent event) {
+		if (Loader.isModLoaded("crafttweaker")) {
+			ConditionRenderer.register(ConditionCrTItem.class, new RendererCrTItem.Factory());
+			ConditionRenderer.register(ConditionCrTLiquid.class, new RendererCrTLiquid.Factory());
+		}
+	}
 
-    @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandResearch());
-    }
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandResearch());
+	}
 
-    @SubscribeEvent
-    public static void onOpenTable(EventOpenTable event) {
-        EntityPlayer player = event.getEntityPlayer();
-        if (scores == null || scores.length == 0 || player.world.isRemote) {
-            return;
-        }
+	@SubscribeEvent
+	public static void onOpenTable(EventOpenTable event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if (scores == null || scores.length == 0 || player.world.isRemote) {
+			return;
+		}
 
-        Scoreboard scoreboard = player.world.getScoreboard();
-        NBTHelper helper = NBTHelper.of(event.getTable().getData());
+		Scoreboard scoreboard = player.world.getScoreboard();
+		NBTHelper helper = NBTHelper.of(event.getTable().getData());
 
-        for (String s : scores) {
-            ScoreObjective scoreobjective = scoreboard.getObjective(s);
-            if (scoreobjective == null) {
-                continue;
-            }
-            // String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
-            String key = player.getName();
-            if (!scoreboard.entityHasObjective(key, scoreobjective)) {
-                continue;
-            }
-            Score score = scoreboard.getOrCreateScore(key, scoreobjective);
-            int i = score.getScorePoints();
-            helper.setInt("score." + s, i);
-        }
-    }
+		for (String s : scores) {
+			ScoreObjective scoreobjective = scoreboard.getObjective(s);
+			if (scoreobjective == null) {
+				continue;
+			}
+			// String key = player instanceof EntityPlayerMP ? player.getName() : player.getCachedUniqueIdString();
+			String key = player.getName();
+			if (!scoreboard.entityHasObjective(key, scoreobjective)) {
+				continue;
+			}
+			Score score = scoreboard.getOrCreateScore(key, scoreobjective);
+			int i = score.getScorePoints();
+			helper.setInt("score." + s, i);
+		}
+	}
 
-    // When current GUI is not null, you cannot receive event, I am not sure if it is a bug
-    //    @SubscribeEvent
-    //    @SideOnly(Side.CLIENT)
-    //    public static void onGameStageEvent(GameStageEvent event)
-    //    {
-    //        if (event.getClass() == GameStageEvent.Check.class || event.getClass() == GameStageEvent.Add.class || event.getClass() == GameStageEvent.Remove.class)
-    //        {
-    //            return;
-    //        }
-    //        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-    //        if (gui != null && gui.getClass() == GuiTable.class)
-    //        {
-    //            ((GuiTable) gui).resetProgress();
-    //        }
-    //    }
+	// When current GUI is not null, you cannot receive event, I am not sure if it is a bug
+	//    @SubscribeEvent
+	//    @SideOnly(Side.CLIENT)
+	//    public static void onGameStageEvent(GameStageEvent event)
+	//    {
+	//        if (event.getClass() == GameStageEvent.Check.class || event.getClass() == GameStageEvent.Add.class || event.getClass() == GameStageEvent.Remove.class)
+	//        {
+	//            return;
+	//        }
+	//        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+	//        if (gui != null && gui.getClass() == GuiTable.class)
+	//        {
+	//            ((GuiTable) gui).resetProgress();
+	//        }
+	//    }
 }

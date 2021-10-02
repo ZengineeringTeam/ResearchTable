@@ -9,18 +9,18 @@ import snownee.researchtable.core.DataStorage;
 import snownee.researchtable.plugin.togetherforever.TeamProviderTF;
 
 public class TeamHelper {
-    static {
-        if (Loader.isModLoaded("togetherforever")) {
-            provider = TeamProviderTF.INSTANCE;
-        } else {
-            provider = TeamProvider.Stub.INSTANCE;
-        }
-    }
+	static {
+		if (Loader.isModLoaded("togetherforever")) {
+			provider = TeamProviderTF.INSTANCE;
+		} else {
+			provider = TeamProvider.Stub.INSTANCE;
+		}
+	}
 
-    @Nonnull
-    public static TeamProvider provider;
+	@Nonnull
+	public static TeamProvider provider;
 
-    public static void onPlayerAdd(UUID uuid, UUID owner) {
-        DataStorage.onPlayerAdd(owner, owner);
-    }
+	public static void onPlayerAdd(UUID uuid, UUID owner) {
+		DataStorage.onPlayerAdd(owner, owner);
+	}
 }

@@ -8,9 +8,9 @@ import snownee.researchtable.client.gui.GuiTable;
 @JEIPlugin
 public class JeiPlugin implements IModPlugin {
 
-    @Override
-    public void register(IModRegistry registry) {
-        registry.addGuiScreenHandler(GuiTable.class, $ -> null);
-    }
+	@Override
+	public void register(IModRegistry registry) {
+		registry.addGuiScreenHandler(GuiTable.class, $ -> null);
+	}
 
 }

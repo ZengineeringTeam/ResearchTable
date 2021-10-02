@@ -11,33 +11,33 @@ import snownee.kiwi.network.PacketMod;
 import snownee.researchtable.core.DataStorage;
 
 public class PacketSyncClient implements PacketMod {
-    private Object2IntMap<String> map;
+	private Object2IntMap<String> map;
 
-    public PacketSyncClient() {
-    }
+	public PacketSyncClient() {
+	}
 
-    public PacketSyncClient(Object2IntMap<String> map) {
-        this.map = map;
-    }
+	public PacketSyncClient(Object2IntMap<String> map) {
+		this.map = map;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void handleClient(EntityPlayerSP player) {
-        DataStorage.clientData = map;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void handleClient(EntityPlayerSP player) {
+		DataStorage.clientData = map;
+	}
 
-    @Override
-    public void handleServer(EntityPlayerMP player) {
-    }
+	@Override
+	public void handleServer(EntityPlayerMP player) {
+	}
 
-    @Override
-    public void readDataFrom(ByteBuf buf) {
-        map = DataStorage.readPlayerData(ByteBufUtils.readTag(buf));
-    }
+	@Override
+	public void readDataFrom(ByteBuf buf) {
+		map = DataStorage.readPlayerData(ByteBufUtils.readTag(buf));
+	}
 
-    @Override
-    public void writeDataTo(ByteBuf buf) {
-        ByteBufUtils.writeTag(buf, DataStorage.writePlayerData(map));
-    }
+	@Override
+	public void writeDataTo(ByteBuf buf) {
+		ByteBufUtils.writeTag(buf, DataStorage.writePlayerData(map));
+	}
 
 }

@@ -14,21 +14,21 @@ import snownee.researchtable.client.renderer.EventShowItemCondition;
 
 @KiwiModule(modid = ResearchTable.MODID, name = "itemstages", dependency = "itemstages", optional = true)
 public class ItemStagesPlugin implements IModule {
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void init() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void init() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onCondition(EventShowItemCondition event) {
-        event.stacks.removeIf(stack -> {
-            String itemsStage = ItemStages.getStage(stack);
-            if (itemsStage != null) {
-                return !GameStageHelper.hasStage(Minecraft.getMinecraft().player, itemsStage);
-            }
-            return false;
-        });
-    }
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onCondition(EventShowItemCondition event) {
+		event.stacks.removeIf(stack -> {
+			String itemsStage = ItemStages.getStage(stack);
+			if (itemsStage != null) {
+				return !GameStageHelper.hasStage(Minecraft.getMinecraft().player, itemsStage);
+			}
+			return false;
+		});
+	}
 }

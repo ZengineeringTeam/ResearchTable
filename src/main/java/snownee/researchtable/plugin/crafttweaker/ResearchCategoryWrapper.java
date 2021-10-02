@@ -7,10 +7,10 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("ResearchTable.Category")
 @ZenRegister
 public class ResearchCategoryWrapper {
-    protected final ResearchCategory category;
+	protected final ResearchCategory category;
 
-    public ResearchCategoryWrapper(ResearchCategory category) {
-        this.category = category;
-    }
+	public ResearchCategoryWrapper(ResearchCategory category) {
+		this.category = category;
+	}
 
 }

@@ -17,36 +17,36 @@ import snownee.researchtable.plugin.forge.RendererForgeEnergy;
 
 @SideOnly(Side.CLIENT)
 public abstract class ConditionRenderer<T extends ICondition> {
-    private static final Map<Class, ConditionRendererFactory> MAP = new HashMap<>();
+	private static final Map<Class, ConditionRendererFactory> MAP = new HashMap<>();
 
-    static {
-        ConditionRenderer.register(ConditionForgeEnergy.class, new RendererForgeEnergy.Factory());
-    }
+	static {
+		ConditionRenderer.register(ConditionForgeEnergy.class, new RendererForgeEnergy.Factory());
+	}
 
-    public static <T extends ICondition> void register(Class<T> clazz, ConditionRendererFactory<T> renderer) {
-        MAP.put(clazz, renderer);
-    }
+	public static <T extends ICondition> void register(Class<T> clazz, ConditionRendererFactory<T> renderer) {
+		MAP.put(clazz, renderer);
+	}
 
-    @Nullable
-    public static <T extends ICondition> ConditionRenderer<T> get(T condition) {
-        ConditionRendererFactory<T> factory = MAP.get(condition.getClass());
-        if (factory != null) {
-            return factory.get(condition);
-        }
-        return null;
-    }
+	@Nullable
+	public static <T extends ICondition> ConditionRenderer<T> get(T condition) {
+		ConditionRendererFactory<T> factory = MAP.get(condition.getClass());
+		if (factory != null) {
+			return factory.get(condition);
+		}
+		return null;
+	}
 
-    public abstract void draw(Minecraft mc, int x, int y);
+	public abstract void draw(Minecraft mc, int x, int y);
 
-    public abstract String name();
+	public abstract String name();
 
-    public abstract String format(long number);
+	public abstract String format(long number);
 
-    public abstract FontRenderer getFont();
+	public abstract FontRenderer getFont();
 
-    public abstract List<String> getTooltip(ITooltipFlag flag);
+	public abstract List<String> getTooltip(ITooltipFlag flag);
 
-    public static interface ConditionRendererFactory<T extends ICondition> {
-        ConditionRenderer<T> get(T condition);
-    }
+	public static interface ConditionRendererFactory<T extends ICondition> {
+		ConditionRenderer<T> get(T condition);
+	}
 }
