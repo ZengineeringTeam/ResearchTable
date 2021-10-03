@@ -47,7 +47,7 @@ public class ComponentResearchList extends ComponentList {
 		this.slotHeight = entryHeight;
 		this.showTabs = showTabs;
 		if (showTabs) {
-			int tabsPerPage = Math.max((height - 18) / TAB_WIDTH, 1);
+			int tabsPerPage = Math.max((height - 14) / TAB_WIDTH, 1);
 			maxTabPage = MathHelper.ceil((double) ResearchList.CATEGORIES.size() / tabsPerPage);
 		}
 	}
@@ -95,7 +95,7 @@ public class ComponentResearchList extends ComponentList {
 		int btnLeft = left - TAB_WIDTH;
 		int btnTop = top;
 		int id = 114514;
-		int tabsPerPage = Math.max((height - 18) / TAB_WIDTH, 1);
+		int tabsPerPage = Math.max((height - 14) / TAB_WIDTH, 1);
 		int start = currentTabPage * tabsPerPage;
 		for (int i = 0; i < tabsPerPage; i++) {
 			if (start + i >= ResearchList.CATEGORIES.size()) {
