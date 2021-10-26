@@ -32,9 +32,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import snownee.kiwi.network.NetworkChannel;
 import snownee.researchtable.ResearchTable;
 import snownee.researchtable.core.team.TeamHelper;
+import snownee.researchtable.network.NetworkChannel;
 import snownee.researchtable.network.PacketSyncClient;
 
 @EventBusSubscriber(modid = ResearchTable.MODID)

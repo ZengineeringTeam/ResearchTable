@@ -22,7 +22,6 @@ import snownee.kiwi.client.gui.GuiControl;
 import snownee.kiwi.client.gui.component.Component;
 import snownee.kiwi.client.gui.component.ComponentPanel;
 import snownee.kiwi.client.gui.element.DrawableResource;
-import snownee.kiwi.network.NetworkChannel;
 import snownee.kiwi.util.NBTHelper;
 import snownee.researchtable.ModConfig;
 import snownee.researchtable.ResearchTable;
@@ -30,6 +29,7 @@ import snownee.researchtable.block.TileTable;
 import snownee.researchtable.container.ContainerTable;
 import snownee.researchtable.core.Research;
 import snownee.researchtable.core.ResearchList;
+import snownee.researchtable.network.NetworkChannel;
 import snownee.researchtable.network.PacketResearchChanged;
 import snownee.researchtable.network.PacketResearchChanged.Action;
 
