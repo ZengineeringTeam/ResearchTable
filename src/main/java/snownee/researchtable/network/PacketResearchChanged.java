@@ -34,6 +34,8 @@ public class PacketResearchChanged implements PacketMod {
 
 	@Override
 	public void handleServer(EntityPlayerMP player) {
+		if (player.getDistanceSq(pos) > 100 || player.world.isBlockLoaded(pos))
+			return;
 		TileEntity tile = player.world.getTileEntity(pos);
 		if (tile instanceof TileTable) {
 			TileTable table = (TileTable) tile;
